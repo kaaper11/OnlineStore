@@ -1,11 +1,15 @@
 package entity.component.computerConfig;
 
-import entity.product.base.StorageComponent;
-
 import java.math.BigDecimal;
 
-public class Ram extends StorageComponent {
-    public Ram(BigDecimal price, int capacityGB) {
-        super(price, capacityGB);
+public enum Ram {
+    GB8(BigDecimal.ZERO),
+    GB16(new BigDecimal("300")),
+    GB24(new BigDecimal("500"));
+
+    private BigDecimal price;
+
+    Ram(BigDecimal price) {
+        this.price = price;
     }
-}
+    }

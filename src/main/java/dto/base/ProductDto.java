@@ -1,4 +1,4 @@
-package entity.product.base;
+package dto.base;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,9 +8,8 @@ import java.math.BigDecimal;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class Product {
-    private long id;
-    private String name;
-    private BigDecimal price;
-    private int quantity;
+public abstract class ProductDto {
+    private final String name;
+    private final BigDecimal price;
+    private final int quantity;
 }

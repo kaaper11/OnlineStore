@@ -1,14 +1,17 @@
 package entity.component.computerConfig;
 
-import entity.product.base.NamedComponent;
-
 import java.math.BigDecimal;
 
-public class GraphicCard extends NamedComponent {
-    private int vram;
+public enum GraphicCard {
+    RTX5050(BigDecimal.ZERO),
+    RTX5060(new BigDecimal("700")),
+    RTX5070(new BigDecimal("1000")),
+    RTX5090(new BigDecimal("2000"));
 
-    public GraphicCard(BigDecimal price, String name, int vram) {
-        super(price, name);
-        this.vram = vram;
+    private BigDecimal price;
+
+    GraphicCard(BigDecimal price) {
+        this.price = price;
     }
 }
+

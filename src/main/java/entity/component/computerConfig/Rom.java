@@ -1,11 +1,15 @@
 package entity.component.computerConfig;
 
-import entity.product.base.StorageComponent;
-
 import java.math.BigDecimal;
 
-public class Rom extends StorageComponent {
-    public Rom(BigDecimal price, int capacityGB) {
-        super(price, capacityGB);
+public enum Rom {
+    GB500(BigDecimal.ZERO),
+    GB1000(new BigDecimal("300")),
+    GB2000(new BigDecimal("500"));
+
+    private BigDecimal price;
+
+    Rom(BigDecimal price) {
+        this.price = price;
     }
 }

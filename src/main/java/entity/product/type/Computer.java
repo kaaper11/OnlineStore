@@ -1,15 +1,17 @@
 package entity.product.type;
 
 
-import entity.product.Configurable;
-import entity.product.base.Product;
 import entity.component.computerConfig.GraphicCard;
 import entity.component.computerConfig.Processor;
 import entity.component.computerConfig.Ram;
 import entity.component.computerConfig.Rom;
+import entity.product.Configurable;
+import entity.product.base.Product;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 
+@Getter
 public class Computer extends Product implements Configurable {
     private Processor processor;
     private Ram ram;
@@ -20,11 +22,13 @@ public class Computer extends Product implements Configurable {
         super(id, name, price, quantity);
     }
 
-    public void configureComputer(Processor processor, Ram ram, Rom rom, GraphicCard graphicCard) {
+    public Computer configureComputer(Processor processor, Ram ram, Rom rom, GraphicCard graphicCard) {
         this.processor = processor;
         this.ram = ram;
         this.rom = rom;
         this.graphicCard = graphicCard;
+
+        return this;
     }
 
     @Override

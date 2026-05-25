@@ -1,12 +1,16 @@
 package entity.component.smartphoneConfig;
 
-import entity.product.base.NamedComponent;
-
 import java.math.BigDecimal;
 
-public class Accessory extends NamedComponent {
+public enum Accessory {
+    PHONE_CASE(new BigDecimal("50")),
+    SCREEN_GLASS(new BigDecimal("20")),
+    CHARGER(new BigDecimal("70")),
+    POWERBANK(new BigDecimal("100"));
 
-    public Accessory(BigDecimal price, String name) {
-        super(price, name);
+    private BigDecimal price;
+
+    Accessory(BigDecimal price) {
+        this.price = price;
     }
 }

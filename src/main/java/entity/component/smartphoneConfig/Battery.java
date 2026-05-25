@@ -1,14 +1,18 @@
 package entity.component.smartphoneConfig;
 
-import entity.product.base.PricedComponent;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 
-public class Battery extends PricedComponent {
-    private int capacity;
+@Getter
+public enum Battery {
+    MAH5000(BigDecimal.ZERO),
+    MAH5500(new BigDecimal("200")),
+    MAH6000(new BigDecimal("500"));
 
-    public Battery(BigDecimal price, int capacity) {
-        super(price);
-        this.capacity = capacity;
+    private BigDecimal price;
+
+    Battery(BigDecimal price) {
+        this.price = price;
     }
 }
