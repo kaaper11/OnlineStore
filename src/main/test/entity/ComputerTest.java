@@ -1,3 +1,5 @@
+package entity;
+
 import entity.component.computerConfig.GraphicCard;
 import entity.component.computerConfig.Processor;
 import entity.component.computerConfig.Ram;
@@ -19,7 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 public class ComputerTest {
 
     @InjectMocks
-    Computer computer = new Computer(1L, "name", new BigDecimal(BigInteger.ONE), 22);
+    Computer computer = new Computer(1L, "name", new BigDecimal(BigInteger.ONE), 22,
+            Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
 
     @Mock
     Processor processor;

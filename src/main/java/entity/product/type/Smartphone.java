@@ -18,8 +18,11 @@ public class Smartphone extends Product implements Configurable {
     private List<Accessory> accessoryList = new ArrayList<>();
 
 
-    public Smartphone(long id, String name, BigDecimal price, int quantity) {
+    public Smartphone(Long id, String name, BigDecimal price, int quantity, SmartphoneColorType color,
+                      Battery battery) {
         super(id, name, price, quantity);
+        this.color = color;
+        this.battery = battery;
     }
 
     public Smartphone configureSmartphone(SmartphoneColorType color, Battery battery) {

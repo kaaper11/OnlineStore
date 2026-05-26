@@ -1,7 +1,8 @@
+package entity;
+
 import entity.component.smartphoneConfig.Accessory;
 import entity.component.smartphoneConfig.Battery;
 import entity.component.smartphoneConfig.SmartphoneColorType;
-import entity.product.type.Computer;
 import entity.product.type.Smartphone;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 public class SmartphoneTest {
 
     @InjectMocks
-    Smartphone smartphone = new Smartphone(1L, "name", new BigDecimal(BigInteger.ONE), 22);
+    Smartphone smartphone = new Smartphone(1L, "name", new BigDecimal(BigInteger.ONE), 22,
+            SmartphoneColorType.BLACK, Battery.MAH5000);
 
     @Mock
     SmartphoneColorType color;
@@ -87,5 +89,7 @@ public class SmartphoneTest {
 
         //then
         assertThat(smartphone.getAccessoryList()).hasSize(1);
+        assertThat(result).isNotNull();
+        assertThat(smartphone.getAccessoryList()).contains(accessory);
     }
 }

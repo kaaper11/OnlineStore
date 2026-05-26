@@ -1,0 +1,139 @@
+package service;
+
+import dto.type.ComputerDto;
+import entity.component.computerConfig.GraphicCard;
+import entity.component.computerConfig.Processor;
+import entity.component.computerConfig.Ram;
+import entity.component.computerConfig.Rom;
+import entity.product.type.Computer;
+import exception.ComputerNotFoundException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import repository.ComputerRepository;
+import service.impl.ComputerServiceImpl;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+public class ComputerServiceImplTest {
+
+    @Mock
+    private ComputerRepository computerRepository;
+
+    @InjectMocks
+    private ComputerServiceImpl computerService;
+
+    private final ComputerDto computerDto = new ComputerDto("name", new BigDecimal("100"),
+            20, Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
+
+    private final Computer computer = new Computer(1L, "name", new BigDecimal("100"), 20,
+            Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
+
+
+    @Test
+    void shouldCreateComputer() {
+        //given
+        when(computerRepository.getNextId()).thenReturn(1L);
+        when(computerRepository.save(any(Computer.class))).thenReturn(computer);
+
+        //when
+        ComputerDto dto = computerService.createComputer(computerDto);
+
+        assertNotNull(dto);
+        verify(computerRepository).save(any(Computer.class));
+        assertThat(dto).usingRecursiveComparison().isEqualTo(computerDto);
+    }
+
+    @Test
+    void shouldRemoveComputer() {
+        //given
+        when(computerRepository.delete(anyLong())).thenReturn(Optional.of(computer));
+
+        //when
+        ComputerDto dto = computerService.removeComputer(1L);
+
+        //then
+        assertNotNull(dto);
+        verify(computerRepository).delete(1L);
+    }
+
+    @Test
+    void shouldThrowWhenRemoveAndComputerNotFound() {
+        //given
+        when(computerRepository.delete(anyLong())).thenReturn(Optional.empty());
+
+        //then
+        assertThatExceptionOfType(ComputerNotFoundException.class)
+                .isThrownBy(() -> computerService.removeComputer(1L));
+    }
+
+    @Test
+    void shouldUpdateComputer() {
+        when(computerRepository.update(anyLong(), any(Computer.class))).thenReturn(Optional.of(computer));
+
+        ComputerDto dto = computerService.updateComputer(1L, computerDto);
+
+        assertNotNull(dto);
+        verify(computerRepository).update(anyLong(), any(Computer.class));
+        assertThat(dto).usingRecursiveComparison().isEqualTo(computerDto);
+    }
+
+    @Test
+    void shouldThrowWhenUpdateAndComputerNotFound() {
+        //given
+        when(computerRepository.update(anyLong(), any(Computer.class))).thenReturn(Optional.empty());
+
+        //then
+        assertThatExceptionOfType(ComputerNotFoundException.class)
+                .isThrownBy(() -> computerService.updateComputer(1L, computerDto));
+    }
+
+    @Test
+    void shouldGetCorrectComputerById() {
+        //given
+        when(computerRepository.getComputerById(anyLong())).thenReturn(Optional.of(computer));
+
+        //when
+        ComputerDto dto = computerService.getComputerById(1L);
+
+        //then
+        assertNotNull(dto);
+        assertThat(dto).usingRecursiveComparison().isEqualTo(computer);
+    }
+
+    @Test
+    void shouldThrowWhenGetComputerByIdNotFound() {
+        //given
+        when(computerRepository.getComputerById(anyLong())).thenReturn(Optional.empty());
+
+        //then
+        assertThatExceptionOfType(ComputerNotFoundException.class)
+            .isThrownBy(() -> computerService.getComputerById(1L));
+    }
+
+    @Test
+    void shouldGetAllComputers() {
+        //given
+        when(computerRepository.getAllComputers()).thenReturn(List.of(computer));
+
+        //when
+        List<ComputerDto> dtos = computerService.getAllComputers();
+
+        //then
+        assertThat(dtos).hasSize(1);
+        assertThat(dtos.get(0)).usingRecursiveComparison().isEqualTo(computerDto);
+    }
+}

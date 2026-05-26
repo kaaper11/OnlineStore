@@ -18,8 +18,13 @@ public class Computer extends Product implements Configurable {
     private Rom rom;
     private GraphicCard graphicCard;
 
-    public Computer(long id, String name, BigDecimal price, int quantity) {
+    public Computer(Long id, String name, BigDecimal price, int quantity, Processor processor, Ram ram, Rom rom,
+                    GraphicCard graphicCard) {
         super(id, name, price, quantity);
+        this.processor = processor;
+        this.ram = ram;
+        this.rom = rom;
+        this.graphicCard = graphicCard;
     }
 
     public Computer configureComputer(Processor processor, Ram ram, Rom rom, GraphicCard graphicCard) {
