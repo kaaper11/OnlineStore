@@ -1,12 +1,10 @@
 package entity.product.type;
 
 
-import entity.component.computerConfig.GraphicCard;
-import entity.component.computerConfig.Processor;
-import entity.component.computerConfig.Ram;
-import entity.component.computerConfig.Rom;
-import entity.product.Configurable;
-import entity.product.base.Product;
+import entity.product.config.computer.GraphicCard;
+import entity.product.config.computer.Processor;
+import entity.product.config.computer.Ram;
+import entity.product.config.computer.Rom;
 import lombok.Getter;
 
 import java.math.BigDecimal;

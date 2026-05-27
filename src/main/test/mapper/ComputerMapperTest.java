@@ -1,10 +1,10 @@
 package mapper;
 
-import dto.type.ComputerDto;
-import entity.component.computerConfig.GraphicCard;
-import entity.component.computerConfig.Processor;
-import entity.component.computerConfig.Ram;
-import entity.component.computerConfig.Rom;
+import dto.product.ComputerDto;
+import entity.product.config.computer.GraphicCard;
+import entity.product.config.computer.Processor;
+import entity.product.config.computer.Ram;
+import entity.product.config.computer.Rom;
 import entity.product.type.Computer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

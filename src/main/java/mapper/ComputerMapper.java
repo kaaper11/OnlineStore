@@ -1,6 +1,6 @@
 package mapper;
 
-import dto.type.ComputerDto;
+import dto.product.ComputerDto;
 import entity.product.type.Computer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

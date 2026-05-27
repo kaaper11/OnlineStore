@@ -1,8 +1,8 @@
 package entity;
 
-import entity.component.smartphoneConfig.Accessory;
-import entity.component.smartphoneConfig.Battery;
-import entity.component.smartphoneConfig.SmartphoneColorType;
+import entity.product.config.smartphone.Accessory;
+import entity.product.config.smartphone.Battery;
+import entity.product.config.smartphone.SmartphoneColorType;
 import entity.product.type.Smartphone;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

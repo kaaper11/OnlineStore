@@ -1,6 +1,6 @@
 package service;
 
-import dto.type.ElectronicsDto;
+import dto.product.ElectronicsDto;
 import entity.product.type.Electronics;
 import exception.ElectronicsNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ public class ElectronicsServiceImplTest {
         when(electronicsRepository.save(any(Electronics.class))).thenReturn(electronics);
 
         // when
-        ElectronicsDto dto = electronicsService.createElectronics(electronicsDto);
+        ElectronicsDto dto = electronicsService.create(electronicsDto);
 
         // then
         assertNotNull(dto);
@@ -57,7 +57,7 @@ public class ElectronicsServiceImplTest {
         when(electronicsRepository.delete(anyLong())).thenReturn(Optional.of(electronics));
 
         // when
-        ElectronicsDto dto = electronicsService.removeElectronics(1L);
+        ElectronicsDto dto = electronicsService.remove(1L);
 
         // then
         assertNotNull(dto);
@@ -71,7 +71,7 @@ public class ElectronicsServiceImplTest {
 
         // then
         assertThatExceptionOfType(ElectronicsNotFoundException.class)
-                .isThrownBy(() -> electronicsService.removeElectronics(1L));
+                .isThrownBy(() -> electronicsService.remove(1L));
     }
 
     @Test
@@ -81,7 +81,7 @@ public class ElectronicsServiceImplTest {
                 .thenReturn(Optional.of(electronics));
 
         // when
-        ElectronicsDto dto = electronicsService.updateElectronics(1L, electronicsDto);
+        ElectronicsDto dto = electronicsService.update(1L, electronicsDto);
 
         // then
         assertNotNull(dto);
@@ -97,7 +97,7 @@ public class ElectronicsServiceImplTest {
 
         // then
         assertThatExceptionOfType(ElectronicsNotFoundException.class)
-                .isThrownBy(() -> electronicsService.updateElectronics(1L, electronicsDto));
+                .isThrownBy(() -> electronicsService.update(1L, electronicsDto));
     }
 
     @Test
@@ -107,7 +107,7 @@ public class ElectronicsServiceImplTest {
                 .thenReturn(Optional.of(electronics));
 
         // when
-        ElectronicsDto dto = electronicsService.getElectronicsById(1L);
+        ElectronicsDto dto = electronicsService.getById(1L);
 
         // then
         assertNotNull(dto);
@@ -122,7 +122,7 @@ public class ElectronicsServiceImplTest {
 
         // then
         assertThatExceptionOfType(ElectronicsNotFoundException.class)
-                .isThrownBy(() -> electronicsService.getElectronicsById(1L));
+                .isThrownBy(() -> electronicsService.getById(1L));
     }
 
     @Test
@@ -132,11 +132,11 @@ public class ElectronicsServiceImplTest {
                 .thenReturn(List.of(electronics));
 
         // when
-        List<ElectronicsDto> dtos = electronicsService.getAllElectronics();
+        List<ElectronicsDto> dtos = electronicsService.getAll();
 
         // then
         assertThat(dtos).hasSize(1);
-        assertThat(dtos.get(0))
+        assertThat(dtos.getFirst())
                 .usingRecursiveComparison()
                 .isEqualTo(electronicsDto);
     }

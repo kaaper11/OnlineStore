@@ -1,17 +1,6 @@
 package service;
 
-import dto.type.ComputerDto;
+import dto.product.ComputerDto;
 
-import java.util.List;
-
-public interface ComputerService {
-    ComputerDto createComputer(ComputerDto computerDto);
-
-    ComputerDto removeComputer(Long id);
-
-    ComputerDto updateComputer(Long id, ComputerDto computerDto);
-
-    ComputerDto getComputerById(Long id);
-
-    List<ComputerDto> getAllComputers();
+public interface ComputerService extends ProductService<ComputerDto> {
 }

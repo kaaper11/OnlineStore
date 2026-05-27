@@ -1,6 +1,4 @@
-package dto.type;
-
-import dto.base.ProductDto;
+package dto.product;
 
 import java.math.BigDecimal;
 

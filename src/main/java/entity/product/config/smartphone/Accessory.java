@@ -1,4 +1,4 @@
-package entity.component.smartphoneConfig;
+package entity.product.config.smartphone;
 
 import java.math.BigDecimal;
 
@@ -8,7 +8,7 @@ public enum Accessory {
     CHARGER(new BigDecimal("70")),
     POWERBANK(new BigDecimal("100"));
 
-    private BigDecimal price;
+    private final BigDecimal price;
 
     Accessory(BigDecimal price) {
         this.price = price;

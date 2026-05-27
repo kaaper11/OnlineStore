@@ -1,4 +1,4 @@
-package entity.product.base;
+package entity.product.type;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

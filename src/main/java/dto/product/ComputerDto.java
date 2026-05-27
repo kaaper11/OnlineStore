@@ -1,10 +1,9 @@
-package dto.type;
+package dto.product;
 
-import dto.base.ProductDto;
-import entity.component.computerConfig.GraphicCard;
-import entity.component.computerConfig.Processor;
-import entity.component.computerConfig.Ram;
-import entity.component.computerConfig.Rom;
+import entity.product.config.computer.GraphicCard;
+import entity.product.config.computer.Processor;
+import entity.product.config.computer.Ram;
+import entity.product.config.computer.Rom;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -16,7 +15,8 @@ public class ComputerDto extends ProductDto {
     private final Rom rom;
     private final GraphicCard graphicCard;
 
-    public ComputerDto(String name, BigDecimal price, int quantity, Processor processor, Ram ram, Rom rom, GraphicCard graphicCard) {
+    public ComputerDto(String name, BigDecimal price, int quantity, Processor processor, Ram ram, Rom rom,
+                       GraphicCard graphicCard) {
         super(name, price, quantity);
         this.processor = processor;
         this.ram = ram;

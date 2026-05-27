@@ -1,6 +1,6 @@
 package mapper;
 
-import dto.type.ElectronicsDto;
+import dto.product.ElectronicsDto;
 import entity.product.type.Electronics;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
