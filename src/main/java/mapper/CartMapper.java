@@ -8,7 +8,6 @@ import entity.product.type.Product;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -23,11 +22,7 @@ public final class CartMapper {
                 .map(ProductMapper::mapProductToDto)
                 .toList();
 
-        BigDecimal total = productDtos.stream()
-                .map(ProductDto::getPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        return new CartResponseDto(cart.getClientId(), productDtos, total);
+        return new CartResponseDto(cart.getClientId(), productDtos);
     }
 
 }

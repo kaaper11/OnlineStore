@@ -13,4 +13,6 @@ public interface CartService {
     CartResponseDto getCartById(Long id);
 
     CartResponseDto getCartByClientId(Long clientId);
+
+    CartResponseDto addProductToCart(Long clientId, Long productId);
 }
