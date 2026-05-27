@@ -62,14 +62,28 @@ public class CartServiceImpl implements CartService {
         return CartMapper.mapCartToCartResponseDto(cart, products);
     }
 
+    @Override
+    public CartResponseDto addProductToCart(Long clientId, Long productId) {
+        Cart cart = cartRepository.getCartByClientId(clientId).orElseThrow(CartNotFoundException::new);
+
+        findProductById(productId);
+
+        cart.addProduct(productId);
+
+        List<Product> products = findProductsByIds(cart.getProductsIds());
+        return CartMapper.mapCartToCartResponseDto(cart, products);
+    }
+
+    private Product findProductById(Long id) {
+        return computerRepository.getComputerById(id).<Product>map(p -> p)
+                .or(() -> smartphoneRepository.getSmartphoneById(id))
+                .or(() -> electronicsRepository.getElectronicsById(id))
+                .orElseThrow(() -> new ProductNotFoundException("produktu"));
+    }
+
     private List<Product> findProductsByIds(List<Long> ids) {
         return ids.stream()
-                .map(id -> computerRepository.getComputerById(id)
-                        .<Product>map(computer -> computer)
-                        .or(() -> electronicsRepository.getElectronicsById(id))
-                        .or(() -> smartphoneRepository.getSmartphoneById(id))
-                        .orElseThrow(() -> new ProductNotFoundException("produktu"))
-                )
+                .map(this::findProductById)
                 .toList();
     }
 }

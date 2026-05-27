@@ -57,8 +57,7 @@ public class CartMapperTest {
 
         CartResponseDto result = CartMapper.mapCartToCartResponseDto(cart, products);
 
-        CartResponseDto expected = new CartResponseDto(1L, List.of(productDto1, productDto2),
-                BigDecimal.valueOf(3200));
+        CartResponseDto expected = new CartResponseDto(1L, List.of(productDto1, productDto2));
 
         assertThat(result)
                 .usingRecursiveComparison()
