@@ -1,4 +1,4 @@
-package entity.component.computerConfig;
+package entity.product.config.computer;
 
 import java.math.BigDecimal;
 
@@ -8,7 +8,7 @@ public enum GraphicCard {
     RTX5070(new BigDecimal("1000")),
     RTX5090(new BigDecimal("2000"));
 
-    private BigDecimal price;
+    private final BigDecimal price;
 
     GraphicCard(BigDecimal price) {
         this.price = price;

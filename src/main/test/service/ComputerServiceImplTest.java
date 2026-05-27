@@ -1,10 +1,10 @@
 package service;
 
-import dto.type.ComputerDto;
-import entity.component.computerConfig.GraphicCard;
-import entity.component.computerConfig.Processor;
-import entity.component.computerConfig.Ram;
-import entity.component.computerConfig.Rom;
+import dto.product.ComputerDto;
+import entity.product.config.computer.GraphicCard;
+import entity.product.config.computer.Processor;
+import entity.product.config.computer.Ram;
+import entity.product.config.computer.Rom;
 import entity.product.type.Computer;
 import exception.ComputerNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ public class ComputerServiceImplTest {
         when(computerRepository.save(any(Computer.class))).thenReturn(computer);
 
         //when
-        ComputerDto dto = computerService.createComputer(computerDto);
+        ComputerDto dto = computerService.create(computerDto);
 
         assertNotNull(dto);
         verify(computerRepository).save(any(Computer.class));
@@ -63,7 +63,7 @@ public class ComputerServiceImplTest {
         when(computerRepository.delete(anyLong())).thenReturn(Optional.of(computer));
 
         //when
-        ComputerDto dto = computerService.removeComputer(1L);
+        ComputerDto dto = computerService.remove(1L);
 
         //then
         assertNotNull(dto);
@@ -77,14 +77,14 @@ public class ComputerServiceImplTest {
 
         //then
         assertThatExceptionOfType(ComputerNotFoundException.class)
-                .isThrownBy(() -> computerService.removeComputer(1L));
+                .isThrownBy(() -> computerService.remove(1L));
     }
 
     @Test
     void shouldUpdateComputer() {
         when(computerRepository.update(anyLong(), any(Computer.class))).thenReturn(Optional.of(computer));
 
-        ComputerDto dto = computerService.updateComputer(1L, computerDto);
+        ComputerDto dto = computerService.update(1L, computerDto);
 
         assertNotNull(dto);
         verify(computerRepository).update(anyLong(), any(Computer.class));
@@ -98,7 +98,7 @@ public class ComputerServiceImplTest {
 
         //then
         assertThatExceptionOfType(ComputerNotFoundException.class)
-                .isThrownBy(() -> computerService.updateComputer(1L, computerDto));
+                .isThrownBy(() -> computerService.update(1L, computerDto));
     }
 
     @Test
@@ -107,7 +107,7 @@ public class ComputerServiceImplTest {
         when(computerRepository.getComputerById(anyLong())).thenReturn(Optional.of(computer));
 
         //when
-        ComputerDto dto = computerService.getComputerById(1L);
+        ComputerDto dto = computerService.getById(1L);
 
         //then
         assertNotNull(dto);
@@ -121,7 +121,7 @@ public class ComputerServiceImplTest {
 
         //then
         assertThatExceptionOfType(ComputerNotFoundException.class)
-            .isThrownBy(() -> computerService.getComputerById(1L));
+            .isThrownBy(() -> computerService.getById(1L));
     }
 
     @Test
@@ -130,10 +130,10 @@ public class ComputerServiceImplTest {
         when(computerRepository.getAllComputers()).thenReturn(List.of(computer));
 
         //when
-        List<ComputerDto> dtos = computerService.getAllComputers();
+        List<ComputerDto> dtos = computerService.getAll();
 
         //then
         assertThat(dtos).hasSize(1);
-        assertThat(dtos.get(0)).usingRecursiveComparison().isEqualTo(computerDto);
+        assertThat(dtos.getFirst()).usingRecursiveComparison().isEqualTo(computerDto);
     }
 }

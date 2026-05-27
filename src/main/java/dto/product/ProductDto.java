@@ -1,4 +1,4 @@
-package dto.base;
+package dto.product;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

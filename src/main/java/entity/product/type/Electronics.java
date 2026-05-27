@@ -1,7 +1,5 @@
 package entity.product.type;
 
-import entity.product.base.Product;
-
 import java.math.BigDecimal;
 
 public class Electronics extends Product {

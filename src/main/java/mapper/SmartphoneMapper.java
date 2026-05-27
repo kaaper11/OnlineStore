@@ -1,6 +1,6 @@
 package mapper;
 
-import dto.type.SmartphoneDto;
+import dto.product.SmartphoneDto;
 import entity.product.type.Smartphone;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

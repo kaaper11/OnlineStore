@@ -1,4 +1,4 @@
-package entity.component.smartphoneConfig;
+package entity.product.config.smartphone;
 
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ public enum Battery {
     MAH5500(new BigDecimal("200")),
     MAH6000(new BigDecimal("500"));
 
-    private BigDecimal price;
+    private final BigDecimal price;
 
     Battery(BigDecimal price) {
         this.price = price;

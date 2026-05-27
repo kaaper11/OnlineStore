@@ -1,10 +1,8 @@
 package entity.product.type;
 
-import entity.component.smartphoneConfig.Accessory;
-import entity.component.smartphoneConfig.Battery;
-import entity.component.smartphoneConfig.SmartphoneColorType;
-import entity.product.Configurable;
-import entity.product.base.Product;
+import entity.product.config.smartphone.Accessory;
+import entity.product.config.smartphone.Battery;
+import entity.product.config.smartphone.SmartphoneColorType;
 import lombok.Getter;
 
 import java.math.BigDecimal;

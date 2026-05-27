@@ -1,9 +1,8 @@
-package dto.type;
+package dto.product;
 
-import dto.base.ProductDto;
-import entity.component.smartphoneConfig.Accessory;
-import entity.component.smartphoneConfig.Battery;
-import entity.component.smartphoneConfig.SmartphoneColorType;
+import entity.product.config.smartphone.Accessory;
+import entity.product.config.smartphone.Battery;
+import entity.product.config.smartphone.SmartphoneColorType;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -16,7 +15,8 @@ public class SmartphoneDto extends ProductDto {
     private final Battery battery;
     private final List<Accessory> accessoryList = new ArrayList<>();
 
-    public SmartphoneDto(String name, BigDecimal price, int quantity, SmartphoneColorType color, Battery battery) {
+    public SmartphoneDto(String name, BigDecimal price, int quantity, SmartphoneColorType color,
+                         Battery battery) {
         super(name, price, quantity);
         this.color = color;
         this.battery = battery;

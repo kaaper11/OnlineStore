@@ -1,4 +1,4 @@
-package entity.component.computerConfig;
+package entity.product.config.computer;
 
 import java.math.BigDecimal;
 
@@ -7,9 +7,9 @@ public enum Ram {
     GB16(new BigDecimal("300")),
     GB24(new BigDecimal("500"));
 
-    private BigDecimal price;
+    private final BigDecimal price;
 
     Ram(BigDecimal price) {
         this.price = price;
     }
-    }
+}

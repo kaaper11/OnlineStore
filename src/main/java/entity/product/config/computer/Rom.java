@@ -1,4 +1,4 @@
-package entity.component.computerConfig;
+package entity.product.config.computer;
 
 import java.math.BigDecimal;
 
@@ -7,7 +7,7 @@ public enum Rom {
     GB1000(new BigDecimal("300")),
     GB2000(new BigDecimal("500"));
 
-    private BigDecimal price;
+    private final BigDecimal price;
 
     Rom(BigDecimal price) {
         this.price = price;

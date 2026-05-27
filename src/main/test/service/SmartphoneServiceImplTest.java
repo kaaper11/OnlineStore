@@ -1,8 +1,8 @@
 package service;
 
-import dto.type.SmartphoneDto;
-import entity.component.smartphoneConfig.Battery;
-import entity.component.smartphoneConfig.SmartphoneColorType;
+import dto.product.SmartphoneDto;
+import entity.product.config.smartphone.Battery;
+import entity.product.config.smartphone.SmartphoneColorType;
 import entity.product.type.Smartphone;
 import exception.SmartphoneNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -47,7 +47,7 @@ public class SmartphoneServiceImplTest {
         when(smartphoneRepository.save(any(Smartphone.class))).thenReturn(smartphone);
 
         // when
-        SmartphoneDto dto = smartphoneService.createSmartphone(smartphoneDto);
+        SmartphoneDto dto = smartphoneService.create(smartphoneDto);
 
         // then
         assertNotNull(dto);
@@ -61,7 +61,7 @@ public class SmartphoneServiceImplTest {
         when(smartphoneRepository.delete(anyLong())).thenReturn(Optional.of(smartphone));
 
         // when
-        SmartphoneDto dto = smartphoneService.removeSmartphone(1L);
+        SmartphoneDto dto = smartphoneService.remove(1L);
 
         // then
         assertNotNull(dto);
@@ -75,7 +75,7 @@ public class SmartphoneServiceImplTest {
 
         // then
         assertThatExceptionOfType(SmartphoneNotFoundException.class)
-                .isThrownBy(() -> smartphoneService.removeSmartphone(1L));
+                .isThrownBy(() -> smartphoneService.remove(1L));
     }
 
     @Test
@@ -85,7 +85,7 @@ public class SmartphoneServiceImplTest {
                 .thenReturn(Optional.of(smartphone));
 
         // when
-        SmartphoneDto dto = smartphoneService.updateSmartphone(1L, smartphoneDto);
+        SmartphoneDto dto = smartphoneService.update(1L, smartphoneDto);
 
         // then
         assertNotNull(dto);
@@ -101,7 +101,7 @@ public class SmartphoneServiceImplTest {
 
         // then
         assertThatExceptionOfType(SmartphoneNotFoundException.class)
-                .isThrownBy(() -> smartphoneService.updateSmartphone(1L, smartphoneDto));
+                .isThrownBy(() -> smartphoneService.update(1L, smartphoneDto));
     }
 
     @Test
@@ -111,7 +111,7 @@ public class SmartphoneServiceImplTest {
                 .thenReturn(Optional.of(smartphone));
 
         // when
-        SmartphoneDto dto = smartphoneService.getSmartphoneById(1L);
+        SmartphoneDto dto = smartphoneService.getById(1L);
 
         // then
         assertNotNull(dto);
@@ -126,7 +126,7 @@ public class SmartphoneServiceImplTest {
 
         // then
         assertThatExceptionOfType(SmartphoneNotFoundException.class)
-                .isThrownBy(() -> smartphoneService.getSmartphoneById(1L));
+                .isThrownBy(() -> smartphoneService.getById(1L));
     }
 
     @Test
@@ -136,11 +136,11 @@ public class SmartphoneServiceImplTest {
                 .thenReturn(List.of(smartphone));
 
         // when
-        List<SmartphoneDto> dtos = smartphoneService.getAllSmartphones();
+        List<SmartphoneDto> dtos = smartphoneService.getAll();
 
         // then
         assertThat(dtos).hasSize(1);
-        assertThat(dtos.get(0))
+        assertThat(dtos.getFirst())
                 .usingRecursiveComparison()
                 .isEqualTo(smartphoneDto);
     }
