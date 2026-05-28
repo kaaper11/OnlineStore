@@ -6,4 +6,9 @@ public class Electronics extends Product {
     public Electronics(Long id, String name, BigDecimal price, int quantity) {
         super(id, name, price, quantity);
     }
+
+    @Override
+    public BigDecimal getTotalPrice() {
+        return getPrice();
+    }
 }

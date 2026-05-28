@@ -39,4 +39,13 @@ public class Smartphone extends Product implements Configurable {
     public boolean isConfigured() {
         return color != null && battery != null;
     }
+
+    @Override
+    public BigDecimal getTotalPrice() {
+        BigDecimal accessoryTotalPrice = accessoryList.stream()
+                .map(Accessory::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return getPrice().add(battery.getPrice()).add(accessoryTotalPrice);
+    }
 }

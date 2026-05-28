@@ -1,7 +1,6 @@
 package service.impl;
 
-import dto.cart.CartRequestDto;
-import dto.cart.CartResponseDto;
+import dto.cart.CartDto;
 import entity.cart.Cart;
 import entity.product.type.Product;
 import exception.CartNotFoundException;
@@ -14,8 +13,6 @@ import repository.ElectronicsRepository;
 import repository.SmartphoneRepository;
 import service.CartService;
 
-import java.util.List;
-
 @AllArgsConstructor
 public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
@@ -24,54 +21,26 @@ public class CartServiceImpl implements CartService {
     private final ElectronicsRepository electronicsRepository;
 
     @Override
-    public CartResponseDto createCart(CartRequestDto cartRequestDto) {
-        Cart cart = cartRepository.save(CartMapper.mapDtoToCart(cartRequestDto, cartRepository.getNextId()));
-        List<Product> products = findProductsByIds(cart.getProductsIds());
-        return CartMapper.mapCartToCartResponseDto(cart, products);
+    public CartDto getCartById(Long id) {
+        Cart cart = cartRepository.getCartById(id).orElseThrow(CartNotFoundException::new);
+        return CartMapper.mapCartToDto(cart);
     }
 
     @Override
-    public CartResponseDto removeCart(Long id) {
-        Cart cart = cartRepository.delete(id)
-                .orElseThrow(CartNotFoundException::new);
-        List<Product> products = findProductsByIds(cart.getProductsIds());
-        return CartMapper.mapCartToCartResponseDto(cart, products);
+    public CartDto getCartByClientId(Long clientId) {
+        Cart cart = cartRepository.getCartByClientId(clientId).orElseThrow(CartNotFoundException::new);
+        return CartMapper.mapCartToDto(cart);
     }
 
     @Override
-    public CartResponseDto updateCart(Long id, CartRequestDto cartRequestDto) {
-        Cart cart = cartRepository.update(id, CartMapper.mapDtoToCart(cartRequestDto, id))
-                .orElseThrow(CartNotFoundException::new);
-        List<Product> products = findProductsByIds(cart.getProductsIds());
-        return CartMapper.mapCartToCartResponseDto(cart, products);
-    }
-
-    @Override
-    public CartResponseDto getCartById(Long id) {
-        Cart cart = cartRepository.getCartById(id)
-                .orElseThrow(CartNotFoundException::new);
-        List<Product> products = findProductsByIds(cart.getProductsIds());
-        return CartMapper.mapCartToCartResponseDto(cart, products);
-    }
-
-    @Override
-    public CartResponseDto getCartByClientId(Long clientId) {
-        Cart cart = cartRepository.getCartByClientId(clientId)
-                .orElseThrow(CartNotFoundException::new);
-        List<Product> products = findProductsByIds(cart.getProductsIds());
-        return CartMapper.mapCartToCartResponseDto(cart, products);
-    }
-
-    @Override
-    public CartResponseDto addProductToCart(Long clientId, Long productId) {
+    public CartDto addProductToCart(Long clientId, Long productId) {
         Cart cart = cartRepository.getCartByClientId(clientId).orElseThrow(CartNotFoundException::new);
 
-        findProductById(productId);
+        Product product = findProductById(productId);
 
-        cart.addProduct(productId);
+        cart.addProduct(product);
 
-        List<Product> products = findProductsByIds(cart.getProductsIds());
-        return CartMapper.mapCartToCartResponseDto(cart, products);
+        return CartMapper.mapCartToDto(cart);
     }
 
     private Product findProductById(Long id) {
@@ -79,11 +48,5 @@ public class CartServiceImpl implements CartService {
                 .or(() -> smartphoneRepository.getSmartphoneById(id))
                 .or(() -> electronicsRepository.getElectronicsById(id))
                 .orElseThrow(() -> new ProductNotFoundException("produktu"));
-    }
-
-    private List<Product> findProductsByIds(List<Long> ids) {
-        return ids.stream()
-                .map(this::findProductById)
-                .toList();
     }
 }

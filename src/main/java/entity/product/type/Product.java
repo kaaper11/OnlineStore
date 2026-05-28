@@ -15,6 +15,11 @@ public abstract class Product {
     private BigDecimal price;
     private int quantity;
 
+    public int buyProduct() {
+        quantity--;
+        return quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -26,4 +31,6 @@ public abstract class Product {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    public abstract BigDecimal getTotalPrice();
 }

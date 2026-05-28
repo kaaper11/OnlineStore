@@ -5,6 +5,7 @@ import entity.client.Client;
 import exception.ClientNotFoundException;
 import lombok.RequiredArgsConstructor;
 import mapper.ClientMapper;
+import repository.CartRepository;
 import repository.ClientRepository;
 import service.ClientService;
 
@@ -13,10 +14,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
+    private final CartRepository cartRepository;
 
     @Override
     public ClientDto createClient(ClientDto clientDto) {
         Client client = clientRepository.save(ClientMapper.mapDtoToClient(clientDto, clientRepository.getNextId()));
+        cartRepository.save(client.getId());
         return ClientMapper.mapClientToDto(client);
     }
 
@@ -29,7 +32,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDto removeClient(Long id) {
+        cartRepository.delete(id);
         Client client = clientRepository.delete(id).orElseThrow(ClientNotFoundException::new);
+        clientRepository.delete(id);
         return ClientMapper.mapClientToDto(client);
     }
 

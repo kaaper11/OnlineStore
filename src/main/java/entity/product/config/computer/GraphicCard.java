@@ -1,7 +1,10 @@
 package entity.product.config.computer;
 
+import lombok.Getter;
+
 import java.math.BigDecimal;
 
+@Getter
 public enum GraphicCard {
     RTX5050(BigDecimal.ZERO),
     RTX5060(new BigDecimal("700")),
