@@ -1,7 +1,10 @@
 package entity.product.config.computer;
 
+import lombok.Getter;
+
 import java.math.BigDecimal;
 
+@Getter
 public enum Ram {
     GB8(BigDecimal.ZERO),
     GB16(new BigDecimal("300")),

@@ -8,24 +8,16 @@ public class CartRepository {
     private final Set<Cart> carts = new HashSet<>();
     private Long idCounter = 0L;
 
-    public Cart save(Cart cart) {
+    public Cart save(Long clientId) {
+        Cart cart = new Cart(getNextId(), clientId, new ArrayList<>());
         carts.add(cart);
         return cart;
     }
 
-    public Optional<Cart> delete(Long id) {
-        return getCartById(id)
+    public Optional<Cart> delete(Long clientId) {
+        return getCartByClientId(clientId)
                 .map(cart -> {
                     carts.remove(cart);
-                    return cart;
-                });
-    }
-
-    public Optional<Cart> update(Long id, Cart updatedCart) {
-        return getCartById(id)
-                .map(cart -> {
-                    carts.remove(cart);
-                    carts.add(updatedCart);
                     return cart;
                 });
     }
@@ -38,7 +30,7 @@ public class CartRepository {
 
     public Optional<Cart> getCartByClientId(Long clientId) {
         return carts.stream()
-                .filter( cart -> cart.getClientId().equals(clientId))
+                .filter(cart -> cart.getClientId().equals(clientId))
                 .findFirst();
     }
 

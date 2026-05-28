@@ -71,6 +71,10 @@ public class ProductMapperTest {
     @Test
     public void shouldThrowExceptionForUnknownProductType() {
         Product unknownProduct = new Product(99L, "Unknown", BigDecimal.TEN, 28) {
+            @Override
+            public BigDecimal getTotalPrice() {
+                return null;
+            }
         };
 
         assertThrows(

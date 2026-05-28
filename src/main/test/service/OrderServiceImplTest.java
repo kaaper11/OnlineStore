@@ -1,0 +1,108 @@
+package service;
+
+import dto.order.OrderDto;
+import entity.cart.Cart;
+import entity.client.Address;
+import entity.client.Client;
+import entity.order.Order;
+import entity.product.type.Electronics;
+import entity.product.type.Product;
+import exception.CartIsEmptyException;
+import exception.OrderNotFoundException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import repository.CartRepository;
+import repository.ClientRepository;
+import repository.OrderRepository;
+import service.impl.OrderServiceImpl;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+public class OrderServiceImplTest {
+
+    @Mock
+    private OrderRepository orderRepository;
+
+    @Mock
+    private CartRepository cartRepository;
+
+    @Mock
+    private ClientRepository clientRepository;
+
+    @InjectMocks
+    private OrderServiceImpl orderService;
+
+    private final Product product = new Electronics(1L, "product", BigDecimal.TEN, 10);
+    private final Cart cart = new Cart(1L, 10L, List.of(product));
+    private final Address address = new Address("Poland", "Warsaw", "Zlota", "15-820",
+            2);
+    private final Client client = new Client(1L, "name", "name@test.com", "123456789",
+            address);
+    private final Order order = new Order(1L, client, cart.getProducts(), BigDecimal.TEN);
+
+    @Test
+    public void shouldPlaceOrder() {
+        List<Product> products = new ArrayList<>();
+        products.add(product);
+        Cart testCart = new Cart(1L, 10L, products);
+
+
+        when(cartRepository.getCartByClientId(anyLong())).thenReturn(Optional.of(testCart));
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
+        when(orderRepository.save(any(Order.class))).thenReturn(order);
+
+        OrderDto orderDto = orderService.placeOrder(1L);
+
+        assertThat(orderDto.totalPrice()).isEqualTo(order.getTotalPrice());
+        assertThat(testCart.getProducts()).hasSize(0);
+    }
+
+    @Test
+    public void shouldThrowWhenCartIsEmpty() {
+        Cart testCart = new Cart(1L, 10L, List.of());
+
+        when(cartRepository.getCartByClientId(anyLong())).thenReturn(Optional.of(testCart));
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
+
+        assertThrows(CartIsEmptyException.class, () -> orderService.placeOrder(1L));
+    }
+
+    @Test
+    public void shouldGetOrderById() {
+        when(orderRepository.getOrderById(anyLong())).thenReturn(Optional.of(order));
+
+        OrderDto orderDto = orderService.getOrderById(1L);
+
+        assertThat(orderDto.totalPrice()).isEqualTo(order.getTotalPrice());
+    }
+
+    @Test
+    public void throwsExceptionWhenOrderNotFoundById() {
+        when(orderRepository.getOrderById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(OrderNotFoundException.class, () -> orderService.getOrderById(1L));
+    }
+
+    @Test
+    public void shouldGetOrdersByClientId() {
+        when(orderRepository.getOneClientOrders(anyLong())).thenReturn(List.of(order));
+
+        List<OrderDto> ordersDto = orderService.getOrdersByClientId(1L);
+
+        assertThat(ordersDto).hasSize(1);
+        assertThat(ordersDto.getFirst().totalPrice()).isEqualTo(order.getTotalPrice());
+    }
+}

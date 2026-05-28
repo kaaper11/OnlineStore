@@ -1,7 +1,10 @@
 package entity.product.config.smartphone;
 
+import lombok.Getter;
+
 import java.math.BigDecimal;
 
+@Getter
 public enum Accessory {
     PHONE_CASE(new BigDecimal("50")),
     SCREEN_GLASS(new BigDecimal("20")),

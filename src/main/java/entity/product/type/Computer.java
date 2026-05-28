@@ -38,4 +38,9 @@ public class Computer extends Product implements Configurable {
     public boolean isConfigured() {
         return processor != null && ram != null && rom != null && graphicCard != null;
     }
+
+    @Override
+    public BigDecimal getTotalPrice() {
+        return getPrice().add(processor.getPrice()).add(ram.getPrice()).add(rom.getPrice()).add(graphicCard.getPrice());
+    }
 }

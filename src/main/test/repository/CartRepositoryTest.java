@@ -6,111 +6,84 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class CartRepositoryTest {
+class CartRepositoryTest {
 
     @InjectMocks
-    private CartRepository cartRepository;
-
-    private final Cart cart = new Cart(1L, 100L, List.of(1L, 2L));
-    private final Cart updatedCart = new Cart(1L, 200L, List.of(3L, 4L));
+    private CartRepository repository;
 
 
     @Test
-    public void shouldSaveCart() {
-        Cart result = cartRepository.save(cart);
+    void shouldSaveCartAndAssignId() {
+        Cart cart = repository.save(1L);
 
-        assertThat(result)
-                .usingRecursiveComparison()
-                .isEqualTo(cart);
-
-        assertThat(cartRepository.getCartById(1L))
-                .contains(cart);
+        assertNotNull(cart);
+        assertEquals(0L, cart.getId());
+        assertEquals(1L, cart.getClientId());
     }
 
     @Test
-    public void shouldDeleteCart() {
-        cartRepository.save(cart);
+    void shouldIncrementIdForEachSavedCart() {
+        Cart cart1 = repository.save(1L);
+        Cart cart2 = repository.save(2L);
 
-        Optional<Cart> result = cartRepository.delete(1L);
-
-        assertThat(result)
-                .contains(cart);
-
-        assertThat(cartRepository.getCartById(1L))
-                .isEmpty();
+        assertEquals(0L, cart1.getId());
+        assertEquals(1L, cart2.getId());
     }
 
     @Test
-    public void shouldReturnEmptyWhenDeletingNonExistingCart() {
-        Optional<Cart> result = cartRepository.delete(99L);
+    void shouldFindCartById() {
+        Cart cart = repository.save(1L);
 
-        assertThat(result).isEmpty();
+        Optional<Cart> found = repository.getCartById(cart.getId());
+
+        assertTrue(found.isPresent());
+        assertEquals(cart.getId(), found.get().getId());
     }
 
     @Test
-    public void shouldUpdateCart() {
-        cartRepository.save(cart);
+    void shouldFindCartByClientId() {
+        repository.save(10L);
 
-        Optional<Cart> result = cartRepository.update(1L, updatedCart);
+        Optional<Cart> found = repository.getCartByClientId(10L);
 
-        assertThat(result)
-                .contains(cart);
-
-        assertThat(cartRepository.getCartById(1L))
-                .contains(updatedCart);
+        assertTrue(found.isPresent());
+        assertEquals(10L, found.get().getClientId());
     }
 
     @Test
-    public void shouldReturnEmptyWhenUpdatingNonExistingCart() {
-        Optional<Cart> result = cartRepository.update(99L, updatedCart);
+    void shouldDeleteCartByClientId() {
+        repository.save(100L);
 
-        assertThat(result).isEmpty();
+        Optional<Cart> deleted = repository.delete(100L);
+
+        assertTrue(deleted.isPresent());
+        assertEquals(100L, deleted.get().getClientId());
+
+        assertTrue(repository.getCartByClientId(100L).isEmpty());
     }
 
     @Test
-    public void shouldGetCartById() {
-        cartRepository.save(cart);
+    void shouldReturnEmptyWhenDeletingNonExistingCart() {
+        Optional<Cart> deleted = repository.delete(999L);
 
-        Optional<Cart> result = cartRepository.getCartById(1L);
-
-        assertThat(result)
-                .contains(cart);
+        assertTrue(deleted.isEmpty());
     }
 
     @Test
-    public void shouldGetCartByClientId() {
-        cartRepository.save(cart);
+    void shouldReturnAllCarts() {
+        repository.save(1L);
+        repository.save(2L);
 
-        Optional<Cart> result = cartRepository.getCartByClientId(100L);
-
-        assertThat(result)
-                .contains(cart);
+        assertEquals(2, repository.getAllCarts().size());
     }
 
     @Test
-    public void shouldReturnAllCarts() {
-        cartRepository.save(cart);
-        cartRepository.save(updatedCart);
-
-        List<Cart> result = cartRepository.getAllCarts();
-
-        assertThat(result)
-                .hasSize(2)
-                .contains(cart, updatedCart);
-    }
-
-    @Test
-    public void shouldGenerateNextId() {
-        Long firstId = cartRepository.getNextId();
-        Long secondId = cartRepository.getNextId();
-
-        assertThat(firstId).isEqualTo(0L);
-        assertThat(secondId).isEqualTo(1L);
+    void shouldReturnEmptyWhenCartNotFoundById() {
+        assertTrue(repository.getCartById(123L).isEmpty());
     }
 }

@@ -4,5 +4,5 @@ import dto.product.ProductDto;
 
 import java.util.List;
 
-public record CartResponseDto(Long clientId, List<ProductDto> products) {
+public record CartDto(Long clientId, List<ProductDto> products) {
 }
