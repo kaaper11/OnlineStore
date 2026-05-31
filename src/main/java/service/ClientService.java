@@ -1,19 +1,20 @@
 package service;
 
-import dto.client.ClientDto;
+import dto.client.ClientRequestDto;
+import dto.client.ClientResponseDto;
 
 import java.util.List;
 
 public interface ClientService {
-    ClientDto createClient(ClientDto clientDto);
+    ClientResponseDto createClient(ClientRequestDto clientRequestDto);
 
-    ClientDto updateClient(Long id, ClientDto clientDto);
+    ClientResponseDto updateClient(Long id, ClientRequestDto clientResponseDto);
 
-    ClientDto removeClient(Long id);
+    ClientResponseDto removeClient(Long id);
 
-    ClientDto getClientById(Long id);
+    ClientResponseDto getClientById(Long id);
 
-    ClientDto getClientByEmail(String email);
+    ClientResponseDto getClientByEmail(String email);
 
-    List<ClientDto> getAllClients();
+    List<ClientResponseDto> getAllClients();
 }

@@ -1,6 +1,7 @@
 package service.impl;
 
-import dto.client.ClientDto;
+import dto.client.ClientRequestDto;
+import dto.client.ClientResponseDto;
 import entity.client.Client;
 import exception.ClientNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -17,21 +18,21 @@ public class ClientServiceImpl implements ClientService {
     private final CartRepository cartRepository;
 
     @Override
-    public ClientDto createClient(ClientDto clientDto) {
-        Client client = clientRepository.save(ClientMapper.mapDtoToClient(clientDto, clientRepository.getNextId()));
+    public ClientResponseDto createClient(ClientRequestDto clientRequestDto) {
+        Client client = clientRepository.save(ClientMapper.mapDtoToClient(clientRequestDto, clientRepository.getNextId()));
         cartRepository.save(client.getId());
         return ClientMapper.mapClientToDto(client);
     }
 
     @Override
-    public ClientDto updateClient(Long id, ClientDto clientDto) {
-        Client client = clientRepository.update(id, ClientMapper.mapDtoToClient(clientDto, id))
+    public ClientResponseDto updateClient(Long id, ClientRequestDto clientRequestDto) {
+        Client client = clientRepository.update(id, ClientMapper.mapDtoToClient(clientRequestDto, id))
                 .orElseThrow(ClientNotFoundException::new);
         return ClientMapper.mapClientToDto(client);
     }
 
     @Override
-    public ClientDto removeClient(Long id) {
+    public ClientResponseDto removeClient(Long id) {
         cartRepository.delete(id);
         Client client = clientRepository.delete(id).orElseThrow(ClientNotFoundException::new);
         clientRepository.delete(id);
@@ -39,19 +40,19 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDto getClientById(Long id) {
+    public ClientResponseDto getClientById(Long id) {
         Client client = clientRepository.getClientById(id).orElseThrow(ClientNotFoundException::new);
         return ClientMapper.mapClientToDto(client);
     }
 
     @Override
-    public ClientDto getClientByEmail(String email) {
+    public ClientResponseDto getClientByEmail(String email) {
         Client client = clientRepository.getClientByEmail(email).orElseThrow(ClientNotFoundException::new);
         return ClientMapper.mapClientToDto(client);
     }
 
     @Override
-    public List<ClientDto> getAllClients() {
+    public List<ClientResponseDto> getAllClients() {
         return clientRepository.getAllComputers().stream()
                 .map(ClientMapper::mapClientToDto)
                 .toList();

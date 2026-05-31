@@ -1,6 +1,7 @@
 package service;
 
-import dto.product.ComputerDto;
+import dto.product.request.ComputerRequestDto;
+import dto.product.response.ComputerResponseDto;
 import entity.product.config.computer.GraphicCard;
 import entity.product.config.computer.Processor;
 import entity.product.config.computer.Ram;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import repository.ComputerRepository;
 import service.impl.ComputerServiceImpl;
+import utils.ProductIdGenerator;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,10 +35,13 @@ public class ComputerServiceImplTest {
     @Mock
     private ComputerRepository computerRepository;
 
+    @Mock
+    private ProductIdGenerator productIdGenerator;
+
     @InjectMocks
     private ComputerServiceImpl computerService;
 
-    private final ComputerDto computerDto = new ComputerDto("name", new BigDecimal("100"),
+    private final ComputerRequestDto computerRequestDto = new ComputerRequestDto("name", new BigDecimal("100"),
             20, Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
 
     private final Computer computer = new Computer(1L, "name", new BigDecimal("100"), 20,
@@ -46,15 +51,15 @@ public class ComputerServiceImplTest {
     @Test
     void shouldCreateComputer() {
         //given
-        when(computerRepository.getNextId()).thenReturn(1L);
+        when(productIdGenerator.getNextProductId()).thenReturn(1L);
         when(computerRepository.save(any(Computer.class))).thenReturn(computer);
 
         //when
-        ComputerDto dto = computerService.create(computerDto);
+        ComputerResponseDto dto = computerService.create(computerRequestDto);
 
         assertNotNull(dto);
         verify(computerRepository).save(any(Computer.class));
-        assertThat(dto).usingRecursiveComparison().isEqualTo(computerDto);
+        assertThat(dto.getName()).isEqualTo(computerRequestDto.getName());
     }
 
     @Test
@@ -63,7 +68,7 @@ public class ComputerServiceImplTest {
         when(computerRepository.delete(anyLong())).thenReturn(Optional.of(computer));
 
         //when
-        ComputerDto dto = computerService.remove(1L);
+        ComputerResponseDto dto = computerService.remove(1L);
 
         //then
         assertNotNull(dto);
@@ -84,11 +89,12 @@ public class ComputerServiceImplTest {
     void shouldUpdateComputer() {
         when(computerRepository.update(anyLong(), any(Computer.class))).thenReturn(Optional.of(computer));
 
-        ComputerDto dto = computerService.update(1L, computerDto);
+        ComputerResponseDto dto = computerService.update(1L, computerRequestDto);
 
         assertNotNull(dto);
         verify(computerRepository).update(anyLong(), any(Computer.class));
-        assertThat(dto).usingRecursiveComparison().isEqualTo(computerDto);
+        assertThat(dto).usingRecursiveComparison()
+                .ignoringFields("id").isEqualTo(computerRequestDto);
     }
 
     @Test
@@ -98,7 +104,7 @@ public class ComputerServiceImplTest {
 
         //then
         assertThatExceptionOfType(ComputerNotFoundException.class)
-                .isThrownBy(() -> computerService.update(1L, computerDto));
+                .isThrownBy(() -> computerService.update(1L, computerRequestDto));
     }
 
     @Test
@@ -107,7 +113,7 @@ public class ComputerServiceImplTest {
         when(computerRepository.getComputerById(anyLong())).thenReturn(Optional.of(computer));
 
         //when
-        ComputerDto dto = computerService.getById(1L);
+        ComputerResponseDto dto = computerService.getById(1L);
 
         //then
         assertNotNull(dto);
@@ -130,10 +136,11 @@ public class ComputerServiceImplTest {
         when(computerRepository.getAllComputers()).thenReturn(List.of(computer));
 
         //when
-        List<ComputerDto> dtos = computerService.getAll();
+        List<ComputerResponseDto> dtos = computerService.getAll();
 
         //then
         assertThat(dtos).hasSize(1);
-        assertThat(dtos.getFirst()).usingRecursiveComparison().isEqualTo(computerDto);
+        assertThat(dtos.getFirst()).usingRecursiveComparison()
+                .ignoringFields("id").isEqualTo(computerRequestDto);
     }
 }

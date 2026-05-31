@@ -1,7 +1,7 @@
 package mapper;
 
 import dto.cart.CartDto;
-import dto.product.ProductDto;
+import dto.product.response.ProductResponseDto;
 import entity.cart.Cart;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.List;
 public final class CartMapper {
 
     public static CartDto mapCartToDto(Cart cart) {
-        List<ProductDto> productDtos = cart.getProducts().stream()
+        List<ProductResponseDto> productDtos = cart.getProducts().stream()
                 .map(ProductMapper::mapProductToDto)
                 .toList();
 

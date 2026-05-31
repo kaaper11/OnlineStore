@@ -9,7 +9,6 @@ import java.util.Set;
 
 public class SmartphoneRepository {
     private final Set<Smartphone> smartphones = new HashSet<>();
-    private Long idCounter = 0L;
 
     public Smartphone save(Smartphone smartphone) {
         smartphones.add(smartphone);
@@ -42,9 +41,5 @@ public class SmartphoneRepository {
     public List<Smartphone> getAllSmartphones() {
         return smartphones.stream()
                 .toList();
-    }
-
-    public Long getNextId() {
-        return idCounter++;
     }
 }

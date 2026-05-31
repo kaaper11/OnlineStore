@@ -1,9 +1,9 @@
 package mapper;
 
-import dto.product.ComputerDto;
-import dto.product.ElectronicsDto;
-import dto.product.ProductDto;
-import dto.product.SmartphoneDto;
+import dto.product.response.ComputerResponseDto;
+import dto.product.response.ElectronicsResponseDto;
+import dto.product.response.ProductResponseDto;
+import dto.product.response.SmartphoneResponseDto;
 import entity.product.config.computer.GraphicCard;
 import entity.product.config.computer.Processor;
 import entity.product.config.computer.Ram;
@@ -37,9 +37,9 @@ public class ProductMapperTest {
 
     @Test
     public void shouldMapComputerToDto() {
-        ProductDto result = ProductMapper.mapProductToDto(computer);
+        ProductResponseDto result = ProductMapper.mapProductToDto(computer);
 
-        ComputerDto expected = ComputerMapper.mapComputerToDto(computer);
+        ComputerResponseDto expected = ComputerMapper.mapComputerToDto(computer);
 
         assertThat(result)
                 .usingRecursiveComparison()
@@ -48,9 +48,9 @@ public class ProductMapperTest {
 
     @Test
     public void shouldMapSmartphoneToDto() {
-        ProductDto result = ProductMapper.mapProductToDto(smartphone);
+        ProductResponseDto result = ProductMapper.mapProductToDto(smartphone);
 
-        SmartphoneDto expected = SmartphoneMapper.mapSmartphoneToDto(smartphone);
+        SmartphoneResponseDto expected = SmartphoneMapper.mapSmartphoneToDto(smartphone);
 
         assertThat(result)
                 .usingRecursiveComparison()
@@ -59,9 +59,9 @@ public class ProductMapperTest {
 
     @Test
     public void shouldMapElectronicsToDto() {
-        ProductDto result = ProductMapper.mapProductToDto(electronics);
+        ProductResponseDto result = ProductMapper.mapProductToDto(electronics);
 
-        ElectronicsDto expected = ElectronicsMapper.mapElectronicsToDto(electronics);
+        ElectronicsResponseDto expected = ElectronicsMapper.mapElectronicsToDto(electronics);
 
         assertThat(result)
                 .usingRecursiveComparison()

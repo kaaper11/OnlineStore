@@ -1,9 +1,9 @@
 package mapper;
 
 import dto.cart.CartDto;
-import dto.product.ComputerDto;
-import dto.product.ElectronicsDto;
-import dto.product.ProductDto;
+import dto.product.response.ComputerResponseDto;
+import dto.product.response.ElectronicsResponseDto;
+import dto.product.response.ProductResponseDto;
 import entity.cart.Cart;
 import entity.product.config.computer.GraphicCard;
 import entity.product.config.computer.Processor;
@@ -31,8 +31,9 @@ public class CartMapperTest {
             new Computer(2L, "Mouse", BigDecimal.valueOf(200), 20, Processor.INTEL_CORE_I3,
                     Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
 
-    private final ProductDto productDto1 = new ElectronicsDto("Laptop", BigDecimal.valueOf(3000), 10);
-    private final ProductDto productDto2 = new ComputerDto("Mouse", BigDecimal.valueOf(200), 20,
+    private final ProductResponseDto productDto1 = new ElectronicsResponseDto(1L, "Laptop",
+            BigDecimal.valueOf(3000), 10);
+    private final ProductResponseDto productDto2 = new ComputerResponseDto(2L,"Mouse", BigDecimal.valueOf(200), 20,
             Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
 
     @Test
