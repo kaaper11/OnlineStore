@@ -1,7 +1,8 @@
 package mapper;
 
 import dto.client.AddressDto;
-import dto.client.ClientDto;
+import dto.client.ClientRequestDto;
+import dto.client.ClientResponseDto;
 import entity.client.Address;
 import entity.client.Client;
 import org.junit.jupiter.api.Test;
@@ -18,21 +19,21 @@ public class ClientMapperTest {
     private final AddressDto addressDto = new AddressDto("Poland", "Warsaw", "Zlota", "15-820",
             10);
     private final Client client = new Client(1L, "name", "email", "phone", address);
-    private final ClientDto clientDto = new ClientDto("name", "email", "phone", addressDto);
+    private final ClientRequestDto clientRequestDto = new ClientRequestDto("name", "email", "phone", addressDto);
 
     @Test
     void shouldMapClientToDto() {
-        ClientDto result = ClientMapper.mapClientToDto(client);
+        ClientResponseDto result = ClientMapper.mapClientToDto(client);
 
         assertThat(result).isNotNull();
         assertThat(result)
                 .usingRecursiveComparison()
-                .isEqualTo(clientDto);
+                .isEqualTo(clientRequestDto);
     }
 
     @Test
     void shouldMapClientDtoToClient() {
-        Client result = ClientMapper.mapDtoToClient(clientDto, 1L);
+        Client result = ClientMapper.mapDtoToClient(clientRequestDto, 1L);
 
         assertThat(result).isNotNull();
         assertThat(result)

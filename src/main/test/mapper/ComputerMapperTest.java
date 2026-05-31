@@ -1,6 +1,7 @@
 package mapper;
 
-import dto.product.ComputerDto;
+import dto.product.request.ComputerRequestDto;
+import dto.product.response.ComputerResponseDto;
 import entity.product.config.computer.GraphicCard;
 import entity.product.config.computer.Processor;
 import entity.product.config.computer.Ram;
@@ -20,22 +21,22 @@ public class ComputerMapperTest {
     private final Computer computer = new Computer(1L, "name", new BigDecimal("100"), 20,
             Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
 
-    private final ComputerDto computerDto = new ComputerDto("name", new BigDecimal("100"),
+    private final ComputerRequestDto computerRequestDto = new ComputerRequestDto("name", new BigDecimal("100"),
             20, Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
 
     @Test
     public void shouldMapDtoToComputer() {
-        Computer result = ComputerMapper.mapDtoToComputer(computerDto, 1L);
+        Computer result = ComputerMapper.mapDtoToComputer(computerRequestDto, 1L);
 
         assertThat(result)
                 .usingRecursiveComparison()
                 .ignoringFields("id")
-                .isEqualTo(computerDto);
+                .isEqualTo(computerRequestDto);
     }
 
     @Test
     public void shouldMapComputerToDto() {
-        ComputerDto result = ComputerMapper.mapComputerToDto(computer);
+        ComputerResponseDto result = ComputerMapper.mapComputerToDto(computer);
 
         assertThat(result)
                 .usingRecursiveComparison()

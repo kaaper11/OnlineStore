@@ -1,6 +1,7 @@
 package service;
 
-import dto.product.SmartphoneDto;
+import dto.product.request.SmartphoneRequestDto;
+import dto.product.response.SmartphoneResponseDto;
 
-public interface SmartphoneService extends ProductService<SmartphoneDto> {
+public interface SmartphoneService extends ProductService<SmartphoneResponseDto, SmartphoneRequestDto> {
 }

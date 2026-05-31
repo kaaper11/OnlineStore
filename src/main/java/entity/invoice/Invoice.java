@@ -1,37 +1,34 @@
-package entity.cart;
+package entity.invoice;
 
+import entity.client.Client;
 import entity.product.type.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
 @AllArgsConstructor
 @Getter
-public class Cart {
+public class Invoice {
     private Long id;
-    private Long clientId;
+    private Long orderId;
+    private Client client;
     private List<Product> products;
-
-    public Product addProduct(Product product) {
-        products.add(product);
-        return product;
-    }
-
-    public boolean cheekProductsEmpty() {
-        return products.isEmpty();
-    }
+    private BigDecimal totalPrice;
+    private LocalDateTime invoiceDateTime;
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Cart cart = (Cart) o;
-        return Objects.equals(clientId, cart.clientId);
+        Invoice invoice = (Invoice) o;
+        return Objects.equals(id, invoice.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(clientId);
+        return Objects.hashCode(id);
     }
 }

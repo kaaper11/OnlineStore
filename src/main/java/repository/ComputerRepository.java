@@ -9,7 +9,6 @@ import java.util.Set;
 
 public class ComputerRepository {
     private final Set<Computer> computers = new HashSet<>();
-    private Long idCounter = 0L;
 
     public Computer save(Computer computer) {
         computers.add(computer);
@@ -46,9 +45,5 @@ public class ComputerRepository {
     public List<Computer> getAllComputers() {
         return computers.stream()
                 .toList();
-    }
-
-    public Long getNextId() {
-        return idCounter++;
     }
 }

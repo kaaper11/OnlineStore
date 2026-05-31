@@ -1,7 +1,8 @@
 package service;
 
 import dto.client.AddressDto;
-import dto.client.ClientDto;
+import dto.client.ClientRequestDto;
+import dto.client.ClientResponseDto;
 import entity.client.Address;
 import entity.client.Client;
 import exception.ClientNotFoundException;
@@ -41,7 +42,7 @@ public class ClientServiceImplTest {
     private final Client updatedClient = new Client(1L, "name2", "name@test.com", "987654321",
             address);
 
-    private final ClientDto request = new ClientDto("name3", "name@test.com", "123456789",
+    private final ClientRequestDto request = new ClientRequestDto("name3", "name@test.com", "123456789",
             addressDto);
 
     @Test
@@ -49,7 +50,7 @@ public class ClientServiceImplTest {
         when(clientRepository.getNextId()).thenReturn(1L);
         when(clientRepository.save(any(Client.class))).thenReturn(client);
 
-        ClientDto result = clientService.createClient(request);
+        ClientResponseDto result = clientService.createClient(request);
 
         assertThat(result).isNotNull();
 
@@ -62,7 +63,7 @@ public class ClientServiceImplTest {
         when(clientRepository.update(eq(1L), any(Client.class)))
                 .thenReturn(Optional.of(client));
 
-        ClientDto result = clientService.updateClient(1L, request);
+        ClientResponseDto result = clientService.updateClient(1L, request);
 
         assertThat(result).isNotNull();
 
@@ -82,7 +83,7 @@ public class ClientServiceImplTest {
     public void shouldRemoveClient() {
         when(clientRepository.delete(1L)).thenReturn(Optional.of(client));
 
-        ClientDto result = clientService.removeClient(1L);
+        ClientResponseDto result = clientService.removeClient(1L);
 
         assertThat(result).isNotNull();
 
@@ -101,7 +102,7 @@ public class ClientServiceImplTest {
     public void shouldGetClientById() {
         when(clientRepository.getClientById(1L)).thenReturn(Optional.of(client));
 
-        ClientDto result = clientService.getClientById(1L);
+        ClientResponseDto result = clientService.getClientById(1L);
 
         assertThat(result).isNotNull();
 
@@ -121,7 +122,7 @@ public class ClientServiceImplTest {
         when(clientRepository.getClientByEmail("name@test.com"))
                 .thenReturn(Optional.of(client));
 
-        ClientDto result = clientService.getClientByEmail("name@test.com");
+        ClientResponseDto result = clientService.getClientByEmail("name@test.com");
 
         assertThat(result).isNotNull();
 
@@ -132,7 +133,7 @@ public class ClientServiceImplTest {
     public void shouldGetAllClients() {
         when(clientRepository.getAllComputers()).thenReturn(List.of(client, updatedClient));
 
-        List<ClientDto> result = clientService.getAllClients();
+        List<ClientResponseDto> result = clientService.getAllClients();
 
         assertThat(result).hasSize(2);
 

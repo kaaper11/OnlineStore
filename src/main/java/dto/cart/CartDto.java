@@ -1,8 +1,8 @@
 package dto.cart;
 
-import dto.product.ProductDto;
+import dto.product.response.ProductResponseDto;
 
 import java.util.List;
 
-public record CartDto(Long clientId, List<ProductDto> products) {
+public record CartDto(Long clientId, List<ProductResponseDto> products) {
 }

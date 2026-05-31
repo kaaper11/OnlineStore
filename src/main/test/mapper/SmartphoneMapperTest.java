@@ -1,6 +1,7 @@
 package mapper;
 
-import dto.product.SmartphoneDto;
+import dto.product.request.SmartphoneRequestDto;
+import dto.product.response.SmartphoneResponseDto;
 import entity.product.config.smartphone.Battery;
 import entity.product.config.smartphone.SmartphoneColorType;
 import entity.product.type.Smartphone;
@@ -18,7 +19,7 @@ public class SmartphoneMapperTest {
     private final Smartphone smartphone = new Smartphone(1L, "name", new BigDecimal("100"), 20,
             SmartphoneColorType.BLACK, Battery.MAH5500);
 
-    private final SmartphoneDto smartphoneDto = new SmartphoneDto("name", new BigDecimal("100"), 20,
+    private final SmartphoneRequestDto smartphoneDto = new SmartphoneRequestDto("name", new BigDecimal("100"), 20,
             SmartphoneColorType.BLACK, Battery.MAH5500);
 
     @Test
@@ -33,7 +34,7 @@ public class SmartphoneMapperTest {
 
     @Test
     public void shouldMapSmartphoneToDto() {
-        SmartphoneDto result = SmartphoneMapper.mapSmartphoneToDto(smartphone);
+        SmartphoneResponseDto result = SmartphoneMapper.mapSmartphoneToDto(smartphone);
 
         assertThat(result)
                 .usingRecursiveComparison()

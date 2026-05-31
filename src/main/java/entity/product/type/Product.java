@@ -1,5 +1,6 @@
 package entity.product.type;
 
+import exception.ProductOutOfStockException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +17,9 @@ public abstract class Product {
     private int quantity;
 
     public int buyProduct() {
+        if (quantity == 0) {
+            throw new ProductOutOfStockException(this);
+        }
         quantity--;
         return quantity;
     }

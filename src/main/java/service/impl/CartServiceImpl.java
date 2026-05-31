@@ -5,6 +5,7 @@ import entity.cart.Cart;
 import entity.product.type.Product;
 import exception.CartNotFoundException;
 import exception.ProductNotFoundException;
+import exception.ProductOutOfStockException;
 import lombok.AllArgsConstructor;
 import mapper.CartMapper;
 import repository.CartRepository;
@@ -37,6 +38,10 @@ public class CartServiceImpl implements CartService {
         Cart cart = cartRepository.getCartByClientId(clientId).orElseThrow(CartNotFoundException::new);
 
         Product product = findProductById(productId);
+
+        if (product.getQuantity() < 1) {
+            throw new ProductOutOfStockException(product);
+        }
 
         cart.addProduct(product);
 

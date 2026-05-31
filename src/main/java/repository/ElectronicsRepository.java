@@ -9,7 +9,6 @@ import java.util.Set;
 
 public class ElectronicsRepository {
     private final Set<Electronics> electronicsSet = new HashSet<>();
-    private Long idCounter = 0L;
 
     public Electronics save(Electronics electronics) {
         electronicsSet.add(electronics);
@@ -42,9 +41,5 @@ public class ElectronicsRepository {
     public List<Electronics> getAllElectronics() {
         return electronicsSet.stream()
                 .toList();
-    }
-
-    public Long getNextId() {
-        return idCounter++;
     }
 }

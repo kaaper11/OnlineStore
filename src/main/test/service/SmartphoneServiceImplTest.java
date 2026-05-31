@@ -1,6 +1,7 @@
 package service;
 
-import dto.product.SmartphoneDto;
+import dto.product.request.SmartphoneRequestDto;
+import dto.product.response.SmartphoneResponseDto;
 import entity.product.config.smartphone.Battery;
 import entity.product.config.smartphone.SmartphoneColorType;
 import entity.product.type.Smartphone;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import repository.SmartphoneRepository;
 import service.impl.SmartphoneServiceImpl;
+import utils.ProductIdGenerator;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,10 +33,13 @@ public class SmartphoneServiceImplTest {
     @Mock
     private SmartphoneRepository smartphoneRepository;
 
+    @Mock
+    private ProductIdGenerator productIdGenerator;
+
     @InjectMocks
     private SmartphoneServiceImpl smartphoneService;
 
-    private final SmartphoneDto smartphoneDto = new SmartphoneDto("name", new BigDecimal("100"), 20,
+    private final SmartphoneRequestDto smartphoneDto = new SmartphoneRequestDto("name", new BigDecimal("100"), 20,
             SmartphoneColorType.BLACK, Battery.MAH5500);
 
     private final Smartphone smartphone = new Smartphone(1L, "name", new BigDecimal("100"), 20,
@@ -43,16 +48,17 @@ public class SmartphoneServiceImplTest {
     @Test
     void shouldCreateSmartphone() {
         // given
-        when(smartphoneRepository.getNextId()).thenReturn(1L);
+        when(productIdGenerator.getNextProductId()).thenReturn(1L);
         when(smartphoneRepository.save(any(Smartphone.class))).thenReturn(smartphone);
 
         // when
-        SmartphoneDto dto = smartphoneService.create(smartphoneDto);
+        SmartphoneResponseDto dto = smartphoneService.create(smartphoneDto);
 
         // then
         assertNotNull(dto);
         verify(smartphoneRepository).save(any(Smartphone.class));
-        assertThat(dto).usingRecursiveComparison().isEqualTo(smartphoneDto);
+        assertThat(dto).usingRecursiveComparison().ignoringFields("id")
+                .isEqualTo(smartphoneDto);
     }
 
     @Test
@@ -61,7 +67,7 @@ public class SmartphoneServiceImplTest {
         when(smartphoneRepository.delete(anyLong())).thenReturn(Optional.of(smartphone));
 
         // when
-        SmartphoneDto dto = smartphoneService.remove(1L);
+        SmartphoneResponseDto dto = smartphoneService.remove(1L);
 
         // then
         assertNotNull(dto);
@@ -85,12 +91,12 @@ public class SmartphoneServiceImplTest {
                 .thenReturn(Optional.of(smartphone));
 
         // when
-        SmartphoneDto dto = smartphoneService.update(1L, smartphoneDto);
+        SmartphoneResponseDto dto = smartphoneService.update(1L, smartphoneDto);
 
         // then
         assertNotNull(dto);
         verify(smartphoneRepository).update(anyLong(), any(Smartphone.class));
-        assertThat(dto).usingRecursiveComparison().isEqualTo(smartphoneDto);
+        assertThat(dto).usingRecursiveComparison().ignoringFields("id").isEqualTo(smartphoneDto);
     }
 
     @Test
@@ -111,11 +117,11 @@ public class SmartphoneServiceImplTest {
                 .thenReturn(Optional.of(smartphone));
 
         // when
-        SmartphoneDto dto = smartphoneService.getById(1L);
+        SmartphoneResponseDto dto = smartphoneService.getById(1L);
 
         // then
         assertNotNull(dto);
-        assertThat(dto).usingRecursiveComparison().isEqualTo(smartphoneDto);
+        assertThat(dto).usingRecursiveComparison().ignoringFields("id").isEqualTo(smartphoneDto);
     }
 
     @Test
@@ -136,12 +142,13 @@ public class SmartphoneServiceImplTest {
                 .thenReturn(List.of(smartphone));
 
         // when
-        List<SmartphoneDto> dtos = smartphoneService.getAll();
+        List<SmartphoneResponseDto> dtos = smartphoneService.getAll();
 
         // then
         assertThat(dtos).hasSize(1);
         assertThat(dtos.getFirst())
                 .usingRecursiveComparison()
+                .ignoringFields("id")
                 .isEqualTo(smartphoneDto);
     }
 }
