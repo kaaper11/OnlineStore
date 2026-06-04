@@ -1,5 +1,6 @@
 package service;
 
+import dto.LoginRequest;
 import dto.client.ClientRequestDto;
 import dto.client.ClientResponseDto;
 
@@ -17,4 +18,6 @@ public interface ClientService {
     ClientResponseDto getClientByEmail(String email);
 
     List<ClientResponseDto> getAllClients();
+
+    ClientResponseDto loginClient(LoginRequest loginRequest);
 }

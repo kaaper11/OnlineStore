@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class OrderRepository {
     private final Set<Order> orders = new HashSet<>();
-    private Long idCounter = 0L;
+    private Long idCounter = 1L;
 
     public Order save(Order order) {
         orders.add(order);

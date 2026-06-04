@@ -11,4 +11,9 @@ public class Electronics extends Product {
     public BigDecimal getTotalPrice() {
         return getPrice();
     }
+
+    @Override
+    public Product getProductCopy() {
+        return new Electronics(getId(), getName(), getPrice(), getQuantity());
+    }
 }

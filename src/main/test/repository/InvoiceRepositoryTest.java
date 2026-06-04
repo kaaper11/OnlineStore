@@ -2,6 +2,7 @@ package repository;
 
 import entity.client.Address;
 import entity.client.Client;
+import entity.client.Role;
 import entity.invoice.Invoice;
 import entity.order.Order;
 import entity.product.type.Electronics;
@@ -24,8 +25,8 @@ public class InvoiceRepositoryTest {
     @InjectMocks
     private InvoiceRepository invoiceRepository;
 
-    private final Client client = new Client(2L, "name", "email", "123456789",
-            new Address("Poland", "Warsaw", "Zlota", "15-820", 10));
+    private final Client client = new Client(2L, "name", "email","pass", "123456789",
+            new Address("Poland", "Warsaw", "Zlota", "15-820", 10), Role.USER);
     private final Product product = new Electronics(1L, "product", BigDecimal.TEN, 10);
     private final Order order = new Order(1L, client, List.of(product), BigDecimal.TEN);
     private final Invoice invoice = new Invoice(1L, order.getId(), client,  List.of(product), BigDecimal.TEN,
@@ -46,5 +47,15 @@ public class InvoiceRepositoryTest {
         Optional<Invoice> invoiceResult = invoiceRepository.getInvoiceByOrderId(result.getId());
         assertThat(invoiceResult).isNotNull();
         assertThat(invoiceResult).usingRecursiveComparison().isEqualTo(Optional.of(invoice));
+    }
+
+    @Test
+    public void shouldFindInvoicesByClientId() {
+        invoiceRepository.save(invoice);
+
+        List<Invoice> result = invoiceRepository.getInvoicesByClientId(client.getId());
+
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.getFirst()).isEqualTo(invoice);
     }
 }

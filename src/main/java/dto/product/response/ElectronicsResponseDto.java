@@ -7,4 +7,9 @@ public class ElectronicsResponseDto extends ProductResponseDto {
     public ElectronicsResponseDto(Long id, String name, BigDecimal price, int quantity) {
         super(id, name, price, quantity);
     }
+
+    @Override
+    public String toString() {
+        return "Electronics: (" + "nazwa:" + getName() + ", cena:" + getPrice() + ", dostępność" + getQuantity()+")";
+    }
 }

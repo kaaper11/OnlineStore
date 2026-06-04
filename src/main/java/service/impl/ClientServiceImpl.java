@@ -1,14 +1,18 @@
 package service.impl;
 
+import dto.LoginRequest;
 import dto.client.ClientRequestDto;
 import dto.client.ClientResponseDto;
 import entity.client.Client;
+import exception.ClientAlreadyExists;
 import exception.ClientNotFoundException;
+import exception.IncorrectPasswordException;
 import lombok.RequiredArgsConstructor;
 import mapper.ClientMapper;
 import repository.CartRepository;
 import repository.ClientRepository;
 import service.ClientService;
+import validator.ClientValidator;
 
 import java.util.List;
 
@@ -19,7 +23,14 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientResponseDto createClient(ClientRequestDto clientRequestDto) {
-        Client client = clientRepository.save(ClientMapper.mapDtoToClient(clientRequestDto, clientRepository.getNextId()));
+        ClientValidator.validate(clientRequestDto);
+
+        if (clientRepository.isClientExist(clientRequestDto.email())) {
+            throw new ClientAlreadyExists();
+        }
+
+        Client client = clientRepository.save(ClientMapper.mapDtoToClient(clientRequestDto,
+                clientRepository.getNextId()));
         cartRepository.save(client.getId());
         return ClientMapper.mapClientToDto(client);
     }
@@ -35,7 +46,6 @@ public class ClientServiceImpl implements ClientService {
     public ClientResponseDto removeClient(Long id) {
         cartRepository.delete(id);
         Client client = clientRepository.delete(id).orElseThrow(ClientNotFoundException::new);
-        clientRepository.delete(id);
         return ClientMapper.mapClientToDto(client);
     }
 
@@ -56,5 +66,17 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.getAllComputers().stream()
                 .map(ClientMapper::mapClientToDto)
                 .toList();
+    }
+
+    @Override
+    public ClientResponseDto loginClient(LoginRequest loginRequest) {
+        Client client = clientRepository.getClientByEmail(loginRequest.email())
+                .orElseThrow(ClientNotFoundException::new);
+
+        if(!client.getPassword().equals(loginRequest.password())) {
+            throw new IncorrectPasswordException();
+        }
+
+        return ClientMapper.mapClientToDto(client);
     }
 }

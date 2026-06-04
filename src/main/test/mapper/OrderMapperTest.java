@@ -3,6 +3,7 @@ package mapper;
 import dto.order.OrderDto;
 import entity.client.Address;
 import entity.client.Client;
+import entity.client.Role;
 import entity.order.Order;
 import entity.product.type.Electronics;
 import entity.product.type.Product;
@@ -20,8 +21,8 @@ public class OrderMapperTest {
 
     @Test
     void shouldMapOrderToDto() {
-        Client client = new Client(2L, "name", "email", "123456789",
-                new Address("Poland", "Warsaw", "Zlota", "15-820", 10));
+        Client client = new Client(2L, "name", "email","pass", "123456789",
+                new Address("Poland", "Warsaw", "Zlota", "15-820", 10), Role.USER);
         Product product = new Electronics(1L, "product", BigDecimal.TEN, 10);
         Order order = new Order(1L, client, List.of(product), BigDecimal.TEN);
 

@@ -3,10 +3,10 @@ package entity;
 import entity.product.config.smartphone.Accessory;
 import entity.product.config.smartphone.Battery;
 import entity.product.config.smartphone.SmartphoneColorType;
+import entity.product.type.Product;
 import entity.product.type.Smartphone;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 @ExtendWith(MockitoExtension.class)
 public class SmartphoneTest {
 
-    @InjectMocks
     Smartphone smartphone = new Smartphone(1L, "name", new BigDecimal(BigInteger.ONE), 22,
             SmartphoneColorType.BLACK, Battery.MAH5000);
 
@@ -42,36 +41,6 @@ public class SmartphoneTest {
     }
 
     @Test
-    public void shouldReturnTrueWhenAllComponentsPresent() {
-        //when
-        smartphone.configureSmartphone(color, battery);
-        boolean result = smartphone.isConfigured();
-
-        //then
-        assertThat(result).isTrue();
-    }
-
-    @Test
-    public void shouldReturnFalseWhenColorIsNull() {
-        //when
-        smartphone.configureSmartphone(null, battery);
-        boolean result = smartphone.isConfigured();
-
-        //then
-        assertThat(result).isFalse();
-    }
-
-    @Test
-    public void shouldReturnFalseWhenBatteryIsNull() {
-        //when
-        smartphone.configureSmartphone(color, null);
-        boolean result = smartphone.isConfigured();
-
-        //then
-        assertThat(result).isFalse();
-    }
-
-    @Test
     public void shouldAddAccessoryToList() {
         //when
         Accessory result = smartphone.addAccessory(accessory);
@@ -91,5 +60,21 @@ public class SmartphoneTest {
         assertThat(smartphone.getAccessoryList()).hasSize(1);
         assertThat(result).isNotNull();
         assertThat(smartphone.getAccessoryList()).contains(accessory);
+    }
+
+    @Test
+    public void shouldReturnTotalPriceCorrectly() {
+        BigDecimal totalPrice = smartphone.getTotalPrice();
+
+        assertThat(totalPrice).isNotNull();
+        assertThat(totalPrice).isEqualTo(new BigDecimal(BigInteger.ONE));
+    }
+
+    @Test
+    public void shouldReturnSmartphoneCopyCorrectly() {
+        Product computer1 = smartphone.getProductCopy();
+
+        assertThat(computer1).isNotNull();
+        assertThat(computer1.getName()).isEqualTo(smartphone.getName());
     }
 }

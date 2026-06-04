@@ -1,4 +1,12 @@
 package dto.client;
 
-public record ClientRequestDto(String name, String email, String phone, AddressDto address) {
+public record ClientRequestDto(
+        String name,
+
+        String email,
+        String password,
+
+        String phone,
+
+        AddressDto address) {
 }

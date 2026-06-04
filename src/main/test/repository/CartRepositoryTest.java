@@ -22,7 +22,7 @@ class CartRepositoryTest {
         Cart cart = repository.save(1L);
 
         assertNotNull(cart);
-        assertEquals(0L, cart.getId());
+        assertEquals(2L, cart.getId());
         assertEquals(1L, cart.getClientId());
     }
 
@@ -31,8 +31,8 @@ class CartRepositoryTest {
         Cart cart1 = repository.save(1L);
         Cart cart2 = repository.save(2L);
 
-        assertEquals(0L, cart1.getId());
-        assertEquals(1L, cart2.getId());
+        assertEquals(2L, cart1.getId());
+        assertEquals(3L, cart2.getId());
     }
 
     @Test
@@ -79,7 +79,8 @@ class CartRepositoryTest {
         repository.save(1L);
         repository.save(2L);
 
-        assertEquals(2, repository.getAllCarts().size());
+        assertEquals(3, repository.getAllCarts().size());
+        assertEquals(3L, repository.getAllCarts().get(1).getId());
     }
 
     @Test

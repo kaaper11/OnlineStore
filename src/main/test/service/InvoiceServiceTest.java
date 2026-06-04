@@ -4,6 +4,7 @@ import dto.invoice.InvoiceDto;
 import entity.cart.Cart;
 import entity.client.Address;
 import entity.client.Client;
+import entity.client.Role;
 import entity.invoice.Invoice;
 import entity.order.Order;
 import entity.product.type.Electronics;
@@ -40,8 +41,8 @@ public class InvoiceServiceTest {
     private final Cart cart = new Cart(1L, 10L, List.of(product));
     private final Address address = new Address("Poland", "Warsaw", "Zlota", "15-820",
             2);
-    private final Client client = new Client(1L, "name", "name@test.com", "123456789",
-            address);
+    private final Client client = new Client(1L, "name", "name@test.com", "pass", "123456789",
+            address, Role.USER);
     private final Order order = new Order(1L, client, cart.getProducts(), BigDecimal.TEN);
     private final Invoice invoice = new Invoice(1L, order.getId(), client, order.getProducts(), BigDecimal.TEN,
             LocalDateTime.now());
@@ -61,5 +62,15 @@ public class InvoiceServiceTest {
         when(invoiceRepository.getInvoiceByOrderId(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(InvoiceNotFoundException.class, () -> invoiceService.getInvoiceByOrderId(1L));
+    }
+
+    @Test
+    void shouldFindInvoicesByClientId() {
+        when(invoiceRepository.getInvoicesByClientId(anyLong())).thenReturn(List.of(invoice));
+
+        List<InvoiceDto> invoicesDto = invoiceService.getInvoicesByClientId(1L);
+
+        assertThat(invoicesDto).hasSize(1);
+        assertThat(invoicesDto.getFirst()).usingRecursiveComparison().isEqualTo(invoice);
     }
 }

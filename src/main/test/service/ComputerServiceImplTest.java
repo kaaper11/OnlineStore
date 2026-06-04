@@ -1,7 +1,12 @@
 package service;
 
 import dto.product.request.ComputerRequestDto;
+import dto.product.request.ElectronicsRequestDto;
+import dto.product.request.ProductRequestDto;
 import dto.product.response.ComputerResponseDto;
+import entity.client.Address;
+import entity.client.Client;
+import entity.client.Role;
 import entity.product.config.computer.GraphicCard;
 import entity.product.config.computer.Processor;
 import entity.product.config.computer.Ram;
@@ -13,9 +18,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import repository.ComputerRepository;
+import repository.ClientRepository;
+import repository.productrepositories.ComputerRepository;
 import service.impl.ComputerServiceImpl;
-import utils.ProductIdGenerator;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -36,26 +41,32 @@ public class ComputerServiceImplTest {
     private ComputerRepository computerRepository;
 
     @Mock
-    private ProductIdGenerator productIdGenerator;
+    private ClientRepository clientRepository;
 
     @InjectMocks
     private ComputerServiceImpl computerService;
 
     private final ComputerRequestDto computerRequestDto = new ComputerRequestDto("name", new BigDecimal("100"),
-            20, Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
+            20);
 
     private final Computer computer = new Computer(1L, "name", new BigDecimal("100"), 20,
             Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
+
+    private final Address address = new Address("Poland", "Warsaw", "Zlota", "15-820",
+            2);
+
+    private final Client client = new Client(1L, "name", "name@test.com", "pasS12%dd",
+            "123456789", address, Role.ADMIN);
 
 
     @Test
     void shouldCreateComputer() {
         //given
-        when(productIdGenerator.getNextProductId()).thenReturn(1L);
         when(computerRepository.save(any(Computer.class))).thenReturn(computer);
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
 
         //when
-        ComputerResponseDto dto = computerService.create(computerRequestDto);
+        ComputerResponseDto dto = computerService.create(computerRequestDto, 1L);
 
         assertNotNull(dto);
         verify(computerRepository).save(any(Computer.class));
@@ -66,45 +77,26 @@ public class ComputerServiceImplTest {
     void shouldRemoveComputer() {
         //given
         when(computerRepository.delete(anyLong())).thenReturn(Optional.of(computer));
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
 
         //when
-        ComputerResponseDto dto = computerService.remove(1L);
+        ComputerResponseDto dto = computerService.remove(1L, 1L);
 
         //then
         assertNotNull(dto);
         verify(computerRepository).delete(1L);
+        assertThat(dto.getName()).isEqualTo(computerRequestDto.getName());
     }
 
     @Test
     void shouldThrowWhenRemoveAndComputerNotFound() {
         //given
         when(computerRepository.delete(anyLong())).thenReturn(Optional.empty());
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
 
         //then
         assertThatExceptionOfType(ComputerNotFoundException.class)
-                .isThrownBy(() -> computerService.remove(1L));
-    }
-
-    @Test
-    void shouldUpdateComputer() {
-        when(computerRepository.update(anyLong(), any(Computer.class))).thenReturn(Optional.of(computer));
-
-        ComputerResponseDto dto = computerService.update(1L, computerRequestDto);
-
-        assertNotNull(dto);
-        verify(computerRepository).update(anyLong(), any(Computer.class));
-        assertThat(dto).usingRecursiveComparison()
-                .ignoringFields("id").isEqualTo(computerRequestDto);
-    }
-
-    @Test
-    void shouldThrowWhenUpdateAndComputerNotFound() {
-        //given
-        when(computerRepository.update(anyLong(), any(Computer.class))).thenReturn(Optional.empty());
-
-        //then
-        assertThatExceptionOfType(ComputerNotFoundException.class)
-                .isThrownBy(() -> computerService.update(1L, computerRequestDto));
+                .isThrownBy(() -> computerService.remove(1L, 1L));
     }
 
     @Test
@@ -142,5 +134,37 @@ public class ComputerServiceImplTest {
         assertThat(dtos).hasSize(1);
         assertThat(dtos.getFirst()).usingRecursiveComparison()
                 .ignoringFields("id").isEqualTo(computerRequestDto);
+    }
+
+    @Test
+    void shouldComputerExists() {
+        when(computerRepository.getComputerById(anyLong())).thenReturn(Optional.of(computer));
+
+        boolean result = computerService.exist(computer.getId());
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void shouldComputerNotExists() {
+        when(computerRepository.getComputerById(anyLong())).thenReturn(Optional.of(computer));
+
+        boolean result = computerService.exist(10L);
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void shouldProductIsInstanceComputer() {
+        ProductRequestDto dto = new ComputerRequestDto("name", new BigDecimal("100"), 20);
+
+        boolean result = computerService.isInstance(dto);
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void shouldProductIsNotInstanceComputer() {
+        ProductRequestDto dto = new ElectronicsRequestDto("name", new BigDecimal("100"), 20);
+
+        boolean result = computerService.isInstance(dto);
+        assertThat(result).isFalse();
     }
 }

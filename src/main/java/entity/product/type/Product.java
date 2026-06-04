@@ -1,19 +1,20 @@
 package entity.product.type;
 
 import exception.ProductOutOfStockException;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@ToString
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Product {
     private Long id;
     private String name;
+    @Setter
     private BigDecimal price;
+    @Setter
     private int quantity;
 
     public int buyProduct() {
@@ -37,4 +38,6 @@ public abstract class Product {
     }
 
     public abstract BigDecimal getTotalPrice();
+
+    public abstract Product getProductCopy();
 }

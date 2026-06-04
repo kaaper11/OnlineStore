@@ -5,6 +5,7 @@ import dto.client.ClientRequestDto;
 import dto.client.ClientResponseDto;
 import entity.client.Address;
 import entity.client.Client;
+import entity.client.Role;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,8 +19,10 @@ public class ClientMapperTest {
             10);
     private final AddressDto addressDto = new AddressDto("Poland", "Warsaw", "Zlota", "15-820",
             10);
-    private final Client client = new Client(1L, "name", "email", "phone", address);
-    private final ClientRequestDto clientRequestDto = new ClientRequestDto("name", "email", "phone", addressDto);
+    private final Client client = new Client(1L, "name", "email", "pass", "phone",
+            address, Role.USER);
+    private final ClientRequestDto clientRequestDto = new ClientRequestDto("name", "email", "pass",
+            "phone", addressDto);
 
     @Test
     void shouldMapClientToDto() {
@@ -28,6 +31,7 @@ public class ClientMapperTest {
         assertThat(result).isNotNull();
         assertThat(result)
                 .usingRecursiveComparison()
+                .ignoringFields("role", "id")
                 .isEqualTo(clientRequestDto);
     }
 

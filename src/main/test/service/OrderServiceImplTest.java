@@ -4,10 +4,11 @@ import dto.order.OrderDto;
 import entity.cart.Cart;
 import entity.client.Address;
 import entity.client.Client;
+import entity.client.Role;
 import entity.order.Order;
 import entity.product.type.Electronics;
 import entity.product.type.Product;
-import exception.CartIsEmptyException;
+import exception.CartEmptyException;
 import exception.OrderNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import repository.CartRepository;
 import repository.ClientRepository;
+import repository.InvoiceRepository;
 import repository.OrderRepository;
 import service.impl.OrderServiceImpl;
 
@@ -37,6 +39,9 @@ public class OrderServiceImplTest {
     private OrderRepository orderRepository;
 
     @Mock
+    private InvoiceRepository invoiceRepository;
+
+    @Mock
     private CartRepository cartRepository;
 
     @Mock
@@ -49,8 +54,8 @@ public class OrderServiceImplTest {
     private final Cart cart = new Cart(1L, 10L, List.of(product));
     private final Address address = new Address("Poland", "Warsaw", "Zlota", "15-820",
             2);
-    private final Client client = new Client(1L, "name", "name@test.com", "123456789",
-            address);
+    private final Client client = new Client(1L, "name", "name@test.com", "pass",
+            "123456789", address, Role.ADMIN);
     private final Order order = new Order(1L, client, cart.getProducts(), BigDecimal.TEN);
 
     @Test
@@ -77,7 +82,7 @@ public class OrderServiceImplTest {
         when(cartRepository.getCartByClientId(anyLong())).thenReturn(Optional.of(testCart));
         when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
 
-        assertThrows(CartIsEmptyException.class, () -> orderService.placeOrder(1L));
+        assertThrows(CartEmptyException.class, () -> orderService.placeOrder(1L));
     }
 
     @Test

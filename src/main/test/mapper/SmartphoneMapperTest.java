@@ -2,8 +2,6 @@ package mapper;
 
 import dto.product.request.SmartphoneRequestDto;
 import dto.product.response.SmartphoneResponseDto;
-import entity.product.config.smartphone.Battery;
-import entity.product.config.smartphone.SmartphoneColorType;
 import entity.product.type.Smartphone;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,11 +14,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 public class SmartphoneMapperTest {
 
-    private final Smartphone smartphone = new Smartphone(1L, "name", new BigDecimal("100"), 20,
-            SmartphoneColorType.BLACK, Battery.MAH5500);
+    private final Smartphone smartphone = new Smartphone(1L, "name", new BigDecimal("100"), 20);
 
-    private final SmartphoneRequestDto smartphoneDto = new SmartphoneRequestDto("name", new BigDecimal("100"), 20,
-            SmartphoneColorType.BLACK, Battery.MAH5500);
+    private final SmartphoneRequestDto smartphoneDto = new SmartphoneRequestDto("name", new BigDecimal("100"),
+            20);
 
     @Test
     public void shouldMapDtoToSmartphone() {

@@ -1,6 +1,8 @@
 package repository;
 
+import entity.client.Address;
 import entity.client.Client;
+import entity.client.Role;
 
 import java.util.HashSet;
 import java.util.List;
@@ -10,6 +12,13 @@ import java.util.Set;
 public class ClientRepository {
     private final Set<Client> clients = new HashSet<>();
     private Long idCounter = 0L;
+
+    public ClientRepository() {
+        Client client = new Client(100L, "Kacper", "kacper60@wp.pl", "123",
+                "123456789", new Address("Polska", "WWa", "Warszawska", "15-876", 2),
+                Role.ADMIN);
+        clients.add(client);
+    }
 
     public Client save(Client client) {
         clients.add(client);
@@ -29,7 +38,7 @@ public class ClientRepository {
                 .map(client -> {
                     clients.remove(client);
                     clients.add(updatedClient);
-                    return client;
+                    return updatedClient;
                 });
     }
 
@@ -54,4 +63,7 @@ public class ClientRepository {
         return idCounter++;
     }
 
+    public boolean isClientExist(String email) {
+        return getClientByEmail(email).isPresent();
+    }
 }

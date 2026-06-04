@@ -1,6 +1,7 @@
 package service.impl;
 
 import dto.cart.CartDto;
+import dto.productconfig.ProductConfig;
 import entity.cart.Cart;
 import entity.product.type.Product;
 import exception.CartNotFoundException;
@@ -9,9 +10,9 @@ import exception.ProductOutOfStockException;
 import lombok.AllArgsConstructor;
 import mapper.CartMapper;
 import repository.CartRepository;
-import repository.ComputerRepository;
-import repository.ElectronicsRepository;
-import repository.SmartphoneRepository;
+import repository.productrepositories.ComputerRepository;
+import repository.productrepositories.ElectronicsRepository;
+import repository.productrepositories.SmartphoneRepository;
 import service.CartService;
 
 @AllArgsConstructor
@@ -34,14 +35,20 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDto addProductToCart(Long clientId, Long productId) {
+    public CartDto addProductToCart(Long clientId, Long productId, ProductConfig productConfig) {
         Cart cart = cartRepository.getCartByClientId(clientId).orElseThrow(CartNotFoundException::new);
 
-        Product product = findProductById(productId);
+        Product originalProduct = findProductById(productId);
 
-        if (product.getQuantity() < 1) {
-            throw new ProductOutOfStockException(product);
+        if (originalProduct.getQuantity() < 1) {
+            throw new ProductOutOfStockException(originalProduct);
         }
+
+        originalProduct.buyProduct();
+
+        Product product = originalProduct.getProductCopy();
+
+        productConfig.configure(product);
 
         cart.addProduct(product);
 
