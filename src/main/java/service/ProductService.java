@@ -1,17 +1,24 @@
 package service;
 
+import dto.product.request.ProductRequestDto;
 import dto.product.response.ProductResponseDto;
-
+import java.math.BigDecimal;
 import java.util.List;
 
-public interface ProductService<T extends ProductResponseDto, R> {
-    T create(R dto);
+public interface ProductService<T extends ProductResponseDto> {
+    T create(ProductRequestDto dto, Long clientId);
 
-    T remove(Long id);
+    T remove(Long id, Long clientId);
 
-    T update(Long id, R dto);
+    T updatePrice(Long id, Long clientId, BigDecimal price);
+
+    T updateQuantity(Long id, Long clientId, int quantity);
 
     T getById(Long id);
 
     List<T> getAll();
+
+    boolean exist(Long id);
+
+    boolean isInstance(ProductRequestDto dto);
 }

@@ -1,16 +1,20 @@
 package service;
 
+import dto.LoginRequest;
 import dto.client.AddressDto;
 import dto.client.ClientRequestDto;
 import dto.client.ClientResponseDto;
 import entity.client.Address;
 import entity.client.Client;
+import entity.client.Role;
 import exception.ClientNotFoundException;
+import exception.IncorrectPasswordException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import repository.CartRepository;
 import repository.ClientRepository;
 import service.impl.ClientServiceImpl;
 
@@ -27,6 +31,9 @@ public class ClientServiceImplTest {
     @Mock
     private ClientRepository clientRepository;
 
+    @Mock
+    private CartRepository cartRepository;
+
     @InjectMocks
     private ClientServiceImpl clientService;
 
@@ -36,14 +43,14 @@ public class ClientServiceImplTest {
     private final AddressDto addressDto = new AddressDto("Poland", "Warsaw", "Zlota", "15-820",
             2);
 
-    private final Client client = new Client(1L, "name", "name@test.com", "123456789",
-            address);
+    private final Client client = new Client(1L, "name", "name@test.com", "pasS12%dd",
+            "123456789", address, Role.ADMIN);
 
-    private final Client updatedClient = new Client(1L, "name2", "name@test.com", "987654321",
-            address);
+    private final Client updatedClient = new Client(1L, "name2", "name@test.com", "pasS12%dd",
+            "987654321", address, Role.ADMIN);
 
-    private final ClientRequestDto request = new ClientRequestDto("name3", "name@test.com", "123456789",
-            addressDto);
+    private final ClientRequestDto request = new ClientRequestDto("name3", "name@test.com",
+            "pasS12%dd", "123456789", addressDto);
 
     @Test
     public void shouldCreateClient() {
@@ -56,6 +63,7 @@ public class ClientServiceImplTest {
 
         verify(clientRepository).getNextId();
         verify(clientRepository).save(any(Client.class));
+        assertThat(result.email()).isEqualTo(request.email());
     }
 
     @Test
@@ -68,6 +76,7 @@ public class ClientServiceImplTest {
         assertThat(result).isNotNull();
 
         verify(clientRepository).update(eq(1L), any(Client.class));
+        assertThat(result.email()).isEqualTo(request.email());
     }
 
     @Test
@@ -75,8 +84,7 @@ public class ClientServiceImplTest {
         when(clientRepository.update(eq(1L), any(Client.class)))
                 .thenReturn(Optional.empty());
 
-        assertThrows(ClientNotFoundException.class,
-                () -> clientService.updateClient(1L, request));
+        assertThrows(ClientNotFoundException.class, () -> clientService.updateClient(1L, request));
     }
 
     @Test
@@ -88,14 +96,14 @@ public class ClientServiceImplTest {
         assertThat(result).isNotNull();
 
         verify(clientRepository).delete(1L);
+        assertThat(result.id()).isEqualTo(client.getId());
     }
 
     @Test
     public void shouldThrowWhenRemovingNotExistingClient() {
         when(clientRepository.delete(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ClientNotFoundException.class,
-                () -> clientService.removeClient(1L));
+        assertThrows(ClientNotFoundException.class, () -> clientService.removeClient(1L));
     }
 
     @Test
@@ -107,14 +115,14 @@ public class ClientServiceImplTest {
         assertThat(result).isNotNull();
 
         verify(clientRepository).getClientById(1L);
+        assertThat(result.id()).isEqualTo(client.getId());
     }
 
     @Test
     public void shouldThrowWhenClientByIdNotFound() {
         when(clientRepository.getClientById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ClientNotFoundException.class,
-                () -> clientService.getClientById(1L));
+        assertThrows(ClientNotFoundException.class, () -> clientService.getClientById(1L));
     }
 
     @Test
@@ -127,6 +135,7 @@ public class ClientServiceImplTest {
         assertThat(result).isNotNull();
 
         verify(clientRepository).getClientByEmail("name@test.com");
+        assertThat(result.id()).isEqualTo(client.getId());
     }
 
     @Test
@@ -138,5 +147,27 @@ public class ClientServiceImplTest {
         assertThat(result).hasSize(2);
 
         verify(clientRepository).getAllComputers();
+        assertThat(result.getFirst().id()).isEqualTo(client.getId());
+    }
+
+    @Test
+    public void shouldLoginClientWhenPasswordMatches() {
+        LoginRequest loginRequest = new LoginRequest("name@test.com", "pasS12%dd");
+
+        when(clientRepository.getClientByEmail(anyString())).thenReturn(Optional.of(client));
+
+        ClientResponseDto clientResponseDto = clientService.loginClient(loginRequest);
+
+        assertThat(clientResponseDto).isNotNull();
+        assertThat(clientResponseDto.id()).isEqualTo(client.getId());
+    }
+
+    @Test
+    public void shouldThrowWhenPasswordDoesNotMatch() {
+        LoginRequest loginRequest = new LoginRequest("name@test.com", "zlepass");
+
+        when(clientRepository.getClientByEmail(anyString())).thenReturn(Optional.of(client));
+
+        assertThrows(IncorrectPasswordException.class, () -> clientService.loginClient(loginRequest));
     }
 }

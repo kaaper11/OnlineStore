@@ -2,10 +2,6 @@ package mapper;
 
 import dto.product.request.ComputerRequestDto;
 import dto.product.response.ComputerResponseDto;
-import entity.product.config.computer.GraphicCard;
-import entity.product.config.computer.Processor;
-import entity.product.config.computer.Ram;
-import entity.product.config.computer.Rom;
 import entity.product.type.Computer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,11 +14,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 public class ComputerMapperTest {
 
-    private final Computer computer = new Computer(1L, "name", new BigDecimal("100"), 20,
-            Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
+    private final Computer computer = new Computer(1L, "name", new BigDecimal("100"), 20);
 
     private final ComputerRequestDto computerRequestDto = new ComputerRequestDto("name", new BigDecimal("100"),
-            20, Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
+            20);
 
     @Test
     public void shouldMapDtoToComputer() {

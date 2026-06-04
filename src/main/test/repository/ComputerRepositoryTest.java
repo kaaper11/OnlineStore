@@ -1,14 +1,11 @@
 package repository;
 
-import entity.product.config.computer.GraphicCard;
-import entity.product.config.computer.Processor;
-import entity.product.config.computer.Ram;
-import entity.product.config.computer.Rom;
 import entity.product.type.Computer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import repository.productrepositories.ComputerRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,8 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 public class ComputerRepositoryTest {
 
-    private final Computer computer = new Computer(1L, "name", new BigDecimal("100"), 20,
-            Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
+    private final Computer computer = new Computer(1L, "name", new BigDecimal("100"), 20);
 
     @InjectMocks
     private ComputerRepository computerRepository;
@@ -40,19 +36,6 @@ public class ComputerRepositoryTest {
 
         assertThat(deleted).isPresent();
         assertThat(computerRepository.getComputerById(1L)).isEmpty();
-    }
-
-    @Test
-    public void shouldUpdateComputer() {
-        computerRepository.save(computer);
-
-        Computer update = new Computer(1L, "new", new BigDecimal("200"), 15,
-                Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
-
-        Optional<Computer> result = computerRepository.update(1L, update);
-
-        assertThat(result).isPresent();
-        assertThat(computerRepository.getComputerById(1L)).isEqualTo(Optional.of(update));
     }
 
 
@@ -79,11 +62,9 @@ public class ComputerRepositoryTest {
     void shouldReturnAllComputers() {
         ComputerRepository repository = new ComputerRepository();
 
-        Computer c1 = new Computer(1L, "a", BigDecimal.ONE, 1,
-                Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
+        Computer c1 = new Computer(1L, "a", BigDecimal.ONE, 1);
 
-        Computer c2 = new Computer(2L, "b", BigDecimal.TEN, 2,
-                Processor.INTEL_CORE_I5, Ram.GB16, Rom.GB500, GraphicCard.RTX5090);
+        Computer c2 = new Computer(2L, "b", BigDecimal.TEN, 2);
 
         repository.save(c1);
         repository.save(c2);
@@ -91,5 +72,24 @@ public class ComputerRepositoryTest {
         List<Computer> result = repository.getAllComputers();
 
         assertThat(result).hasSize(2);
+        assertThat(result.getFirst()).isEqualTo(c1);
+    }
+
+    @Test
+    void shouldUpdateComputerPrice() {
+        computerRepository.save(computer);
+
+        Optional<Computer> result = computerRepository.updateComputerPrice(1L, BigDecimal.TEN);
+        assertThat(result).isPresent();
+        assertThat(computerRepository.getComputerById(1L).get().getPrice()).isEqualTo(BigDecimal.TEN);
+    }
+
+    @Test
+    void shouldUpdateComputerQuantity() {
+        computerRepository.save(computer);
+
+        Optional<Computer> result = computerRepository.updateComputerQuantity(1L, 100);
+        assertThat(result).isPresent();
+        assertThat(computerRepository.getComputerById(1L).get().getQuantity()).isEqualTo(100);
     }
 }

@@ -2,6 +2,7 @@ package repository;
 
 import entity.client.Address;
 import entity.client.Client;
+import entity.client.Role;
 import entity.order.Order;
 import entity.product.type.Electronics;
 import entity.product.type.Product;
@@ -27,8 +28,8 @@ public class OrderRepositoryTest {
     @InjectMocks
     private OrderRepository orderRepository;
 
-    private final Client client = new Client(2L, "name", "email", "123456789",
-            new Address("Poland", "Warsaw", "Zlota", "15-820", 10));
+    private final Client client = new Client(2L, "name", "email","pass", "123456789",
+            new Address("Poland", "Warsaw", "Zlota", "15-820", 10), Role.ADMIN);
     private final Product product = new Electronics(1L, "product", BigDecimal.TEN, 10);
     private final Order order = new Order(1L, client, List.of(product), BigDecimal.TEN);
 
@@ -41,8 +42,8 @@ public class OrderRepositoryTest {
     }
 
     private static Stream<Arguments> getOrderArguments() {
-        Client client = new Client(2L, "name", "email", "123456789",
-                new Address("Poland", "Warsaw", "Zlota", "15-820", 10));
+        Client client = new Client(2L, "name", "email","pass", "123456789",
+                new Address("Poland", "Warsaw", "Zlota", "15-820", 10), Role.ADMIN);
 
         Product product = new Electronics(1L, "product", BigDecimal.TEN, 10);
 

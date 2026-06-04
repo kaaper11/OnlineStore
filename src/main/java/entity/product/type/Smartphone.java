@@ -10,14 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class Smartphone extends Product implements Configurable {
+public class Smartphone extends Product {
     private SmartphoneColorType color;
     private Battery battery;
     private List<Accessory> accessoryList = new ArrayList<>();
 
 
-    public Smartphone(Long id, String name, BigDecimal price, int quantity, SmartphoneColorType color,
-                      Battery battery) {
+    public Smartphone(Long id, String name, BigDecimal price, int quantity) {
+        super(id, name, price, quantity);
+    }
+
+    public Smartphone(Long id, String name, BigDecimal price, int quantity, SmartphoneColorType color, Battery battery) {
         super(id, name, price, quantity);
         this.color = color;
         this.battery = battery;
@@ -36,16 +39,16 @@ public class Smartphone extends Product implements Configurable {
     }
 
     @Override
-    public boolean isConfigured() {
-        return color != null && battery != null;
-    }
-
-    @Override
     public BigDecimal getTotalPrice() {
         BigDecimal accessoryTotalPrice = accessoryList.stream()
                 .map(Accessory::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return getPrice().add(battery.getPrice()).add(accessoryTotalPrice);
+    }
+
+    @Override
+    public Product getProductCopy() {
+        return new Smartphone(getId(), getName(), getPrice(), getQuantity());
     }
 }

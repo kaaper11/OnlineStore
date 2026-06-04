@@ -6,7 +6,11 @@ import java.util.*;
 
 public class CartRepository {
     private final Set<Cart> carts = new HashSet<>();
-    private Long idCounter = 0L;
+    private Long idCounter = 1L;
+
+    public CartRepository() {
+        save(100L);
+    }
 
     public Cart save(Long clientId) {
         Cart cart = new Cart(getNextId(), clientId, new ArrayList<>());

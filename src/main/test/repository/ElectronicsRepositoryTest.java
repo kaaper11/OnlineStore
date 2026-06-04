@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import repository.productrepositories.ElectronicsRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,19 +36,6 @@ public class ElectronicsRepositoryTest {
 
         assertThat(deleted).isPresent();
         assertThat(electronicsRepository.getElectronicsById(1L)).isEmpty();
-    }
-
-    @Test
-    public void shouldUpdateElectronics() {
-        electronicsRepository.save(electronics);
-
-        Electronics update = new Electronics(1L, "new", new BigDecimal("200"), 15);
-
-        Optional<Electronics> result = electronicsRepository.update(1L, update);
-
-        assertThat(result).isPresent();
-        assertThat(electronicsRepository.getElectronicsById(1L))
-                .isEqualTo(Optional.of(update));
     }
 
     @Test
@@ -82,5 +70,24 @@ public class ElectronicsRepositoryTest {
         List<Electronics> result = repository.getAllElectronics();
 
         assertThat(result).hasSize(2);
+        assertThat(result.getFirst()).isEqualTo(e1);
+    }
+
+    @Test
+    void shouldUpdateComputerPrice() {
+        electronicsRepository.save(electronics);
+
+        Optional<Electronics> result = electronicsRepository.updatePrice(1L, BigDecimal.TEN);
+        assertThat(result).isPresent();
+        assertThat(electronicsRepository.getElectronicsById(1L).get().getPrice()).isEqualTo(BigDecimal.TEN);
+    }
+
+    @Test
+    void shouldUpdateComputerQuantity() {
+        electronicsRepository.save(electronics);
+
+        Optional<Electronics> result = electronicsRepository.updateQuantity(1L, 100);
+        assertThat(result).isPresent();
+        assertThat(electronicsRepository.getElectronicsById(1L).get().getQuantity()).isEqualTo(100);
     }
 }

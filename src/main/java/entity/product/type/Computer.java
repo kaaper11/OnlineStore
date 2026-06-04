@@ -6,15 +6,21 @@ import entity.product.config.computer.Processor;
 import entity.product.config.computer.Ram;
 import entity.product.config.computer.Rom;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 
+@ToString
 @Getter
-public class Computer extends Product implements Configurable {
+public class Computer extends Product {
     private Processor processor;
     private Ram ram;
     private Rom rom;
     private GraphicCard graphicCard;
+
+    public Computer(Long id, String name, BigDecimal price, int quantity) {
+        super(id, name, price, quantity);
+    }
 
     public Computer(Long id, String name, BigDecimal price, int quantity, Processor processor, Ram ram, Rom rom,
                     GraphicCard graphicCard) {
@@ -35,12 +41,12 @@ public class Computer extends Product implements Configurable {
     }
 
     @Override
-    public boolean isConfigured() {
-        return processor != null && ram != null && rom != null && graphicCard != null;
+    public BigDecimal getTotalPrice() {
+        return getPrice().add(processor.getPrice()).add(ram.getPrice()).add(rom.getPrice()).add(graphicCard.getPrice());
     }
 
     @Override
-    public BigDecimal getTotalPrice() {
-        return getPrice().add(processor.getPrice()).add(ram.getPrice()).add(rom.getPrice()).add(graphicCard.getPrice());
+    public Product getProductCopy() {
+        return new Computer(getId(), getName(), getPrice(), getQuantity());
     }
 }

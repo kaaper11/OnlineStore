@@ -6,7 +6,7 @@ import entity.client.Client;
 import entity.invoice.Invoice;
 import entity.order.Order;
 import entity.product.type.Product;
-import exception.CartIsEmptyException;
+import exception.CartEmptyException;
 import exception.CartNotFoundException;
 import exception.ClientNotFoundException;
 import exception.OrderNotFoundException;
@@ -20,6 +20,7 @@ import service.OrderService;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -35,15 +36,13 @@ public class OrderServiceImpl implements OrderService {
         Client client = clientRepository.getClientById(clientId).orElseThrow(ClientNotFoundException::new);
 
         if (cart.cheekProductsEmpty()) {
-            throw new CartIsEmptyException();
+            throw new CartEmptyException();
         }
 
         BigDecimal totalPrice = getTotalPrice(cart);
 
-        cart.getProducts().forEach(Product::buyProduct);
-
-        Order order = orderRepository.save(new Order(orderRepository.getNextId(), client, cart.getProducts(),
-                totalPrice));
+        Order order = orderRepository.save(new Order(orderRepository.getNextId(), client,
+                new ArrayList<>(cart.getProducts()), totalPrice));
 
         invoiceRepository.save(new Invoice(invoiceRepository.getNextId(),
                 order.getId(), order.getClient(), order.getProducts(), order.getTotalPrice(), LocalDateTime.now()));

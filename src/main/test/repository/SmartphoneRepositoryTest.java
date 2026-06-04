@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import repository.productrepositories.SmartphoneRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -38,20 +39,6 @@ public class SmartphoneRepositoryTest {
 
         assertThat(deleted).isPresent();
         assertThat(smartphoneRepository.getSmartphoneById(1L)).isEmpty();
-    }
-
-    @Test
-    public void shouldUpdateSmartphone() {
-        smartphoneRepository.save(smartphone);
-
-        Smartphone update = new Smartphone(1L, "new", new BigDecimal("200"), 15,
-                SmartphoneColorType.GOLD, Battery.MAH5500);
-
-        Optional<Smartphone> result = smartphoneRepository.update(1L, update);
-
-        assertThat(result).isPresent();
-        assertThat(smartphoneRepository.getSmartphoneById(1L))
-                .isEqualTo(Optional.of(update));
     }
 
     @Test
@@ -88,5 +75,24 @@ public class SmartphoneRepositoryTest {
         List<Smartphone> result = repository.getAllSmartphones();
 
         assertThat(result).hasSize(2);
+        assertThat(result.getFirst()).isEqualTo(s1);
+    }
+
+    @Test
+    void shouldUpdateComputerPrice() {
+        smartphoneRepository.save(smartphone);
+
+        Optional<Smartphone> result = smartphoneRepository.updateSmartphonePrice(1L, BigDecimal.TEN);
+        assertThat(result).isPresent();
+        assertThat(smartphoneRepository.getSmartphoneById(1L).get().getPrice()).isEqualTo(BigDecimal.TEN);
+    }
+
+    @Test
+    void shouldUpdateComputerQuantity() {
+        smartphoneRepository.save(smartphone);
+
+        Optional<Smartphone> result = smartphoneRepository.updateSmartphoneQuantity(1L, 100);
+        assertThat(result).isPresent();
+        assertThat(smartphoneRepository.getSmartphoneById(1L).get().getQuantity()).isEqualTo(100);
     }
 }

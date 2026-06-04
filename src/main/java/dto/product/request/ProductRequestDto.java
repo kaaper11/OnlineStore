@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ProductRequestDto {
     private final String name;
+
     private final BigDecimal price;
+
     private final int quantity;
 }

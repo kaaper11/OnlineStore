@@ -16,6 +16,7 @@ public final class ComputerMapper {
 
     public static ComputerResponseDto mapComputerToDto(Computer computer) {
         return new ComputerResponseDto(computer.getId(), computer.getName(), computer.getPrice(),
-                computer.getQuantity(), computer.getProcessor(), computer.getRam(), computer.getRom(), computer.getGraphicCard());
+                computer.getQuantity(), computer.getProcessor(), computer.getRam(), computer.getRom(),
+                computer.getGraphicCard());
     }
 }

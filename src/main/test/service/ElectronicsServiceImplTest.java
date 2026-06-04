@@ -1,7 +1,12 @@
 package service;
 
+import dto.product.request.ComputerRequestDto;
 import dto.product.request.ElectronicsRequestDto;
+import dto.product.request.ProductRequestDto;
 import dto.product.response.ElectronicsResponseDto;
+import entity.client.Address;
+import entity.client.Client;
+import entity.client.Role;
 import entity.product.type.Electronics;
 import exception.ElectronicsNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -9,9 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import repository.ElectronicsRepository;
+import repository.ClientRepository;
+import repository.productrepositories.ElectronicsRepository;
 import service.impl.ElectronicsServiceImpl;
-import utils.ProductIdGenerator;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,10 +34,10 @@ import static org.mockito.Mockito.when;
 public class ElectronicsServiceImplTest {
 
     @Mock
-    private ElectronicsRepository electronicsRepository;
+    private ClientRepository clientRepository;
 
     @Mock
-    private ProductIdGenerator productIdGenerator;
+    private ElectronicsRepository electronicsRepository;
 
     @InjectMocks
     private ElectronicsServiceImpl electronicsService;
@@ -41,14 +46,20 @@ public class ElectronicsServiceImplTest {
 
     private final Electronics electronics = new Electronics(1L, "name", new BigDecimal("100"), 20);
 
+    private final Address address = new Address("Poland", "Warsaw", "Zlota", "15-820",
+            2);
+
+    private final Client client = new Client(1L, "name", "name@test.com", "pasS12%dd",
+            "123456789", address, Role.ADMIN);
+
     @Test
     void shouldCreateElectronics() {
         // given
-        when(productIdGenerator.getNextProductId()).thenReturn(1L);
         when(electronicsRepository.save(any(Electronics.class))).thenReturn(electronics);
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
 
         // when
-        ElectronicsResponseDto dto = electronicsService.create(electronicsRequestDto);
+        ElectronicsResponseDto dto = electronicsService.create(electronicsRequestDto, 1L);
 
         // then
         assertNotNull(dto);
@@ -61,50 +72,27 @@ public class ElectronicsServiceImplTest {
     void shouldRemoveElectronics() {
         // given
         when(electronicsRepository.delete(anyLong())).thenReturn(Optional.of(electronics));
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
 
         // when
-        ElectronicsResponseDto dto = electronicsService.remove(1L);
+        ElectronicsResponseDto dto = electronicsService.remove(1L, 1L);
 
         // then
         assertNotNull(dto);
         verify(electronicsRepository).delete(1L);
+        assertThat(dto).usingRecursiveComparison().isEqualTo(electronics);
     }
 
     @Test
     void shouldThrowWhenRemoveAndElectronicsNotFound() {
         // given
         when(electronicsRepository.delete(anyLong())).thenReturn(Optional.empty());
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
+
 
         // then
         assertThatExceptionOfType(ElectronicsNotFoundException.class)
-                .isThrownBy(() -> electronicsService.remove(1L));
-    }
-
-    @Test
-    void shouldUpdateElectronics() {
-        // given
-        when(electronicsRepository.update(anyLong(), any(Electronics.class)))
-                .thenReturn(Optional.of(electronics));
-
-        // when
-        ElectronicsResponseDto dto = electronicsService.update(1L, electronicsRequestDto);
-
-        // then
-        assertNotNull(dto);
-        verify(electronicsRepository).update(anyLong(), any(Electronics.class));
-        assertThat(dto).usingRecursiveComparison().ignoringFields("id")
-                .isEqualTo(electronicsRequestDto);
-    }
-
-    @Test
-    void shouldThrowWhenUpdateAndElectronicsNotFound() {
-        // given
-        when(electronicsRepository.update(anyLong(), any(Electronics.class)))
-                .thenReturn(Optional.empty());
-
-        // then
-        assertThatExceptionOfType(ElectronicsNotFoundException.class)
-                .isThrownBy(() -> electronicsService.update(1L, electronicsRequestDto));
+                .isThrownBy(() -> electronicsService.remove(1L, 1L));
     }
 
     @Test
@@ -147,5 +135,37 @@ public class ElectronicsServiceImplTest {
                 .usingRecursiveComparison()
                 .ignoringFields("id")
                 .isEqualTo(electronicsRequestDto);
+    }
+
+    @Test
+    void shouldElectronicsExists() {
+        when(electronicsRepository.getElectronicsById(anyLong())).thenReturn(Optional.of(electronics));
+
+        boolean result = electronicsService.exist(electronics.getId());
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void shouldElectronicsNotExists() {
+        when(electronicsRepository.getElectronicsById(anyLong())).thenReturn(Optional.of(electronics));
+
+        boolean result = electronicsService.exist(10L);
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void shouldProductIsInstanceElectronics() {
+        ProductRequestDto dto = new ElectronicsRequestDto("name", new BigDecimal("100"), 20);
+
+        boolean result = electronicsService.isInstance(dto);
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void shouldProductIsNotInstanceElectronics() {
+        ProductRequestDto dto = new ComputerRequestDto("name", new BigDecimal("100"), 20);
+
+        boolean result = electronicsService.isInstance(dto);
+        assertThat(result).isFalse();
     }
 }

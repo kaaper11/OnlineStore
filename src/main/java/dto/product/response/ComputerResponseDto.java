@@ -21,4 +21,13 @@ public class ComputerResponseDto extends ProductResponseDto {
         this.rom = rom;
         this.graphicCard = graphicCard;
     }
+
+    @Override
+    public String toString() {
+        return processor != null && ram != null && rom != null && graphicCard != null ? "Computer: (" + "nazwa: "
+                + getName() + ", cena: " + getPrice() + ", dostępność: " + getQuantity() + ", procesor: " + processor +
+                ", ilość ram: " + ram + ", ilość rom: " + rom + ", karta graficzna: " + graphicCard +")"
+                : "Computer: (" + "nazwa:" + getName() + ", cena:" + getPrice() + ", dostępność"
+                + getQuantity() + ")";
+    }
 }

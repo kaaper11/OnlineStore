@@ -75,6 +75,11 @@ public class ProductMapperTest {
             public BigDecimal getTotalPrice() {
                 return null;
             }
+
+            @Override
+            public Product getProductCopy() {
+                return null;
+            }
         };
 
         assertThrows(
