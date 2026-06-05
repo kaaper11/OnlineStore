@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class InvoiceRepository {
     private final Set<Invoice> invoices = new HashSet<>();
-    private Long idCounter = 0L;
+    private Long idCounter = 1L;
 
     public Invoice save(Invoice invoice) {
         invoices.add(invoice);

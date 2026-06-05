@@ -44,11 +44,11 @@ public class CartServiceImpl implements CartService {
             throw new ProductOutOfStockException(originalProduct);
         }
 
-        originalProduct.buyProduct();
-
         Product product = originalProduct.getProductCopy();
 
         productConfig.configure(product);
+
+        originalProduct.buyProduct();
 
         cart.addProduct(product);
 

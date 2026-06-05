@@ -1,7 +1,8 @@
-package repository;
+package repository.productrepositories;
 
 import entity.product.type.Smartphone;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -23,15 +24,6 @@ public class SmartphoneRepository {
                 });
     }
 
-    public Optional<Smartphone> update(Long id, Smartphone updatedSmartphone) {
-        return getSmartphoneById(id)
-                .map(smartphone -> {
-                    smartphones.remove(smartphone);
-                    smartphones.add(updatedSmartphone);
-                    return smartphone;
-                });
-    }
-
     public Optional<Smartphone> getSmartphoneById(Long id) {
         return smartphones.stream()
                 .filter(smartphone -> smartphone.getId().equals(id))
@@ -41,5 +33,21 @@ public class SmartphoneRepository {
     public List<Smartphone> getAllSmartphones() {
         return smartphones.stream()
                 .toList();
+    }
+
+    public Optional<Smartphone> updateSmartphonePrice(Long id, BigDecimal price) {
+        return getSmartphoneById(id)
+                .map(smartphone -> {
+                    smartphone.setPrice(price);
+                    return smartphone;
+                });
+    }
+
+    public Optional<Smartphone> updateSmartphoneQuantity(Long id, int quantity) {
+        return getSmartphoneById(id)
+                .map(smartphone -> {
+                    smartphone.setQuantity(quantity);
+                    return smartphone;
+                });
     }
 }

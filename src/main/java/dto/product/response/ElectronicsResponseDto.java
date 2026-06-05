@@ -10,6 +10,6 @@ public class ElectronicsResponseDto extends ProductResponseDto {
 
     @Override
     public String toString() {
-        return "Electronics: (" + "nazwa:" + getName() + ", cena:" + getPrice() + ", dostępność" + getQuantity()+")";
+        return "Electronics: (" + "nazwa: " + getName() + ", cena: " + getPrice() + ", dostępność: " + getQuantity()+")";
     }
 }

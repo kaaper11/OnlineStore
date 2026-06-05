@@ -1,4 +1,5 @@
 import cli.CommandLineMain;
+import export.InvoiceJsonWriter;
 import repository.*;
 import repository.productrepositories.ComputerRepository;
 import repository.productrepositories.ElectronicsRepository;
@@ -17,11 +18,13 @@ public class Main {
         OrderRepository orderRepository = new OrderRepository();
         SmartphoneRepository smartphoneRepository = new SmartphoneRepository();
 
+        InvoiceJsonWriter invoiceJsonWriter = new InvoiceJsonWriter();
+
         CartServiceImpl cartService = new CartServiceImpl(cartRepository, computerRepository, smartphoneRepository,
                 electronicsRepository);
         ClientServiceImpl clientService = new ClientServiceImpl(clientRepository, cartRepository);
         ComputerServiceImpl computerService = new ComputerServiceImpl(computerRepository, clientRepository);
-        InvoiceServiceImpl invoiceService = new InvoiceServiceImpl(invoiceRepository);
+        InvoiceServiceImpl invoiceService = new InvoiceServiceImpl(invoiceRepository, invoiceJsonWriter);
         OrderServiceImpl orderService = new OrderServiceImpl(orderRepository, cartRepository, clientRepository,
                 invoiceRepository);
         ElectronicsServiceImpl electronicsService = new ElectronicsServiceImpl(electronicsRepository, clientRepository);

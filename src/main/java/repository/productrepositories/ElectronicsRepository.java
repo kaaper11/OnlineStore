@@ -1,7 +1,8 @@
-package repository;
+package repository.productrepositories;
 
 import entity.product.type.Electronics;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -23,15 +24,6 @@ public class ElectronicsRepository {
                 });
     }
 
-    public Optional<Electronics> update(Long id, Electronics updatedElectronics) {
-        return getElectronicsById(id)
-                .map(electronics -> {
-                    electronicsSet.remove(electronics);
-                    electronicsSet.add(updatedElectronics);
-                    return electronics;
-                });
-    }
-
     public Optional<Electronics> getElectronicsById(Long id) {
         return electronicsSet.stream()
                 .filter(electronics -> electronics.getId().equals(id))
@@ -41,5 +33,21 @@ public class ElectronicsRepository {
     public List<Electronics> getAllElectronics() {
         return electronicsSet.stream()
                 .toList();
+    }
+
+    public Optional<Electronics> updatePrice(Long id, BigDecimal price) {
+        return getElectronicsById(id)
+                .map(electronics -> {
+                    electronics.setPrice(price);
+                    return electronics;
+                });
+    }
+
+    public Optional<Electronics> updateQuantity(Long id, Integer quantity) {
+        return getElectronicsById(id)
+                .map(electronics -> {
+                    electronics.setQuantity(quantity);
+                    return electronics;
+                });
     }
 }
