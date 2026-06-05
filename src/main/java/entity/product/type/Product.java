@@ -1,5 +1,6 @@
 package entity.product.type;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import exception.ProductOutOfStockException;
 import lombok.*;
 
@@ -39,5 +40,6 @@ public abstract class Product {
 
     public abstract BigDecimal getTotalPrice();
 
+    @JsonIgnore
     public abstract Product getProductCopy();
 }

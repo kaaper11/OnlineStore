@@ -1,7 +1,8 @@
-package repository;
+package repository.productrepositories;
 
 import entity.product.type.Computer;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -23,19 +24,6 @@ public class ComputerRepository {
                 });
     }
 
-    public Optional<Computer> update(Long id, Computer updatedComputer) {
-//        if (computers.removeIf(computer -> computer.getId().equals(id))) {
-//            computers.add(updatedComputer);
-//            return Optional.of(updatedComputer);
-//        }
-        return getComputerById(id)
-                .map(computer -> {
-                    computers.remove(computer);
-                    computers.add(updatedComputer);
-                    return computer;
-                });
-    }
-
     public Optional<Computer> getComputerById(Long id) {
         return computers.stream()
                 .filter(computer -> computer.getId().equals(id))
@@ -45,5 +33,21 @@ public class ComputerRepository {
     public List<Computer> getAllComputers() {
         return computers.stream()
                 .toList();
+    }
+
+    public Optional<Computer> updateComputerPrice(Long id, BigDecimal price) {
+        return getComputerById(id)
+                .map(computer -> {
+                    computer.setPrice(price);
+                    return computer;
+                });
+    }
+
+    public Optional<Computer> updateComputerQuantity(Long id, int quantity) {
+        return getComputerById(id)
+                .map(computer -> {
+                    computer.setQuantity(quantity);
+                    return computer;
+                });
     }
 }

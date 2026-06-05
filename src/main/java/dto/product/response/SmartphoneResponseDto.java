@@ -24,6 +24,6 @@ public class SmartphoneResponseDto extends ProductResponseDto {
         return color != null && battery != null ? "Smartphone: (" + "nazwa: " + getName() + ", cena: " + getPrice()
                 + ", dostępność: " + getQuantity() + ", kolor: " + color + ", pojemność baterii: " + battery + ", akcesoria: "
                 + accessoryList
-                : "Smartphone: (" + "nazwa:" + getName() + ", cena:" + getPrice() + ", dostępność" + getQuantity() + ")";
+                : "Smartphone: (" + "nazwa:" + getName() + ", cena: " + getPrice() + ", dostępność: " + getQuantity() + ")";
     }
 }
