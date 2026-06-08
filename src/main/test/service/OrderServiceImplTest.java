@@ -19,6 +19,7 @@ import repository.CartRepository;
 import repository.ClientRepository;
 import repository.InvoiceRepository;
 import repository.OrderRepository;
+import service.impl.DiscountServiceImpl;
 import service.impl.OrderServiceImpl;
 
 import java.math.BigDecimal;
@@ -40,6 +41,9 @@ public class OrderServiceImplTest {
 
     @Mock
     private InvoiceRepository invoiceRepository;
+
+    @Mock
+    private DiscountServiceImpl discountService;
 
     @Mock
     private CartRepository cartRepository;

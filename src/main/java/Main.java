@@ -17,23 +17,27 @@ public class Main {
         InvoiceRepository invoiceRepository = new InvoiceRepository();
         OrderRepository orderRepository = new OrderRepository();
         SmartphoneRepository smartphoneRepository = new SmartphoneRepository();
+        DiscountRepository discountRepository = new DiscountRepository();
 
         InvoiceJsonWriter invoiceJsonWriter = new InvoiceJsonWriter();
 
+        DiscountServiceImpl discountService = new DiscountServiceImpl(discountRepository, computerRepository,
+                smartphoneRepository, electronicsRepository, clientRepository);
         CartServiceImpl cartService = new CartServiceImpl(cartRepository, computerRepository, smartphoneRepository,
                 electronicsRepository);
         ClientServiceImpl clientService = new ClientServiceImpl(clientRepository, cartRepository);
         ComputerServiceImpl computerService = new ComputerServiceImpl(computerRepository, clientRepository);
         InvoiceServiceImpl invoiceService = new InvoiceServiceImpl(invoiceRepository, invoiceJsonWriter);
         OrderServiceImpl orderService = new OrderServiceImpl(orderRepository, cartRepository, clientRepository,
-                invoiceRepository);
+                invoiceRepository, discountService);
         ElectronicsServiceImpl electronicsService = new ElectronicsServiceImpl(electronicsRepository, clientRepository);
         SmartphoneServiceImpl smartphoneService = new SmartphoneServiceImpl(smartphoneRepository, clientRepository);
         ProductFacadeService productFacadeService = new ProductFacadeService(List.of(computerService, electronicsService,
                 smartphoneService));
 
+
         CommandLineMain cli = new CommandLineMain(cartService, clientService, invoiceService, orderService,
-                productFacadeService);
+                productFacadeService, discountService);
 
         cli.start();
     }

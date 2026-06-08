@@ -1,11 +1,14 @@
 package cli;
 
+import dto.discount.DiscountRequest;
 import dto.product.request.ComputerRequestDto;
 import dto.product.request.ElectronicsRequestDto;
 import dto.product.request.ProductRequestDto;
 import dto.product.request.SmartphoneRequestDto;
+import entity.discount.DiscountType;
 import exception.*;
 import lombok.AllArgsConstructor;
+import service.impl.DiscountServiceImpl;
 import service.impl.ProductFacadeService;
 
 import java.math.BigDecimal;
@@ -14,6 +17,7 @@ import java.util.Scanner;
 @AllArgsConstructor
 public class ProductCli {
     private final ProductFacadeService productFacadeService;
+    private final DiscountServiceImpl discountService;
     private final Scanner scanner;
 
     public void showProductMenu(Long clientId) {
@@ -27,6 +31,7 @@ public class ProductCli {
                 System.out.println("5. Zaktualizuj ilość produktu");
                 System.out.println("6. Zaktualizuj cene produktu");
                 System.out.println("7. Przeglądaj produkty");
+                System.out.println("8. Dodaj promocje");
                 System.out.println("0. Wyjdź");
                 System.out.print("Wybierz opcję: ");
 
@@ -38,6 +43,7 @@ public class ProductCli {
                     case "5" -> updateProductQuantity(clientId);
                     case "6" -> updateProductPrice(clientId);
                     case "7" -> getAllProducts();
+                    case "8" -> addDiscount(clientId);
                     case "0" -> {
                         return;
                     }
@@ -97,6 +103,32 @@ public class ProductCli {
 
     private void getAllProducts() {
         System.out.println("Wszytskie produkty dostępne w sklepie: ");
-        productFacadeService.getAllProducts().forEach(System.out::println);
+        productFacadeService.getAllProducts().forEach(product ->
+                System.out.println(product + discountService.formatProductWithDiscount(product)));
+    }
+
+    private void addDiscount(Long clientId) {
+        System.out.println("=== Dodaj promocję ===");
+
+        System.out.print("ID produktu: ");
+        Long productId = scanner.nextLong();
+
+        System.out.println("Typ rabatu:");
+        System.out.println("1. Procentowy (%)");
+        System.out.println("2. Stała kwota (zł)");
+        System.out.print("Wybór: ");
+        int typeChoice = TypeReaderCli.readInt(scanner);
+
+        DiscountType type = switch (typeChoice) {
+            case 1 -> DiscountType.PERCENT;
+            case 2 -> DiscountType.CONSTANT;
+            default -> throw new IllegalArgumentException("Nieprawidłowy wybór");
+        };
+
+        System.out.print("Wartość (" + (type == DiscountType.PERCENT ? "%" : "zł") + "): ");
+        BigDecimal value = TypeReaderCli.readBigDecimal(scanner);
+
+        discountService.addDiscount(new DiscountRequest(productId, type, value), clientId);
+        System.out.println("Dodano promocję!");
     }
 }

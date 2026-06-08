@@ -14,6 +14,7 @@ public class CommandLineMain {
     private final InvoiceServiceImpl invoiceService;
     private final OrderServiceImpl orderService;
     private final ProductFacadeService productFacadeService;
+    private final DiscountServiceImpl discountService;
 
 
     public void start() {
@@ -35,10 +36,10 @@ public class CommandLineMain {
             System.out.print("Wybierz opcję: ");
 
             switch (scanner.nextLine()) {
-                case "1" -> new ProductCli(productFacadeService, scanner).showProductMenu(loggedClient.id());
-                case "2" -> new CartCli(cartService, scanner).run(loggedClient.id());
-                case "3" -> new OrderCli(orderService, scanner).run(loggedClient.id());
-                case "4" -> new InvoiceCli(invoiceService, scanner).run(loggedClient.id());
+                case "1" -> new ProductCli(productFacadeService, discountService, scanner).showProductMenu(loggedClient.id());
+                case "2" -> new CartCli(cartService, discountService, scanner).run(loggedClient.id());
+                case "3" -> new OrderCli(orderService, discountService, scanner).run(loggedClient.id());
+                case "4" -> new InvoiceCli(invoiceService, discountService, scanner).run(loggedClient.id());
                 case "0" -> { return; }
                 default -> System.out.println("Nieznana opcja.");
             }

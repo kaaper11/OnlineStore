@@ -2,6 +2,7 @@ package cli;
 
 import dto.invoice.InvoiceDto;
 import lombok.AllArgsConstructor;
+import service.impl.DiscountServiceImpl;
 import service.impl.InvoiceServiceImpl;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.util.Scanner;
 @AllArgsConstructor
 public class InvoiceCli {
     private final InvoiceServiceImpl invoiceService;
+    private final DiscountServiceImpl discountService;
     private final Scanner scanner;
 
     public void run(Long clientId) {
@@ -63,7 +65,7 @@ public class InvoiceCli {
         System.out.println("Data wystawienia: " + invoice.invoiceDateTime());
         System.out.println("Produkty:");
         invoice.products().forEach(p ->
-                System.out.println("  - " + p.getName() + " | " + p.getPrice() + " zł")
+                System.out.println("  - " + p + discountService.formatProductWithDiscount(p))
         );
         System.out.println("Suma: " + invoice.totalPrice() + " zł");
         System.out.println("---------------");
