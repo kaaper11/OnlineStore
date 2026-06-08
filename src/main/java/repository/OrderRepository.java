@@ -2,14 +2,15 @@ package repository;
 
 import entity.order.Order;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class OrderRepository {
-    private final Set<Order> orders = new HashSet<>();
-    private Long idCounter = 1L;
+    private final Set<Order> orders = ConcurrentHashMap.newKeySet();
+    private final AtomicLong idCounter = new AtomicLong(1L);
 
     public Order save(Order order) {
         orders.add(order);
@@ -29,6 +30,6 @@ public class OrderRepository {
     }
 
     public Long getNextId() {
-        return idCounter++;
+        return idCounter.getAndIncrement();
     }
 }

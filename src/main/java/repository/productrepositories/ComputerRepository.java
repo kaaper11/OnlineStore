@@ -3,13 +3,13 @@ package repository.productrepositories;
 import entity.product.type.Computer;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ComputerRepository {
-    private final Set<Computer> computers = new HashSet<>();
+    private final Set<Computer> computers = ConcurrentHashMap.newKeySet();
 
     public Computer save(Computer computer) {
         computers.add(computer);

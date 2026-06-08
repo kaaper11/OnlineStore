@@ -4,7 +4,6 @@ import entity.product.config.computer.GraphicCard;
 import entity.product.config.computer.Processor;
 import entity.product.config.computer.Ram;
 import entity.product.config.computer.Rom;
-import entity.product.config.smartphone.Accessory;
 import entity.product.config.smartphone.Battery;
 import entity.product.config.smartphone.SmartphoneColorType;
 
@@ -57,7 +56,7 @@ public class TypeReaderCli {
             try {
                 return Ram.valueOf(scanner.nextLine());
             } catch (IllegalArgumentException e) {
-                System.out.println("Nieprawidłowa wartość, podaj procesor z podanych wyżej.");
+                System.out.println("Nieprawidłowa wartość, podaj ilość ram z podanych wyżej.");
             }
         }
     }
@@ -67,7 +66,7 @@ public class TypeReaderCli {
             try {
                 return Rom.valueOf(scanner.nextLine());
             } catch (IllegalArgumentException e) {
-                System.out.println("Nieprawidłowa wartość, podaj procesor z podanych wyżej.");
+                System.out.println("Nieprawidłowa wartość, podaj ilość rom z podanych wyżej.");
             }
         }
     }
@@ -77,7 +76,7 @@ public class TypeReaderCli {
             try {
                 return GraphicCard.valueOf(scanner.nextLine());
             } catch (IllegalArgumentException e) {
-                System.out.println("Nieprawidłowa wartość, podaj procesor z podanych wyżej.");
+                System.out.println("Nieprawidłowa wartość, podaj model karty z podanych wyżej.");
             }
         }
     }
@@ -87,7 +86,7 @@ public class TypeReaderCli {
             try {
                 return SmartphoneColorType.valueOf(scanner.nextLine());
             } catch (IllegalArgumentException e) {
-                System.out.println("Nieprawidłowa wartość, podaj procesor z podanych wyżej.");
+                System.out.println("Nieprawidłowa wartość, podaj kolor z podanych wyżej.");
             }
         }
     }
@@ -97,17 +96,7 @@ public class TypeReaderCli {
             try {
                 return Battery.valueOf(scanner.nextLine());
             } catch (IllegalArgumentException e) {
-                System.out.println("Nieprawidłowa wartość, podaj procesor z podanych wyżej.");
-            }
-        }
-    }
-
-    public static Accessory readAccessory(Scanner scanner) {
-        while (true) {
-            try {
-                return Accessory.valueOf(scanner.nextLine());
-            } catch (IllegalArgumentException e) {
-                System.out.println("Nieprawidłowa wartość, podaj procesor z podanych wyżej.");
+                System.out.println("Nieprawidłowa wartość, podaj pojemność z podanych wyżej.");
             }
         }
     }
