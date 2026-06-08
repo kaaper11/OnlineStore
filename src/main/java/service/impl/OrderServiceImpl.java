@@ -5,7 +5,6 @@ import entity.cart.Cart;
 import entity.client.Client;
 import entity.invoice.Invoice;
 import entity.order.Order;
-import entity.product.type.Product;
 import exception.CartEmptyException;
 import exception.CartNotFoundException;
 import exception.ClientNotFoundException;
@@ -33,6 +32,7 @@ public class OrderServiceImpl implements OrderService {
     private final CartRepository cartRepository;
     private final ClientRepository clientRepository;
     private final InvoiceRepository invoiceRepository;
+    private final DiscountServiceImpl discountService;
     private final ConcurrentHashMap<Long, Object> clientLocks = new ConcurrentHashMap<>();
 
 
@@ -47,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
                 throw new CartEmptyException();
             }
 
-            BigDecimal totalPrice = getTotalPrice(cart);
+            BigDecimal totalPrice = discountService.calculateTotalCart(cart.getProducts());
 
             Order order = orderRepository.save(new Order(orderRepository.getNextId(), client,
                     new ArrayList<>(cart.getProducts()), totalPrice));
@@ -92,12 +92,6 @@ public class OrderServiceImpl implements OrderService {
 
         executor.shutdown();
         return results;
-    }
-
-    private BigDecimal getTotalPrice(Cart cart) {
-        return cart.getProducts().stream()
-                .map(Product::getTotalPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private void clearCart(Cart cart) {

@@ -22,8 +22,9 @@ public class SmartphoneResponseDto extends ProductResponseDto {
     @Override
     public String toString() {
         return color != null && battery != null ? "Smartphone: (" + "nazwa: " + getName() + ", cena: " + getPrice()
-                + ", dostępność: " + getQuantity() + ", kolor: " + color + ", pojemność baterii: " + battery + ", akcesoria: "
-                + accessoryList
+                + ", dostępność: " + getQuantity() + ", kolor: " + color + ", pojemność baterii: (" + battery + ", "
+                + battery.getPrice() + " zł)" + ", akcesoria: "
+                + accessoryList.stream().map(accessory -> "(" + accessory + ", " + accessory.getPrice() + "zł), ")
                 : "Smartphone: (" + "nazwa:" + getName() + ", cena: " + getPrice() + ", dostępność: " + getQuantity() + ")";
     }
 }

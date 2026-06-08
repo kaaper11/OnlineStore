@@ -5,6 +5,7 @@ import exception.CartEmptyException;
 import exception.CartNotFoundException;
 import exception.ClientNotFoundException;
 import lombok.AllArgsConstructor;
+import service.impl.DiscountServiceImpl;
 import service.impl.OrderServiceImpl;
 
 import java.util.Scanner;
@@ -12,6 +13,7 @@ import java.util.Scanner;
 @AllArgsConstructor
 public class OrderCli {
     private final OrderServiceImpl orderService;
+    private final DiscountServiceImpl discountService;
     private final Scanner scanner;
 
     public void run(Long clientId) {
@@ -45,7 +47,7 @@ public class OrderCli {
         System.out.println("\nZamówienie złożone!");
         System.out.println("Produkty:");
         order.products().forEach(p ->
-                System.out.println("  - " + p)
+                System.out.println("  - " + p + discountService.formatProductWithDiscount(p))
         );
         System.out.println("Suma: " + order.totalPrice() + " zł");
     }
@@ -59,7 +61,7 @@ public class OrderCli {
         orders.forEach(order -> {
             System.out.println("Suma: " + order.totalPrice() + " zł");
             order.products().forEach(p ->
-                    System.out.println("  - " + p)
+                    System.out.println("  - " + p + discountService.formatProductWithDiscount(p))
             );
         });
     }

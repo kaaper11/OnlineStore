@@ -25,9 +25,11 @@ public class ComputerResponseDto extends ProductResponseDto {
     @Override
     public String toString() {
         return processor != null && ram != null && rom != null && graphicCard != null ? "Computer: (" + "nazwa: "
-                + getName() + ", cena: " + getPrice() + ", dostępność: " + getQuantity() + ", procesor: " + processor +
-                ", ilość ram: " + ram + ", ilość rom: " + rom + ", karta graficzna: " + graphicCard +")"
+                + getName() + ", cena: " + getPrice() + ", dostępność: " + getQuantity() + ", procesor: (" +
+                processor + ", " + processor.getPrice() + " zł" + "), ilość ram: (" + ram + ", " + ram.getPrice() +
+                " zł" + "), ilość rom: (" + rom + ", " + rom.getPrice() + " zł)" + ", karta graficzna: (" + graphicCard +
+                ", " + graphicCard.getPrice() + " zł" +")"
                 : "Computer: (" + "nazwa: " + getName() + ", cena: " + getPrice() + ", dostępność: "
-                + getQuantity() + ")";
+                + getQuantity() + ") ";
     }
 }

@@ -17,6 +17,7 @@ import exception.CartNotFoundException;
 import exception.ProductNotFoundException;
 import lombok.AllArgsConstructor;
 import service.impl.CartServiceImpl;
+import service.impl.DiscountServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +27,7 @@ import java.util.Scanner;
 @AllArgsConstructor
 public class CartCli {
     private final CartServiceImpl cartService;
+    private final DiscountServiceImpl discountService;
     private final Scanner scanner;
 
     public void run(Long clientId) {
@@ -64,7 +66,7 @@ public class CartCli {
         CartDto cart = cartService.getCartByClientId(clientId);
         System.out.println("\nTwój koszyk");
         cart.products().forEach(p ->
-                System.out.println("- " + p)
+                System.out.println("- " + p + discountService.formatProductWithDiscount(p))
         );
     }
 
