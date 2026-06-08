@@ -3,10 +3,12 @@ package repository;
 import entity.cart.Cart;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class CartRepository {
-    private final Set<Cart> carts = new HashSet<>();
-    private Long idCounter = 1L;
+    private final Set<Cart> carts = ConcurrentHashMap.newKeySet();
+    private final AtomicLong idCounter = new AtomicLong(1L);
 
     public CartRepository() {
         save(100L);
@@ -43,6 +45,6 @@ public class CartRepository {
     }
 
     public Long getNextId() {
-        return idCounter++;
+        return idCounter.getAndIncrement();
     }
 }

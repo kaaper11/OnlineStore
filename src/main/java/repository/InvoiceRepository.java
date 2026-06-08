@@ -2,14 +2,15 @@ package repository;
 
 import entity.invoice.Invoice;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class InvoiceRepository {
-    private final Set<Invoice> invoices = new HashSet<>();
-    private Long idCounter = 1L;
+    private final Set<Invoice> invoices = ConcurrentHashMap.newKeySet();
+    private final AtomicLong idCounter = new AtomicLong(1L);
 
     public Invoice save(Invoice invoice) {
         invoices.add(invoice);
@@ -29,6 +30,6 @@ public class InvoiceRepository {
     }
 
     public Long getNextId() {
-        return idCounter++;
+        return idCounter.getAndIncrement();
     }
 }

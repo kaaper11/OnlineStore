@@ -22,6 +22,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
@@ -29,29 +33,34 @@ public class OrderServiceImpl implements OrderService {
     private final CartRepository cartRepository;
     private final ClientRepository clientRepository;
     private final InvoiceRepository invoiceRepository;
+    private final ConcurrentHashMap<Long, Object> clientLocks = new ConcurrentHashMap<>();
+
 
     @Override
     public OrderDto placeOrder(Long clientId) {
-        Cart cart = cartRepository.getCartByClientId(clientId).orElseThrow(CartNotFoundException::new);
-        Client client = clientRepository.getClientById(clientId).orElseThrow(ClientNotFoundException::new);
+        Object lock = clientLocks.computeIfAbsent(clientId, id -> new Object());
+        synchronized (lock) {
+            Cart cart = cartRepository.getCartByClientId(clientId).orElseThrow(CartNotFoundException::new);
+            Client client = clientRepository.getClientById(clientId).orElseThrow(ClientNotFoundException::new);
 
-        if (cart.cheekProductsEmpty()) {
-            throw new CartEmptyException();
+            if (cart.cheekProductsEmpty()) {
+                throw new CartEmptyException();
+            }
+
+            BigDecimal totalPrice = getTotalPrice(cart);
+
+            Order order = orderRepository.save(new Order(orderRepository.getNextId(), client,
+                    new ArrayList<>(cart.getProducts()), totalPrice));
+
+            invoiceRepository.save(new Invoice(invoiceRepository.getNextId(),
+                    order.getId(), order.getClient(), order.getProducts(), order.getTotalPrice(), LocalDateTime.now()));
+
+            OrderDto orderDto = OrderMapper.mapOrderToDto(order);
+
+            clearCart(cart);
+
+            return orderDto;
         }
-
-        BigDecimal totalPrice = getTotalPrice(cart);
-
-        Order order = orderRepository.save(new Order(orderRepository.getNextId(), client,
-                new ArrayList<>(cart.getProducts()), totalPrice));
-
-        invoiceRepository.save(new Invoice(invoiceRepository.getNextId(),
-                order.getId(), order.getClient(), order.getProducts(), order.getTotalPrice(), LocalDateTime.now()));
-
-        OrderDto orderDto = OrderMapper.mapOrderToDto(order);
-
-        clearCart(cart);
-
-        return orderDto;
     }
 
     @Override
@@ -65,6 +74,24 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.getOneClientOrders(clientId).stream()
                 .map(OrderMapper::mapOrderToDto)
                 .toList();
+    }
+
+    @Override
+    public List<OrderDto> placeOrdersBatch(List<Long> clientIds) {
+        ExecutorService executor = Executors.newFixedThreadPool(Math.min(clientIds.size(), 4));
+
+        List<CompletableFuture<OrderDto>> futures = clientIds.stream()
+                .map(clientId -> CompletableFuture.supplyAsync(
+                        () -> placeOrder(clientId), executor
+                ))
+                .toList();
+
+        List<OrderDto> results = futures.stream()
+                .map(CompletableFuture::join)
+                .toList();
+
+        executor.shutdown();
+        return results;
     }
 
     private BigDecimal getTotalPrice(Cart cart) {

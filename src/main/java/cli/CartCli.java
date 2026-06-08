@@ -50,11 +50,13 @@ public class CartCli {
                     default -> System.out.println("Nieznana opcja.");
                 }
             }
-        }catch (CartEmptyException | ProductNotFoundException | ClassCastException e) {
+        }catch (CartEmptyException | ProductNotFoundException e) {
             System.out.println(e.getMessage());
         } catch (CartNotFoundException e) {
             System.out.println(e.getMessage());
             return;
+        } catch (ClassCastException e) {
+            System.out.println("Konfigurowałeś obiekt nieodpowiedniego typu!");
         }
     }
 
@@ -104,7 +106,7 @@ public class CartCli {
             String line = scanner.nextLine();
             if (line.isBlank()) break;
             try {
-                accessories.add(TypeReaderCli.readAccessory(scanner));
+                accessories.add(Accessory.valueOf(line));
             } catch (IllegalArgumentException e) {
                 System.out.println("Nieznane akcesorium, spróbuj ponownie.");
             }

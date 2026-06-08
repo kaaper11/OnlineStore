@@ -10,4 +10,7 @@ public interface OrderService {
     OrderDto getOrderById(Long id);
 
     List<OrderDto> getOrdersByClientId(Long clientId);
+
+    List<OrderDto> placeOrdersBatch(List<Long> clientIds);
+
 }
