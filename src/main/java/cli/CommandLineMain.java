@@ -13,7 +13,7 @@ public class CommandLineMain {
     private final ClientServiceImpl clientService;
     private final InvoiceServiceImpl invoiceService;
     private final OrderServiceImpl orderService;
-    private final ProductFacadeService productFacadeService;
+    private final ProductFacadeServiceImpl productFacadeServiceImpl;
     private final DiscountServiceImpl discountService;
 
 
@@ -36,7 +36,7 @@ public class CommandLineMain {
             System.out.print("Wybierz opcję: ");
 
             switch (scanner.nextLine()) {
-                case "1" -> new ProductCli(productFacadeService, discountService, scanner)
+                case "1" -> new ProductCli(productFacadeServiceImpl, discountService, scanner)
                         .showProductMenu(loggedClient.id());
                 case "2" -> new CartCli(cartService, discountService, scanner).run(loggedClient.id());
                 case "3" -> new OrderCli(orderService, discountService, scanner).run(loggedClient.id());

@@ -9,14 +9,14 @@ import entity.discount.DiscountType;
 import exception.*;
 import lombok.AllArgsConstructor;
 import service.impl.DiscountServiceImpl;
-import service.impl.ProductFacadeService;
+import service.impl.ProductFacadeServiceImpl;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
 
 @AllArgsConstructor
 public class ProductCli {
-    private final ProductFacadeService productFacadeService;
+    private final ProductFacadeServiceImpl productFacadeServiceImpl;
     private final DiscountServiceImpl discountService;
     private final Scanner scanner;
 
@@ -74,14 +74,14 @@ public class ProductCli {
             default -> throw new ProductTypeNotFoundException();
         };
 
-        productFacadeService.create(dto, clientId);
+        productFacadeServiceImpl.createProduct(dto, clientId);
         System.out.println("Produkt dodany!");
     }
 
     private void removeProduct(Long clientId) {
         System.out.print("ID produktu: ");
         Long productId = TypeReaderCli.readLong(scanner);
-        productFacadeService.removeProduct(productId, clientId);
+        productFacadeServiceImpl.removeProduct(productId, clientId);
         System.out.println("Produkt usunięty!");
     }
 
@@ -90,7 +90,7 @@ public class ProductCli {
         Long productId = TypeReaderCli.readLong(scanner);
         System.out.println("Ilość: ");
         int quantity = TypeReaderCli.readInt(scanner);
-        productFacadeService.updateProductQuantity(productId, clientId, quantity);
+        productFacadeServiceImpl.updateProductQuantity(productId, clientId, quantity);
     }
 
     private void updateProductPrice(Long clientId) {
@@ -98,12 +98,12 @@ public class ProductCli {
         Long productId = TypeReaderCli.readLong(scanner);
         System.out.println("Cena: ");
         BigDecimal price = TypeReaderCli.readBigDecimal(scanner);
-        productFacadeService.updateProductPrice(productId, clientId, price);
+        productFacadeServiceImpl.updateProductPrice(productId, clientId, price);
     }
 
     private void getAllProducts() {
         System.out.println("Wszytskie produkty dostępne w sklepie: ");
-        productFacadeService.getAllProducts().forEach(product ->
+        productFacadeServiceImpl.getAllProducts().forEach(product ->
                 System.out.println(product + discountService.formatProductWithDiscount(product)));
     }
 

@@ -3,6 +3,7 @@ package service;
 import dto.order.OrderDto;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface OrderService {
     OrderDto placeOrder(Long clientId);
@@ -11,6 +12,7 @@ public interface OrderService {
 
     List<OrderDto> getOrdersByClientId(Long clientId);
 
-    List<OrderDto> placeOrdersBatch(List<Long> clientIds);
+    List<OrderDto> placeSomeOrders(List<Long> clientIds);
 
+    CompletableFuture<OrderDto> placeOrderAsync(Long clientId);
 }

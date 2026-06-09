@@ -115,7 +115,7 @@ public class OrderServiceImpl implements OrderService {
      * @return list of created OrderDto objects
      */
     @Override
-    public List<OrderDto> placeOrdersBatch(List<Long> clientIds) {
+    public List<OrderDto> placeSomeOrders(List<Long> clientIds) {
         ExecutorService executor = Executors.newFixedThreadPool(Math.min(clientIds.size(), 4));
 
         List<CompletableFuture<OrderDto>> futures = clientIds.stream()
@@ -130,6 +130,18 @@ public class OrderServiceImpl implements OrderService {
 
         executor.shutdown();
         return results;
+    }
+
+    /**
+     * Asynchronously places an order for the given client.
+     * The operation is executed in a separate thread using CompletableFuture.
+     *
+     * @param clientId the identifier of the client placing the order
+     * @return a CompletableFuture containing the created OrderDto
+     */
+    @Override
+    public CompletableFuture<OrderDto> placeOrderAsync(Long clientId) {
+        return CompletableFuture.supplyAsync(() -> placeOrder(clientId));
     }
 
     /**

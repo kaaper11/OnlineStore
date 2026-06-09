@@ -32,12 +32,12 @@ public class Main {
                 invoiceRepository, discountService);
         ElectronicsServiceImpl electronicsService = new ElectronicsServiceImpl(electronicsRepository, clientRepository);
         SmartphoneServiceImpl smartphoneService = new SmartphoneServiceImpl(smartphoneRepository, clientRepository);
-        ProductFacadeService productFacadeService = new ProductFacadeService(List.of(computerService, electronicsService,
+        ProductFacadeServiceImpl productFacadeServiceImpl = new ProductFacadeServiceImpl(List.of(computerService, electronicsService,
                 smartphoneService));
 
 
         CommandLineMain cli = new CommandLineMain(cartService, clientService, invoiceService, orderService,
-                productFacadeService, discountService);
+                productFacadeServiceImpl, discountService);
 
         cli.start();
     }
