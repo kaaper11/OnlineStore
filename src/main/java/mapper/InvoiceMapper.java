@@ -8,6 +8,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Utility mapper class responsible for converting Invoice entities
+ * into InvoiceDto objects.
+ * This class is non-instantiable and provides static methods used
+ * to transform invoice data into a transport-friendly format.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class InvoiceMapper {
 

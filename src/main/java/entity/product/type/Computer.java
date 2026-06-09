@@ -10,6 +10,12 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 
+/**
+ * Represents a computer product composed of configurable hardware components
+ * such as processor, RAM, ROM, and graphics card.
+ * A computer extends the base Product class and calculates its total price
+ * based on its selected configuration.
+ */
 @ToString
 @Getter
 public class Computer extends Product {
@@ -31,6 +37,15 @@ public class Computer extends Product {
         this.graphicCard = graphicCard;
     }
 
+    /**
+     * Configures the computer by assigning hardware components.
+     *
+     * @param processor the processor to be assigned to the computer
+     * @param ram the RAM module to be assigned to the computer
+     * @param rom the storage unit to be assigned to the computer
+     * @param graphicCard the graphics card to be assigned to the computer
+     * @return the updated Computer instance with applied configuration
+     */
     public Computer configureComputer(Processor processor, Ram ram, Rom rom, GraphicCard graphicCard) {
         this.processor = processor;
         this.ram = ram;
@@ -40,6 +55,13 @@ public class Computer extends Product {
         return this;
     }
 
+    /**
+     * Calculates the total price of the computer, including all selected components.
+     * The final price is computed as the sum of the base product price and
+     * the prices of the processor, RAM, ROM, and graphics card.
+     *
+     * @return the total price of the configured computer
+     */
     @Override
     public BigDecimal getTotalPrice() {
         return getPrice().add(processor.getPrice()).add(ram.getPrice()).add(rom.getPrice()).add(graphicCard.getPrice());

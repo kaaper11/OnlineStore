@@ -6,6 +6,12 @@ import entity.product.type.Electronics;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Utility mapper class responsible for converting between Electronics entities
+ * and Electronics DTO objects.
+ * This class is non-instantiable and provides static methods for transforming
+ * electronics data between request/response layers and the domain model.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ElectronicsMapper {
 

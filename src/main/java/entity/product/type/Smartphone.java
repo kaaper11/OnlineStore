@@ -9,6 +9,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a smartphone product with configurable features such as color,
+ * battery, and optional accessories.
+ * A smartphone extends the base Product class and supports dynamic price
+ * calculation based on selected configuration and accessories.
+ */
 @Getter
 public class Smartphone extends Product {
     private SmartphoneColorType color;

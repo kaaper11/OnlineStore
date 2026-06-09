@@ -7,6 +7,12 @@ import entity.client.Role;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Utility mapper class responsible for converting between Client entities
+ * and Client DTO objects.
+ * This class is non-instantiable and provides static methods for
+ * transforming client data between persistence and transport layers.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ClientMapper {
 

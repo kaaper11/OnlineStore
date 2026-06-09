@@ -108,10 +108,10 @@ public class ProductCli {
     }
 
     private void addDiscount(Long clientId) {
-        System.out.println("=== Dodaj promocję ===");
+        System.out.println("Dodaj promocję");
 
         System.out.print("ID produktu: ");
-        Long productId = scanner.nextLong();
+        Long productId = TypeReaderCli.readLong(scanner);
 
         System.out.println("Typ rabatu:");
         System.out.println("1. Procentowy (%)");

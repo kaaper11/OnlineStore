@@ -5,6 +5,15 @@ import lombok.Getter;
 
 import java.util.Objects;
 
+/**
+ * Represents a client in the system.
+ * A client contains personal information such as name, email, password,
+ * phone number, and address, as well as an assigned role defining
+ * their permissions within the system.
+ * <p>
+ * Equality of clients is based on the email address, meaning that
+ * two clients are considered equal if they share the same email.
+ */
 @AllArgsConstructor
 @Getter
 public class Client {
