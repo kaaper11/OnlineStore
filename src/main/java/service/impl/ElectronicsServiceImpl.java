@@ -20,6 +20,11 @@ import validator.ProductValidator;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Service implementation responsible for managing Electronics products.
+ * It provides operations for creating, updating, deleting, retrieving,
+ * and validating electronics entities, while enforcing ADMIN-only access control.
+ */
 @RequiredArgsConstructor
 public class ElectronicsServiceImpl implements ElectronicsService {
     private final ElectronicsRepository electronicsRepository;

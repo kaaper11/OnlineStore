@@ -32,7 +32,9 @@ public class InvoiceCli {
                         throw new RuntimeException(e);
                     }
                 }
-                case "0" -> { return; }
+                case "0" -> {
+                    return;
+                }
                 default -> System.out.println("Nieznana opcja.");
             }
         }
@@ -55,7 +57,7 @@ public class InvoiceCli {
         System.out.println("Wpisz numer: ");
         int number = TypeReaderCli.readInt(scanner);
 
-        invoiceService.saveInvoiceToFile(invoices.get(number-1).orderId());
+        invoiceService.saveInvoiceToFile(invoices.get(number - 1).orderId());
     }
 
     private void printInvoice(InvoiceDto invoice) {

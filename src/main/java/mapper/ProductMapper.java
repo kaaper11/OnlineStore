@@ -9,6 +9,12 @@ import exception.UnknownProductTypeException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Utility mapper class responsible for converting Product entities
+ * into their corresponding ProductResponseDto representations.
+ * This class uses type-based dispatching to select the correct mapper
+ * depending on the конкрет product implementation.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ProductMapper {
 

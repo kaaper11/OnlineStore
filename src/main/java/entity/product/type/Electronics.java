@@ -2,6 +2,13 @@ package entity.product.type;
 
 import java.math.BigDecimal;
 
+/**
+ * Represents a basic electronics product in the system.
+ * This class extends Product and does not include additional configuration,
+ * meaning its total price is equal to its base price.
+ * <p>
+ * It is used for simple electronic items that do not require component-based configuration.
+ */
 public class Electronics extends Product {
     public Electronics(Long id, String name, BigDecimal price, int quantity) {
         super(id, name, price, quantity);

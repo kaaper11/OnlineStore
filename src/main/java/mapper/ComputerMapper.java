@@ -6,6 +6,12 @@ import entity.product.type.Computer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Utility mapper class responsible for converting between Computer entities
+ * and Computer DTO objects.
+ * This class is non-instantiable and provides static methods for transforming
+ * computer data between request/response layers and the domain model.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ComputerMapper {
 

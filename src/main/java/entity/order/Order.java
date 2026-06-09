@@ -9,6 +9,13 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Represents a customer order in the system.
+ * An order contains information about the client who placed it,
+ * the list of products included in the order, and the total price.
+ * <p>
+ * Equality of orders is based on the order identifier (id).
+ */
 @AllArgsConstructor
 @Getter
 public class Order {

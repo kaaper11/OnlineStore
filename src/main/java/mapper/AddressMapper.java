@@ -5,6 +5,11 @@ import entity.client.Address;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Utility mapper class responsible for converting between Address entity
+ * and AddressDto objects.
+ * This class is not instantiable and provides only static mapping methods.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AddressMapper {
 

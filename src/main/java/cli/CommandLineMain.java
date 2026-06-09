@@ -36,11 +36,14 @@ public class CommandLineMain {
             System.out.print("Wybierz opcję: ");
 
             switch (scanner.nextLine()) {
-                case "1" -> new ProductCli(productFacadeService, discountService, scanner).showProductMenu(loggedClient.id());
+                case "1" -> new ProductCli(productFacadeService, discountService, scanner)
+                        .showProductMenu(loggedClient.id());
                 case "2" -> new CartCli(cartService, discountService, scanner).run(loggedClient.id());
                 case "3" -> new OrderCli(orderService, discountService, scanner).run(loggedClient.id());
                 case "4" -> new InvoiceCli(invoiceService, discountService, scanner).run(loggedClient.id());
-                case "0" -> { return; }
+                case "0" -> {
+                    return;
+                }
                 default -> System.out.println("Nieznana opcja.");
             }
         }

@@ -40,7 +40,7 @@ public class AuthCli {
                     default -> System.out.println("Nieznana opcja, spróbuj ponownie.");
                 }
             }
-        }catch (ClientNotFoundException | ClientAlreadyExists | IncorrectPasswordException | ValidationException e){
+        } catch (ClientNotFoundException | ClientAlreadyExists | IncorrectPasswordException | ValidationException e) {
             System.out.println("\n" + e.getMessage());
             return showAuthMenu();
         }

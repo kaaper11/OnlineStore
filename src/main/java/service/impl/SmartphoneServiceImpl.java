@@ -20,6 +20,11 @@ import validator.ProductValidator;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Service implementation responsible for managing Smartphone products.
+ * It provides functionality for creating, updating, deleting, retrieving,
+ * and validating smartphone entities, while enforcing ADMIN-only access control.
+ */
 @RequiredArgsConstructor
 public class SmartphoneServiceImpl implements SmartphoneService {
     private final SmartphoneRepository smartphoneRepository;

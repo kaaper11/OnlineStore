@@ -34,10 +34,10 @@ public class OrderCli {
                     default -> System.out.println("Nieznana opcja.");
                 }
             }
-        } catch (ClientNotFoundException | CartNotFoundException e){
+        } catch (ClientNotFoundException | CartNotFoundException e) {
             System.out.println(e.getMessage());
             return;
-        } catch (CartEmptyException e){
+        } catch (CartEmptyException e) {
             System.out.println(e.getMessage());
         }
     }

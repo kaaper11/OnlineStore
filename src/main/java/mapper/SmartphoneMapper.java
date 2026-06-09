@@ -6,6 +6,12 @@ import entity.product.type.Smartphone;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Utility mapper class responsible for converting between Smartphone entities
+ * and Smartphone DTO objects.
+ * This class is non-instantiable and provides static methods for transforming
+ * smartphone data between request/response layers and the domain model.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SmartphoneMapper {
 

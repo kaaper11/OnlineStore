@@ -52,7 +52,7 @@ public class CartCli {
                     default -> System.out.println("Nieznana opcja.");
                 }
             }
-        }catch (CartEmptyException | ProductNotFoundException e) {
+        } catch (CartEmptyException | ProductNotFoundException e) {
             System.out.println(e.getMessage());
         } catch (CartNotFoundException e) {
             System.out.println(e.getMessage());

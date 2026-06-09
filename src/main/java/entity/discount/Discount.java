@@ -5,6 +5,11 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 
+/**
+ * Represents a discount applied to a specific product.
+ * A discount contains information about the product it applies to,
+ * the type of discount, and its value.
+ */
 @AllArgsConstructor
 @Getter
 public class Discount {

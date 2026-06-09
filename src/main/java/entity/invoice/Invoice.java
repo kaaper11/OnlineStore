@@ -10,6 +10,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Represents an invoice generated for an order.
+ * The invoice contains information about the client, ordered products,
+ * total price, and the date and time when the invoice was issued.
+ * <p>
+ * Equality of invoices is based on the invoice identifier (id).
+ */
 @AllArgsConstructor
 @Getter
 public class Invoice {
