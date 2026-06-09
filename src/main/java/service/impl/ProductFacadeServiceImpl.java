@@ -5,6 +5,7 @@ import dto.product.response.ProductResponseDto;
 import exception.ProductNotFoundException;
 import exception.ProductTypeNotFoundException;
 import lombok.AllArgsConstructor;
+import service.ProductFacadeService;
 import service.ProductService;
 
 import java.math.BigDecimal;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
  * to the appropriate ProductService implementation based on runtime type or existence.
  */
 @AllArgsConstructor
-public class ProductFacadeService {
+public class ProductFacadeServiceImpl implements ProductFacadeService {
     private final List<ProductService<? extends ProductResponseDto>> services;
 
     /**
@@ -31,7 +32,8 @@ public class ProductFacadeService {
      * @return the created ProductResponseDto
      * @throws ProductTypeNotFoundException if no matching product service is found
      */
-    public ProductResponseDto create(ProductRequestDto dto, Long clientId) {
+    @Override
+    public ProductResponseDto createProduct(ProductRequestDto dto, Long clientId) {
         return services.stream()
                 .filter(productService -> productService.isInstance(dto))
                 .findFirst()
@@ -48,6 +50,7 @@ public class ProductFacadeService {
      * @return the removed ProductResponseDto
      * @throws ProductNotFoundException if no product is found with the given id
      */
+    @Override
     public ProductResponseDto removeProduct(Long productId, Long clientId) {
 
         return services.stream()
@@ -67,6 +70,7 @@ public class ProductFacadeService {
      * @return the updated ProductResponseDto
      * @throws ProductNotFoundException if no product exists with the given id
      */
+    @Override
     public ProductResponseDto updateProductPrice(Long productId, Long clientId, BigDecimal price) {
         return services.stream()
                 .filter(productService -> productService.exist(productId))
@@ -85,6 +89,7 @@ public class ProductFacadeService {
      * @return the updated ProductResponseDto
      * @throws ProductNotFoundException if no product exists with the given id
      */
+    @Override
     public ProductResponseDto updateProductQuantity(Long productId, Long clientId, int quantity) {
         return services.stream()
                 .filter(productService -> productService.exist(productId))
@@ -99,6 +104,7 @@ public class ProductFacadeService {
      *
      * @return a sorted list of all ProductResponseDto objects in the system
      */
+    @Override
     public List<ProductResponseDto> getAllProducts() {
         return services.stream()
                 .map(ProductService::getAll)
