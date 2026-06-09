@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,7 +25,7 @@ public class Invoice {
     private Client client;
     private List<Product> products;
     private BigDecimal totalPrice;
-    private LocalDateTime invoiceDateTime;
+    private ZonedDateTime invoiceDateTime;
 
     @Override
     public boolean equals(Object o) {
@@ -37,5 +37,9 @@ public class Invoice {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public Invoice invoiceCopyWithLocalTime(ZonedDateTime localDateTime) {
+        return new Invoice(this.id, this.orderId, this.client, this.products, this.totalPrice, localDateTime);
     }
 }

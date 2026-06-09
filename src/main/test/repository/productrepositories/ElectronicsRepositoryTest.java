@@ -1,11 +1,10 @@
-package repository;
+package repository.productrepositories;
 
 import entity.product.type.Electronics;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import repository.productrepositories.ElectronicsRepository;
 
 import java.math.BigDecimal;
 import java.util.List;

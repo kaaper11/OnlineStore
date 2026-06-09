@@ -1,4 +1,4 @@
-package entity;
+package entity.product;
 
 import entity.product.config.smartphone.Accessory;
 import entity.product.config.smartphone.Battery;

@@ -10,6 +10,7 @@ import repository.InvoiceRepository;
 import service.InvoiceService;
 
 import java.io.IOException;
+import java.time.ZoneId;
 import java.util.List;
 
 /**
@@ -43,8 +44,10 @@ public class InvoiceServiceImpl implements InvoiceService {
      * @return a list of InvoiceDto objects associated with the client
      */
     @Override
-    public List<InvoiceDto> getInvoicesByClientId(Long clientId) {
+    public List<InvoiceDto> getInvoicesByClientId(Long clientId, ZoneId zone) {
         return invoiceRepository.getInvoicesByClientId(clientId).stream()
+                .map(invoice -> invoice.invoiceCopyWithLocalTime(invoice.getInvoiceDateTime()
+                        .withZoneSameInstant(zone)))
                 .map(InvoiceMapper::mapInvoiceToDto)
                 .toList();
     }

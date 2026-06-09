@@ -1,6 +1,5 @@
-package entity;
+package entity.cart;
 
-import entity.cart.Cart;
 import entity.product.type.Electronics;
 import entity.product.type.Product;
 import org.junit.jupiter.api.Test;

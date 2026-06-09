@@ -18,7 +18,7 @@ import repository.OrderRepository;
 import service.OrderService;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -71,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
                     new ArrayList<>(cart.getProducts()), totalPrice));
 
             invoiceRepository.save(new Invoice(invoiceRepository.getNextId(),
-                    order.getId(), order.getClient(), order.getProducts(), order.getTotalPrice(), LocalDateTime.now()));
+                    order.getId(), order.getClient(), order.getProducts(), order.getTotalPrice(), ZonedDateTime.now()));
 
             OrderDto orderDto = OrderMapper.mapOrderToDto(order);
 

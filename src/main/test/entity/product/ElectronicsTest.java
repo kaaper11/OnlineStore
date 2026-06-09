@@ -1,4 +1,4 @@
-package entity;
+package entity.product;
 
 import entity.product.type.Electronics;
 import entity.product.type.Product;

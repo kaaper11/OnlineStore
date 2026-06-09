@@ -19,7 +19,8 @@ import repository.InvoiceRepository;
 import service.impl.InvoiceServiceImpl;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +46,7 @@ public class InvoiceServiceTest {
             address, Role.USER);
     private final Order order = new Order(1L, client, cart.getProducts(), BigDecimal.TEN);
     private final Invoice invoice = new Invoice(1L, order.getId(), client, order.getProducts(), BigDecimal.TEN,
-            LocalDateTime.now());
+            ZonedDateTime.now());
 
     @Test
     void shouldFindInvoiceByOrderId() {
@@ -68,7 +69,7 @@ public class InvoiceServiceTest {
     void shouldFindInvoicesByClientId() {
         when(invoiceRepository.getInvoicesByClientId(anyLong())).thenReturn(List.of(invoice));
 
-        List<InvoiceDto> invoicesDto = invoiceService.getInvoicesByClientId(1L);
+        List<InvoiceDto> invoicesDto = invoiceService.getInvoicesByClientId(1L, ZoneId.systemDefault());
 
         assertThat(invoicesDto).hasSize(1);
         assertThat(invoicesDto.getFirst()).usingRecursiveComparison().isEqualTo(invoice);

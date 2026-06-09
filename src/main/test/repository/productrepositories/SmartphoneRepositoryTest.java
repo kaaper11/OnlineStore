@@ -1,4 +1,4 @@
-package repository;
+package repository.productrepositories;
 
 import entity.product.config.smartphone.Battery;
 import entity.product.config.smartphone.SmartphoneColorType;
@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import repository.productrepositories.SmartphoneRepository;
 
 import java.math.BigDecimal;
 import java.util.List;

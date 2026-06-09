@@ -1,4 +1,4 @@
-package entity;
+package entity.product;
 
 import entity.product.config.computer.GraphicCard;
 import entity.product.config.computer.Processor;
