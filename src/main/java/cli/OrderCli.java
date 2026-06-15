@@ -1,12 +1,13 @@
 package cli;
 
+import discountformatter.DiscountFormatter;
 import dto.order.OrderDto;
 import exception.CartEmptyException;
 import exception.CartNotFoundException;
 import exception.ClientNotFoundException;
 import lombok.AllArgsConstructor;
-import service.impl.DiscountServiceImpl;
-import service.impl.OrderServiceImpl;
+import service.discount.DiscountServiceImpl;
+import service.order.OrderServiceImpl;
 
 import java.util.Scanner;
 
@@ -38,7 +39,7 @@ public class OrderCli {
             }
         } catch (ClientNotFoundException | CartNotFoundException e) {
             System.out.println(e.getMessage());
-            return;
+            System.exit(0);
         } catch (CartEmptyException e) {
             System.out.println(e.getMessage());
         }
@@ -47,9 +48,13 @@ public class OrderCli {
     private void placeOrder(Long clientId) {
         OrderDto order = orderService.placeOrder(clientId);
         System.out.println("\nZamówienie złożone!");
-        System.out.println("Produkty:");
-        order.products().forEach(p ->
-                System.out.println("  - " + p + discountService.formatProductWithDiscount(p))
+        System.out.println("To kupiłeś:");
+        order.products().forEach(product -> {
+                    String discount = discountService.getDiscountForProduct(product.getId())
+                            .map(DiscountFormatter::formatDiscount)
+                            .orElse("");
+                    System.out.println(" - " + product + discount);
+                }
         );
         System.out.println("Suma: " + order.totalPrice() + " zł");
     }
@@ -62,8 +67,12 @@ public class OrderCli {
         }
         orders.forEach(order -> {
             System.out.println("Suma: " + order.totalPrice() + " zł");
-            order.products().forEach(p ->
-                    System.out.println("  - " + p + discountService.formatProductWithDiscount(p))
+            order.products().forEach(product -> {
+                        String discount = discountService.getDiscountForProduct(product.getId())
+                                .map(DiscountFormatter::formatDiscount)
+                                .orElse("");
+                        System.out.println(" - " + product + discount);
+                    }
             );
         });
     }
@@ -73,12 +82,13 @@ public class OrderCli {
         orderService.placeOrderAsync(clientId)
                 .thenAccept(order -> {
                     System.out.println("Zamówienie złożone! Suma: " + order.totalPrice() + " zł");
-                    order.products().forEach(product -> System.out.println("  - " + product +
-                            discountService.formatProductWithDiscount(product)));
-                })
-                .exceptionally(e -> {
-                    System.out.println("Błąd: " + e.getMessage());
-                    return null;
+                    order.products().forEach(product -> {
+                                String discount = discountService.getDiscountForProduct(product.getId())
+                                        .map(DiscountFormatter::formatDiscount)
+                                        .orElse("");
+                                System.out.println("- " + product + discount);
+                            }
+                    );
                 });
     }
 }

@@ -1,9 +1,10 @@
 package cli;
 
+import discountformatter.DiscountFormatter;
 import dto.invoice.InvoiceDto;
 import lombok.AllArgsConstructor;
-import service.impl.DiscountServiceImpl;
-import service.impl.InvoiceServiceImpl;
+import service.discount.DiscountServiceImpl;
+import service.invoice.InvoiceServiceImpl;
 
 import java.io.IOException;
 import java.time.ZoneId;
@@ -70,8 +71,12 @@ public class InvoiceCli {
         System.out.println("Data wystawienia: " + invoice.invoiceDateTime().format(DateTimeFormatter
                 .ofPattern("dd-MM-yyyy HH:mm z")));
         System.out.println("Produkty:");
-        invoice.products().forEach(p ->
-                System.out.println("  - " + p + discountService.formatProductWithDiscount(p))
+        invoice.products().forEach(product -> {
+                    String discount = discountService.getDiscountForProduct(product.getId())
+                            .map(DiscountFormatter::formatDiscount)
+                            .orElse("");
+                    System.out.println(" - " + product + discount);
+            }
         );
         System.out.println("Suma: " + invoice.totalPrice() + " zł");
         System.out.println("---------------");

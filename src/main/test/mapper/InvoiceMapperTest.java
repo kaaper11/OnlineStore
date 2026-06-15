@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +28,7 @@ public class InvoiceMapperTest {
         Product product = new Electronics(1L, "product", BigDecimal.TEN, 10);
         Order order = new Order(1L, client, List.of(product), BigDecimal.TEN);
         Invoice invoice = new Invoice(1L, order.getId(), client, List.of(product), BigDecimal.TEN,
-                LocalDateTime.now());
+                ZonedDateTime.now());
 
         InvoiceDto invoiceDto = InvoiceMapper.mapInvoiceToDto(invoice);
 
