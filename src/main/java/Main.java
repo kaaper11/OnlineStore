@@ -4,7 +4,15 @@ import repository.*;
 import repository.productrepositories.ComputerRepository;
 import repository.productrepositories.ElectronicsRepository;
 import repository.productrepositories.SmartphoneRepository;
-import service.impl.*;
+import service.cart.CartServiceImpl;
+import service.client.ClientServiceImpl;
+import service.computer.ComputerServiceImpl;
+import service.discount.DiscountServiceImpl;
+import service.electronics.ElectronicsServiceImpl;
+import service.invoice.InvoiceServiceImpl;
+import service.order.OrderServiceImpl;
+import service.productfacade.ProductFacadeServiceImpl;
+import service.smartphone.SmartphoneServiceImpl;
 
 import java.util.List;
 

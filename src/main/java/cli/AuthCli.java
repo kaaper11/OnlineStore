@@ -1,6 +1,6 @@
 package cli;
 
-import dto.LoginRequest;
+import dto.client.LoginRequest;
 import dto.client.AddressDto;
 import dto.client.ClientRequestDto;
 import dto.client.ClientResponseDto;
@@ -9,7 +9,7 @@ import exception.ClientNotFoundException;
 import exception.IncorrectPasswordException;
 import exception.ValidationException;
 import lombok.RequiredArgsConstructor;
-import service.impl.ClientServiceImpl;
+import service.client.ClientServiceImpl;
 
 import java.util.Scanner;
 
@@ -33,10 +33,7 @@ public class AuthCli {
                     case "2" -> {
                         return login();
                     }
-                    case "0" -> {
-                        System.out.println("Do widzenia!");
-                        System.exit(0);
-                    }
+                    case "0" -> System.exit(0);
                     default -> System.out.println("Nieznana opcja, spróbuj ponownie.");
                 }
             }

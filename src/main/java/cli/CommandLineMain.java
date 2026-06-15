@@ -2,7 +2,12 @@ package cli;
 
 import dto.client.ClientResponseDto;
 import lombok.AllArgsConstructor;
-import service.impl.*;
+import service.cart.CartServiceImpl;
+import service.client.ClientServiceImpl;
+import service.discount.DiscountServiceImpl;
+import service.invoice.InvoiceServiceImpl;
+import service.order.OrderServiceImpl;
+import service.productfacade.ProductFacadeServiceImpl;
 
 import java.util.Scanner;
 

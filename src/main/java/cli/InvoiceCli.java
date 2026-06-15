@@ -1,11 +1,14 @@
 package cli;
 
+import discountformatter.DiscountFormatter;
 import dto.invoice.InvoiceDto;
 import lombok.AllArgsConstructor;
-import service.impl.DiscountServiceImpl;
-import service.impl.InvoiceServiceImpl;
+import service.discount.DiscountServiceImpl;
+import service.invoice.InvoiceServiceImpl;
 
 import java.io.IOException;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -41,7 +44,8 @@ public class InvoiceCli {
     }
 
     private List<InvoiceDto> showMyInvoices(Long clientId) {
-        List<InvoiceDto> invoices = invoiceService.getInvoicesByClientId(clientId);
+        ZoneId zone = ZoneId.systemDefault();
+        List<InvoiceDto> invoices = invoiceService.getInvoicesByClientId(clientId, zone);
         if (invoices.isEmpty()) {
             System.out.println("Brak faktur.");
         }
@@ -64,10 +68,15 @@ public class InvoiceCli {
         System.out.println("\nFAKTURA");
         System.out.println("ID zamówienia: " + invoice.orderId());
         System.out.println("Klient: " + invoice.client().name());
-        System.out.println("Data wystawienia: " + invoice.invoiceDateTime());
+        System.out.println("Data wystawienia: " + invoice.invoiceDateTime().format(DateTimeFormatter
+                .ofPattern("dd-MM-yyyy HH:mm z")));
         System.out.println("Produkty:");
-        invoice.products().forEach(p ->
-                System.out.println("  - " + p + discountService.formatProductWithDiscount(p))
+        invoice.products().forEach(product -> {
+                    String discount = discountService.getDiscountForProduct(product.getId())
+                            .map(DiscountFormatter::formatDiscount)
+                            .orElse("");
+                    System.out.println(" - " + product + discount);
+            }
         );
         System.out.println("Suma: " + invoice.totalPrice() + " zł");
         System.out.println("---------------");

@@ -1,5 +1,6 @@
 package cli;
 
+import discountformatter.DiscountFormatter;
 import dto.cart.CartDto;
 import dto.productconfig.ComputerConfig;
 import dto.productconfig.ElectonicsConfig;
@@ -16,8 +17,8 @@ import exception.CartEmptyException;
 import exception.CartNotFoundException;
 import exception.ProductNotFoundException;
 import lombok.AllArgsConstructor;
-import service.impl.CartServiceImpl;
-import service.impl.DiscountServiceImpl;
+import service.cart.CartServiceImpl;
+import service.discount.DiscountServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,7 +57,7 @@ public class CartCli {
             System.out.println(e.getMessage());
         } catch (CartNotFoundException e) {
             System.out.println(e.getMessage());
-            return;
+            System.exit(0);
         } catch (ClassCastException e) {
             System.out.println("Konfigurowałeś obiekt nieodpowiedniego typu!");
         }
@@ -65,8 +66,12 @@ public class CartCli {
     private void showCart(Long clientId) {
         CartDto cart = cartService.getCartByClientId(clientId);
         System.out.println("\nTwój koszyk");
-        cart.products().forEach(p ->
-                System.out.println("- " + p + discountService.formatProductWithDiscount(p))
+        cart.products().forEach(product -> {
+                    String discount = discountService.getDiscountForProduct(product.getId())
+                            .map(DiscountFormatter::formatDiscount)
+                            .orElse("");
+                    System.out.println("- " + product + discount);
+                }
         );
     }
 

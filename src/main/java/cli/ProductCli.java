@@ -1,5 +1,6 @@
 package cli;
 
+import discountformatter.DiscountFormatter;
 import dto.discount.DiscountRequest;
 import dto.product.request.ComputerRequestDto;
 import dto.product.request.ElectronicsRequestDto;
@@ -8,8 +9,8 @@ import dto.product.request.SmartphoneRequestDto;
 import entity.discount.DiscountType;
 import exception.*;
 import lombok.AllArgsConstructor;
-import service.impl.DiscountServiceImpl;
-import service.impl.ProductFacadeServiceImpl;
+import service.discount.DiscountServiceImpl;
+import service.productfacade.ProductFacadeServiceImpl;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
@@ -55,7 +56,7 @@ public class ProductCli {
             System.out.println(e.getMessage());
         } catch (ClientNotFoundException e) {
             System.out.println(e.getMessage());
-            return;
+            System.exit(0);
         }
     }
 
@@ -103,8 +104,13 @@ public class ProductCli {
 
     private void getAllProducts() {
         System.out.println("Wszytskie produkty dostępne w sklepie: ");
-        productFacadeServiceImpl.getAllProducts().forEach(product ->
-                System.out.println(product + discountService.formatProductWithDiscount(product)));
+        productFacadeServiceImpl.getAllProducts().forEach(product -> {
+                    String discount = discountService.getDiscountForProduct(product.getId())
+                            .map(DiscountFormatter::formatDiscount)
+                            .orElse("");
+                    System.out.println("- " + product + discount);
+                }
+        );
     }
 
     private void addDiscount(Long clientId) {
