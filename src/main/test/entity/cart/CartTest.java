@@ -27,7 +27,7 @@ public class CartTest {
 
     @Test
     public void shouldProductListIsEmpty() {
-        boolean result = cart.cheekProductsEmpty();
+        boolean result = cart.isEmpty();
 
         assertThat(result).isTrue();
     }
@@ -36,7 +36,7 @@ public class CartTest {
     public void shouldProductListIsNotEmpty() {
         cart.addProduct(electronics);
 
-        boolean result = cart.cheekProductsEmpty();
+        boolean result = cart.isEmpty();
 
         assertThat(result).isFalse();
     }

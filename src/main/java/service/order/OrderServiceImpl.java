@@ -61,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
             Cart cart = cartRepository.getCartByClientId(clientId).orElseThrow(CartNotFoundException::new);
             Client client = clientRepository.getClientById(clientId).orElseThrow(ClientNotFoundException::new);
 
-            if (cart.cheekProductsEmpty()) {
+            if (cart.isEmpty()) {
                 throw new CartEmptyException();
             }
 

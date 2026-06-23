@@ -28,7 +28,7 @@ public class Cart {
         return product;
     }
 
-    public boolean cheekProductsEmpty() {
+    public boolean isEmpty() {
         return products.isEmpty();
     }
 
