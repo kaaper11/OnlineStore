@@ -1,8 +1,6 @@
 package service.computer;
 
 import dto.product.request.ComputerRequestDto;
-import dto.product.request.ElectronicsRequestDto;
-import dto.product.request.ProductRequestDto;
 import dto.product.response.ComputerResponseDto;
 import entity.client.Address;
 import entity.client.Client;
@@ -79,12 +77,10 @@ public class ComputerServiceImplTest {
         when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
 
         //when
-        ComputerResponseDto dto = computerService.remove(1L, 1L);
+        computerService.remove(1L, 1L);
 
         //then
-        assertNotNull(dto);
         verify(computerRepository).delete(1L);
-        assertThat(dto.getName()).isEqualTo(computerRequestDto.getName());
     }
 
     @Test
@@ -131,8 +127,7 @@ public class ComputerServiceImplTest {
 
         //then
         assertThat(dtos).hasSize(1);
-        assertThat(dtos.getFirst()).usingRecursiveComparison()
-                .ignoringFields("id").isEqualTo(computerRequestDto);
+        assertThat(dtos.getFirst().getName()).isEqualTo(computer.getName());
     }
 
     @Test
@@ -149,21 +144,5 @@ public class ComputerServiceImplTest {
 
         boolean result = computerService.exist(10L);
         assertThat(result).isTrue();
-    }
-
-    @Test
-    void shouldProductIsInstanceComputer() {
-        ProductRequestDto dto = new ComputerRequestDto("name", new BigDecimal("100"), 20);
-
-        boolean result = computerService.isInstance(dto);
-        assertThat(result).isTrue();
-    }
-
-    @Test
-    void shouldProductIsNotInstanceComputer() {
-        ProductRequestDto dto = new ElectronicsRequestDto("name", new BigDecimal("100"), 20);
-
-        boolean result = computerService.isInstance(dto);
-        assertThat(result).isFalse();
     }
 }

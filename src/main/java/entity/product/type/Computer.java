@@ -7,6 +7,7 @@ import entity.product.config.computer.Ram;
 import entity.product.config.computer.Rom;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
  */
 @ToString
 @Getter
+@SuperBuilder(toBuilder = true)
 public class Computer extends Product {
     private Processor processor;
     private Ram ram;
@@ -40,9 +42,9 @@ public class Computer extends Product {
     /**
      * Configures the computer by assigning hardware components.
      *
-     * @param processor the processor to be assigned to the computer
-     * @param ram the RAM module to be assigned to the computer
-     * @param rom the storage unit to be assigned to the computer
+     * @param processor   the processor to be assigned to the computer
+     * @param ram         the RAM module to be assigned to the computer
+     * @param rom         the storage unit to be assigned to the computer
      * @param graphicCard the graphics card to be assigned to the computer
      * @return the updated Computer instance with applied configuration
      */
@@ -69,6 +71,6 @@ public class Computer extends Product {
 
     @Override
     public Product getProductCopy() {
-        return new Computer(getId(), getName(), getPrice(), getQuantity());
+        return this.toBuilder().build();
     }
 }

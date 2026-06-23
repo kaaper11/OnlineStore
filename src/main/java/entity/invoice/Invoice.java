@@ -3,6 +3,7 @@ package entity.invoice;
 import entity.client.Client;
 import entity.product.type.Product;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ import java.util.Objects;
  * <p>
  * Equality of invoices is based on the invoice identifier (id).
  */
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @Getter
 public class Invoice {
@@ -40,6 +42,6 @@ public class Invoice {
     }
 
     public Invoice invoiceCopyWithLocalTime(ZonedDateTime localDateTime) {
-        return new Invoice(this.id, this.orderId, this.client, this.products, this.totalPrice, localDateTime);
+        return this.toBuilder().invoiceDateTime(localDateTime).build();
     }
 }

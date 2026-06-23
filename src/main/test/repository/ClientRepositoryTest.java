@@ -106,8 +106,8 @@ public class ClientRepositoryTest {
         Long firstId = clientRepository.getNextId();
         Long secondId = clientRepository.getNextId();
 
-        assertThat(firstId).isEqualTo(0L);
-        assertThat(secondId).isEqualTo(1L);
+        assertThat(firstId).isEqualTo(1L);
+        assertThat(secondId).isEqualTo(2L);
     }
 
     @Test

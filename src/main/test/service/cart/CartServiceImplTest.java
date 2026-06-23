@@ -93,7 +93,7 @@ class CartServiceImplTest {
         when(cartRepository.getCartByClientId(10L)).thenReturn(Optional.of(cart));
         when(computerRepository.getComputerById(5L)).thenReturn(Optional.of(product));
 
-        CartDto result = cartService.addProductToCart(10L, 5L,
+        CartDto result = cartService.addProductToCart("computer",10L, 5L,
                 new ComputerConfig(Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050));
 
         assertNotNull(result);
@@ -106,7 +106,7 @@ class CartServiceImplTest {
         when(cartRepository.getCartByClientId(10L))
                 .thenReturn(Optional.empty());
 
-        assertThrows(CartNotFoundException.class, () -> cartService.addProductToCart(10L, 5L,
+        assertThrows(CartNotFoundException.class, () -> cartService.addProductToCart("computer",10L, 5L,
                 new ComputerConfig(Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050)));
     }
 
@@ -118,11 +118,7 @@ class CartServiceImplTest {
 
         when(computerRepository.getComputerById(anyLong())).thenReturn(Optional.empty());
 
-        when(smartphoneRepository.getSmartphoneById(anyLong())).thenReturn(Optional.empty());
-
-        when(electronicsRepository.getElectronicsById(anyLong())).thenReturn(Optional.empty());
-
-        assertThrows(ProductNotFoundException.class, () -> cartService.addProductToCart(10L, 5L,
+        assertThrows(ProductNotFoundException.class, () -> cartService.addProductToCart("computer",10L, 5L,
                 new ComputerConfig(Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050)));
     }
 }

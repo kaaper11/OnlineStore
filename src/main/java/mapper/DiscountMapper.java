@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
  * domain and transport layers.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class DiscountMapper {
+public final class DiscountMapper {
 
     public static DiscountDto mapDiscountToDto(Discount discount) {
         return new DiscountDto(discount.getId(), discount.getProductId(), discount.getDiscountType(),

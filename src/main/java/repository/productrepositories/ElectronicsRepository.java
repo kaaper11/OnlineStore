@@ -2,11 +2,11 @@ package repository.productrepositories;
 
 import entity.product.type.Electronics;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Repository responsible for managing Electronics entities in memory.
@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ElectronicsRepository {
     private final Set<Electronics> electronicsSet = ConcurrentHashMap.newKeySet();
+    private final AtomicLong idCounter = new AtomicLong(1L);
 
     /**
      * Saves an electronics entity into the repository.
@@ -65,35 +66,7 @@ public class ElectronicsRepository {
                 .toList();
     }
 
-    /**
-     * Updates the price of an electronics entity with the given identifier.
-     *
-     * @param id    the identifier of the electronics entity to update
-     * @param price the new price to set
-     * @return an Optional containing the updated electronics if found,
-     * otherwise an empty Optional
-     */
-    public Optional<Electronics> updatePrice(Long id, BigDecimal price) {
-        return getElectronicsById(id)
-                .map(electronics -> {
-                    electronics.setPrice(price);
-                    return electronics;
-                });
-    }
-
-    /**
-     * Updates the quantity of an electronics entity with the given identifier.
-     *
-     * @param id       the identifier of the electronics entity to update
-     * @param quantity the new quantity to set
-     * @return an Optional containing the updated electronics if found,
-     * otherwise an empty Optional
-     */
-    public Optional<Electronics> updateQuantity(Long id, Integer quantity) {
-        return getElectronicsById(id)
-                .map(electronics -> {
-                    electronics.setQuantity(quantity);
-                    return electronics;
-                });
+    public Long getNextId() {
+        return idCounter.getAndIncrement();
     }
 }

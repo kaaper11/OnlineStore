@@ -1,8 +1,6 @@
 package service.electronics;
 
-import dto.product.request.ComputerRequestDto;
 import dto.product.request.ElectronicsRequestDto;
-import dto.product.request.ProductRequestDto;
 import dto.product.response.ElectronicsResponseDto;
 import entity.client.Address;
 import entity.client.Client;
@@ -74,12 +72,10 @@ public class ElectronicsServiceImplTest {
         when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
 
         // when
-        ElectronicsResponseDto dto = electronicsService.remove(1L, 1L);
+        electronicsService.remove(1L, 1L);
 
         // then
-        assertNotNull(dto);
         verify(electronicsRepository).delete(1L);
-        assertThat(dto).usingRecursiveComparison().isEqualTo(electronics);
     }
 
     @Test
@@ -150,21 +146,5 @@ public class ElectronicsServiceImplTest {
 
         boolean result = electronicsService.exist(10L);
         assertThat(result).isTrue();
-    }
-
-    @Test
-    void shouldProductIsInstanceElectronics() {
-        ProductRequestDto dto = new ElectronicsRequestDto("name", new BigDecimal("100"), 20);
-
-        boolean result = electronicsService.isInstance(dto);
-        assertThat(result).isTrue();
-    }
-
-    @Test
-    void shouldProductIsNotInstanceElectronics() {
-        ProductRequestDto dto = new ComputerRequestDto("name", new BigDecimal("100"), 20);
-
-        boolean result = electronicsService.isInstance(dto);
-        assertThat(result).isFalse();
     }
 }

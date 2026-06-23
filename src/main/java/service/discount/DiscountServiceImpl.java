@@ -48,7 +48,7 @@ public class DiscountServiceImpl implements DiscountService {
      * @throws ProductNotFoundException        if the product does not exist
      */
     @Override
-    public DiscountDto addDiscount(DiscountRequest discountRequest, Long clientId) {
+    public DiscountDto addDiscount(String type, DiscountRequest discountRequest, Long clientId) {
         Client client = clientRepository.getClientById(clientId).orElseThrow(ClientNotFoundException::new);
 
         if (client.getRole() != Role.ADMIN) {
@@ -59,7 +59,16 @@ public class DiscountServiceImpl implements DiscountService {
             throw new DiscountForProductAlreadyExists();
         }
 
-        Product product = findProductById(discountRequest.productId());
+        Product product = switch (type) {
+            case "computer" -> computerRepository.getComputerById(discountRequest.productId())
+                    .orElseThrow(ComputerNotFoundException::new);
+            case "electronics" -> electronicsRepository.getElectronicsById(discountRequest.productId())
+                    .orElseThrow(ElectronicsNotFoundException::new);
+            case "smartphone" -> smartphoneRepository.getSmartphoneById(discountRequest.productId())
+                    .orElseThrow(SmartphoneNotFoundException::new);
+            default -> throw new ProductTypeNotFoundException();
+        };
+
         DiscountValidator.validate(discountRequest, product.getPrice());
         Discount discount = discountRepository.save(DiscountMapper.mapDiscountRequestToDiscount(discountRequest,
                 discountRepository.getNextId()));
@@ -125,19 +134,5 @@ public class DiscountServiceImpl implements DiscountService {
         return products.stream()
                 .map(this::calculateDiscount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    /**
-     * Searches for a product across all available product repositories.
-     *
-     * @param id the identifier of the product
-     * @return the found Product instance
-     * @throws ProductNotFoundException if no product is found with the given id
-     */
-    private Product findProductById(Long id) {
-        return computerRepository.getComputerById(id).<Product>map(product -> product)
-                .or(() -> smartphoneRepository.getSmartphoneById(id))
-                .or(() -> electronicsRepository.getElectronicsById(id))
-                .orElseThrow(() -> new ProductNotFoundException("produktu"));
     }
 }

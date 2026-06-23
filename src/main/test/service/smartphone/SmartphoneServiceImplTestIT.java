@@ -63,10 +63,9 @@ public class SmartphoneServiceImplTestIT {
     void shouldRemoveSmartphone() {
         smartphoneRepository.save(smartphone);
 
-        SmartphoneResponseDto result = smartphoneService.remove(1L, 1L);
+        smartphoneService.remove(1L, 1L);
 
-        assertThat(result).isNotNull();
-        assertThat(result.getName()).isEqualTo("iPhone");
+        assertThat(smartphoneRepository.getAllSmartphones().size()).isEqualTo(0);
     }
 
     @Test

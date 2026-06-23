@@ -16,18 +16,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ProductTest {
 
     @Test
-    public void shouldBuyProductWithMoreThanZeroQuantity() {
+    public void shouldDecreaseQuantityWithMoreThanZeroQuantity() {
         Product product = new Electronics(1L, "name", BigDecimal.ONE, 10);
 
-        int quantity = product.buyProduct();
+        int quantity = product.decreaseQuantity();
 
         assertThat(quantity).isEqualTo(product.getQuantity());
     }
 
     @Test
-    public void shouldThrowExceptionWhenBuyProductWithZeroQuantity() {
+    public void shouldThrowExceptionWhenDecreaseQuantityWithZeroQuantity() {
         Product product = new Electronics(1L, "name", BigDecimal.ZERO, 0);
 
-        assertThrows(ProductOutOfStockException.class, product::buyProduct);
+        assertThrows(ProductOutOfStockException.class, product::decreaseQuantity);
     }
 }

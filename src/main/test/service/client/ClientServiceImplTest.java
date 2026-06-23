@@ -56,7 +56,7 @@ public class ClientServiceImplTest {
     public void shouldCreateClient() {
         when(clientRepository.getNextId()).thenReturn(1L);
         when(clientRepository.save(any(Client.class))).thenReturn(client);
-        when(cartRepository.save(anyLong())).thenReturn(any(Cart.class));
+        when(cartRepository.save(any(Cart.class))).thenReturn(any(Cart.class));
 
         ClientResponseDto result = clientService.createClient(request);
 

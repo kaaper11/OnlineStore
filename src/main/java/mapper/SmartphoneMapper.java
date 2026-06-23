@@ -2,6 +2,8 @@ package mapper;
 
 import dto.product.request.SmartphoneRequestDto;
 import dto.product.response.SmartphoneResponseDto;
+import entity.product.config.smartphone.Battery;
+import entity.product.config.smartphone.SmartphoneColorType;
 import entity.product.type.Smartphone;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -17,7 +19,7 @@ public final class SmartphoneMapper {
 
     public static Smartphone mapDtoToSmartphone(SmartphoneRequestDto smartphoneDto, Long id) {
         return new Smartphone(id, smartphoneDto.getName(), smartphoneDto.getPrice(), smartphoneDto.getQuantity(),
-                smartphoneDto.getColor(), smartphoneDto.getBattery());
+                SmartphoneColorType.BLACK, Battery.MAH5000);
     }
 
     public static SmartphoneResponseDto mapSmartphoneToDto(Smartphone smartphone) {

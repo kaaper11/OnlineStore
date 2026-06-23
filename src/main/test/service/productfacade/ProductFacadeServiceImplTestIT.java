@@ -1,9 +1,5 @@
 package service.productfacade;
 
-import dto.product.request.ComputerRequestDto;
-import dto.product.request.ElectronicsRequestDto;
-import dto.product.request.ProductRequestDto;
-import dto.product.request.SmartphoneRequestDto;
 import dto.product.response.ComputerResponseDto;
 import dto.product.response.ElectronicsResponseDto;
 import dto.product.response.ProductResponseDto;
@@ -11,6 +7,8 @@ import dto.product.response.SmartphoneResponseDto;
 import entity.client.Address;
 import entity.client.Client;
 import entity.client.Role;
+import entity.product.type.Computer;
+import entity.product.type.Smartphone;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import repository.ClientRepository;
@@ -49,42 +47,14 @@ public class ProductFacadeServiceImplTestIT{
         Client client = new Client(1L, "Kacper", "kacper40@wp.pl", "Cos123%dd", "123456789",
                 address, Role.ADMIN);
         clientRepository.save(client);
+
+        computerRepository.save(new Computer(1L, "name", new BigDecimal("100"), 10));
+        smartphoneRepository.save(new Smartphone(10L, "name", new BigDecimal("100"), 10));
     }
 
     @Test
-    void shouldCreateComputerProduct() {
-        ProductRequestDto dto = new ComputerRequestDto("PC", BigDecimal.TEN, 10);
-
-        ProductResponseDto result = productFacadeService.createProduct(dto, 1L);
-
-        assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(1L);
-    }
-
-    @Test
-    void shouldCreateSmartphoneProduct() {
-        ProductRequestDto dto = new SmartphoneRequestDto("Phone", BigDecimal.TEN, 10);
-
-        ProductResponseDto result = productFacadeService.createProduct(dto, 1L);
-
-        assertThat(result).isNotNull();
-    }
-
-    @Test
-    void shouldCreateElectronicsProduct() {
-        ProductRequestDto dto = new ElectronicsRequestDto("TV", BigDecimal.TEN, 10);
-
-        ProductResponseDto result = productFacadeService.createProduct(dto, 1L);
-
-        assertThat(result).isNotNull();
-    }
-
-    @Test
-    void shouldGetAllProducts() {
-        productFacadeService.createProduct(new ComputerRequestDto("PC", BigDecimal.TEN, 10), 1L);
-        productFacadeService.createProduct(new SmartphoneRequestDto("Phone", BigDecimal.TEN, 10), 1L);
-
-        List<ProductResponseDto> all = productFacadeService.getAllProducts();
+    void shouldGetBaseProducts() {
+        List<ProductResponseDto> all = productFacadeService.getBaseProducts();
 
         assertThat(all).isNotNull();
         assertThat(all.size()).isEqualTo(2);

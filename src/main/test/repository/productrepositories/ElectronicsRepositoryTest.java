@@ -71,22 +71,4 @@ public class ElectronicsRepositoryTest {
         assertThat(result).hasSize(2);
         assertThat(result.getFirst()).isEqualTo(e1);
     }
-
-    @Test
-    void shouldUpdateComputerPrice() {
-        electronicsRepository.save(electronics);
-
-        Optional<Electronics> result = electronicsRepository.updatePrice(1L, BigDecimal.TEN);
-        assertThat(result).isPresent();
-        assertThat(electronicsRepository.getElectronicsById(1L).get().getPrice()).isEqualTo(BigDecimal.TEN);
-    }
-
-    @Test
-    void shouldUpdateComputerQuantity() {
-        electronicsRepository.save(electronics);
-
-        Optional<Electronics> result = electronicsRepository.updateQuantity(1L, 100);
-        assertThat(result).isPresent();
-        assertThat(electronicsRepository.getElectronicsById(1L).get().getQuantity()).isEqualTo(100);
-    }
 }

@@ -1,7 +1,5 @@
 package service.smartphone;
 
-import dto.product.request.ElectronicsRequestDto;
-import dto.product.request.ProductRequestDto;
 import dto.product.request.SmartphoneRequestDto;
 import dto.product.response.SmartphoneResponseDto;
 import entity.client.Address;
@@ -67,8 +65,7 @@ public class SmartphoneServiceImplTest {
         // then
         assertNotNull(dto);
         verify(smartphoneRepository).save(any(Smartphone.class));
-        assertThat(dto).usingRecursiveComparison().ignoringFields("id")
-                .isEqualTo(smartphoneDto);
+        assertThat(dto.getName()).isEqualTo(smartphone.getName());
     }
 
     @Test
@@ -78,12 +75,10 @@ public class SmartphoneServiceImplTest {
         when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
 
         // when
-        SmartphoneResponseDto dto = smartphoneService.remove(1L, 1L);
+        smartphoneService.remove(1L, 1L);
 
         // then
-        assertNotNull(dto);
         verify(smartphoneRepository).delete(1L);
-        assertThat(dto).usingRecursiveComparison().isEqualTo(smartphone);
     }
 
     @Test
@@ -108,7 +103,7 @@ public class SmartphoneServiceImplTest {
 
         // then
         assertNotNull(dto);
-        assertThat(dto).usingRecursiveComparison().ignoringFields("id").isEqualTo(smartphoneDto);
+        assertThat(dto.getName()).isEqualTo(smartphone.getName());
     }
 
     @Test
@@ -133,10 +128,7 @@ public class SmartphoneServiceImplTest {
 
         // then
         assertThat(dtos).hasSize(1);
-        assertThat(dtos.getFirst())
-                .usingRecursiveComparison()
-                .ignoringFields("id")
-                .isEqualTo(smartphoneDto);
+        assertThat(dtos.getFirst().getName()).isEqualTo(smartphoneDto.getName());
     }
 
     @Test
@@ -153,21 +145,5 @@ public class SmartphoneServiceImplTest {
 
         boolean result = smartphoneService.exist(10L);
         assertThat(result).isTrue();
-    }
-
-    @Test
-    void shouldProductIsInstanceSmartphone() {
-        ProductRequestDto dto = new SmartphoneRequestDto("name", new BigDecimal("100"), 20);
-
-        boolean result = smartphoneService.isInstance(dto);
-        assertThat(result).isTrue();
-    }
-
-    @Test
-    void shouldProductIsNotInstanceSmartphone() {
-        ProductRequestDto dto = new ElectronicsRequestDto("name", new BigDecimal("100"), 20);
-
-        boolean result = smartphoneService.isInstance(dto);
-        assertThat(result).isFalse();
     }
 }

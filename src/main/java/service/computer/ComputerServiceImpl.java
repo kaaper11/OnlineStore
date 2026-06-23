@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import mapper.ComputerMapper;
 import repository.ClientRepository;
 import repository.productrepositories.ComputerRepository;
-import repository.productrepositories.idconfig.ProductIdGenerator;
 import validator.ProductValidator;
 
 import java.math.BigDecimal;
@@ -53,7 +52,7 @@ public class ComputerServiceImpl implements ComputerService {
         }
 
         Computer computer = computerRepository.save(ComputerMapper.mapDtoToComputer(computerRequestDto,
-                ProductIdGenerator.getNextProductId()));
+                computerRepository.getNextId()));
         return ComputerMapper.mapComputerToDto(computer);
     }
 
@@ -63,21 +62,19 @@ public class ComputerServiceImpl implements ComputerService {
      *
      * @param id       the identifier of the computer to remove
      * @param clientId the identifier of the client performing the operation
-     * @return the removed ComputerResponseDto
      * @throws ClientNotFoundException   if the client does not exist
      * @throws NoPermissionsException    if the client is not an ADMIN
      * @throws ComputerNotFoundException if the computer does not exist
      */
     @Override
-    public ComputerResponseDto remove(Long id, Long clientId) {
+    public void remove(Long id, Long clientId) {
         Client client = clientRepository.getClientById(clientId).orElseThrow(ClientNotFoundException::new);
 
         if (client.getRole() != Role.ADMIN) {
             throw new NoPermissionsException();
         }
 
-        Computer computer = computerRepository.delete(id).orElseThrow(ComputerNotFoundException::new);
-        return ComputerMapper.mapComputerToDto(computer);
+        computerRepository.delete(id).orElseThrow(ComputerNotFoundException::new);
     }
 
     /**
@@ -102,9 +99,9 @@ public class ComputerServiceImpl implements ComputerService {
             throw new NoPermissionsException();
         }
 
-        Computer computer = computerRepository.updateComputerPrice(id, price)
-                .orElseThrow(ComputerNotFoundException::new);
+        Computer computer = computerRepository.getComputerById(id).orElseThrow(ComputerNotFoundException::new);
 
+        computer.setPrice(price);
         return ComputerMapper.mapComputerToDto(computer);
     }
 
@@ -130,9 +127,9 @@ public class ComputerServiceImpl implements ComputerService {
             throw new NoPermissionsException();
         }
 
-        Computer computer = computerRepository.updateComputerQuantity(id, quantity)
-                .orElseThrow(ComputerNotFoundException::new);
+        Computer computer = computerRepository.getComputerById(id).orElseThrow(ComputerNotFoundException::new);
 
+        computer.setQuantity(quantity);
         return ComputerMapper.mapComputerToDto(computer);
     }
 
@@ -170,16 +167,5 @@ public class ComputerServiceImpl implements ComputerService {
     @Override
     public boolean exist(Long id) {
         return computerRepository.getComputerById(id).isPresent();
-    }
-
-    /**
-     * Checks whether the given ProductRequestDto is an instance of ComputerRequestDto.
-     *
-     * @param dto the product request to check
-     * @return true if the dto represents a Computer request, false otherwise
-     */
-    @Override
-    public boolean isInstance(ProductRequestDto dto) {
-        return dto instanceof ComputerRequestDto;
     }
 }

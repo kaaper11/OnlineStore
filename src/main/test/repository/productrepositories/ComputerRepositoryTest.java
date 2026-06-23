@@ -73,22 +73,4 @@ public class ComputerRepositoryTest {
         assertThat(result).hasSize(2);
         assertThat(result.getFirst()).isEqualTo(c1);
     }
-
-    @Test
-    void shouldUpdateComputerPrice() {
-        computerRepository.save(computer);
-
-        Optional<Computer> result = computerRepository.updateComputerPrice(1L, BigDecimal.TEN);
-        assertThat(result).isPresent();
-        assertThat(computerRepository.getComputerById(1L).get().getPrice()).isEqualTo(BigDecimal.TEN);
-    }
-
-    @Test
-    void shouldUpdateComputerQuantity() {
-        computerRepository.save(computer);
-
-        Optional<Computer> result = computerRepository.updateComputerQuantity(1L, 100);
-        assertThat(result).isPresent();
-        assertThat(computerRepository.getComputerById(1L).get().getQuantity()).isEqualTo(100);
-    }
 }

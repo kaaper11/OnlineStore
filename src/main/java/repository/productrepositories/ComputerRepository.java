@@ -2,19 +2,20 @@ package repository.productrepositories;
 
 import entity.product.type.Computer;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Repository responsible for managing Computer entities in memory.
  * It provides basic CRUD-like operations such as saving, retrieving,
  * updating, and deleting computer objects using a thread-safe set.
  */
-public class ComputerRepository {
+public final class ComputerRepository {
     private final Set<Computer> computers = ConcurrentHashMap.newKeySet();
+    private final AtomicLong idCounter = new AtomicLong(1L);
 
     /**
      * Saves a computer entity into the repository.
@@ -65,35 +66,7 @@ public class ComputerRepository {
                 .toList();
     }
 
-    /**
-     * Updates the price of a computer with the given identifier.
-     *
-     * @param id    the identifier of the computer to update
-     * @param price the new price to set
-     * @return an Optional containing the updated computer if found,
-     * otherwise an empty Optional
-     */
-    public Optional<Computer> updateComputerPrice(Long id, BigDecimal price) {
-        return getComputerById(id)
-                .map(computer -> {
-                    computer.setPrice(price);
-                    return computer;
-                });
-    }
-
-    /**
-     * Updates the quantity of a computer with the given identifier.
-     *
-     * @param id       the identifier of the computer to update
-     * @param quantity the new quantity to set
-     * @return an Optional containing the updated computer if found,
-     * otherwise an empty Optional
-     */
-    public Optional<Computer> updateComputerQuantity(Long id, int quantity) {
-        return getComputerById(id)
-                .map(computer -> {
-                    computer.setQuantity(quantity);
-                    return computer;
-                });
+    public Long getNextId() {
+        return idCounter.getAndIncrement();
     }
 }

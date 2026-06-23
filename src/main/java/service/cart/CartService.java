@@ -9,5 +9,5 @@ public interface CartService {
 
     CartDto getCartByClientId(Long clientId);
 
-    CartDto addProductToCart(Long clientId, Long productId, ProductConfig productConfig);
+    CartDto addProductToCart(String type, Long clientId, Long productId, ProductConfig productConfig);
 }

@@ -4,6 +4,7 @@ import entity.product.config.smartphone.Accessory;
 import entity.product.config.smartphone.Battery;
 import entity.product.config.smartphone.SmartphoneColorType;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
  * calculation based on selected configuration and accessories.
  */
 @Getter
+@SuperBuilder(toBuilder = true)
 public class Smartphone extends Product {
     private SmartphoneColorType color;
     private Battery battery;
@@ -55,6 +57,6 @@ public class Smartphone extends Product {
 
     @Override
     public Product getProductCopy() {
-        return new Smartphone(getId(), getName(), getPrice(), getQuantity());
+        return this.toBuilder().build();
     }
 }

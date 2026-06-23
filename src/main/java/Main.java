@@ -45,7 +45,7 @@ public class Main {
 
 
         CommandLineMain cli = new CommandLineMain(cartService, clientService, invoiceService, orderService,
-                productFacadeServiceImpl, discountService);
+                productFacadeServiceImpl, discountService, computerService, smartphoneService, electronicsService);
 
         cli.start();
     }

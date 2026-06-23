@@ -2,6 +2,7 @@ package service.order;
 
 import dto.order.OrderDto;
 import dto.productconfig.ComputerConfig;
+import entity.cart.Cart;
 import entity.client.Address;
 import entity.client.Client;
 import entity.client.Role;
@@ -24,6 +25,7 @@ import service.cart.CartServiceImpl;
 import service.discount.DiscountServiceImpl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -66,12 +68,12 @@ public class OrderServiceImplTestIT {
                 address, Role.USER);
 
         clientRepository.save(client);
-        cartRepository.save(client.getId());
+        cartRepository.save(new Cart(1L, client.getId(), new ArrayList<>()));
     }
 
     @Test
     void shouldPlaceOrder() {
-        cartService.addProductToCart(1L, 1L, new ComputerConfig(Processor.INTEL_CORE_I5, Ram.GB8,
+        cartService.addProductToCart("computer", 1L, 1L, new ComputerConfig(Processor.INTEL_CORE_I5, Ram.GB8,
                 Rom.GB500, GraphicCard.RTX5050));
 
         OrderDto orderDto = orderService.placeOrder(1L);
@@ -82,7 +84,7 @@ public class OrderServiceImplTestIT {
 
     @Test
     void shouldGetOrderById() {
-        cartService.addProductToCart(1L, 1L, new ComputerConfig(Processor.INTEL_CORE_I5, Ram.GB8,
+        cartService.addProductToCart("computer",1L, 1L, new ComputerConfig(Processor.INTEL_CORE_I5, Ram.GB8,
                 Rom.GB500, GraphicCard.RTX5050));
 
         orderService.placeOrder(1L);
@@ -94,7 +96,7 @@ public class OrderServiceImplTestIT {
 
     @Test
     void shouldGetOrdersByClientId() {
-        cartService.addProductToCart(1L, 1L, new ComputerConfig(Processor.INTEL_CORE_I5, Ram.GB8,
+        cartService.addProductToCart("computer", 1L, 1L, new ComputerConfig(Processor.INTEL_CORE_I5, Ram.GB8,
                 Rom.GB500, GraphicCard.RTX5050));
 
         orderService.placeOrder(1L);
@@ -107,7 +109,7 @@ public class OrderServiceImplTestIT {
 
     @Test
     void shouldPlaceSomeOrders() {
-        cartService.addProductToCart(1L, 1L, new ComputerConfig(Processor.INTEL_CORE_I5, Ram.GB8,
+        cartService.addProductToCart("computer", 1L, 1L, new ComputerConfig(Processor.INTEL_CORE_I5, Ram.GB8,
                 Rom.GB500, GraphicCard.RTX5050));
 
         List<OrderDto> orders = orderService.placeSomeOrders(List.of(1L));
@@ -118,7 +120,7 @@ public class OrderServiceImplTestIT {
 
     @Test
     void shouldPlaceOrderAsync() {
-        cartService.addProductToCart(1L, 1L, new ComputerConfig(Processor.INTEL_CORE_I5, Ram.GB8,
+        cartService.addProductToCart("computer", 1L, 1L, new ComputerConfig(Processor.INTEL_CORE_I5, Ram.GB8,
                 Rom.GB500, GraphicCard.RTX5050));
 
         OrderDto result = orderService.placeOrderAsync(1L).join();

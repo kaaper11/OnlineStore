@@ -67,7 +67,7 @@ class DiscountServiceImplTest {
 
         when(discountRepository.save(any())).thenReturn(discount);
 
-        DiscountDto result = service.addDiscount(request, clientId);
+        DiscountDto result = service.addDiscount("computer", request, clientId);
 
         assertNotNull(result);
         assertEquals(discount.getDiscountType(), result.discountType());
@@ -85,7 +85,7 @@ class DiscountServiceImplTest {
 
         DiscountRequest request = new DiscountRequest(100L, DiscountType.PERCENT, BigDecimal.valueOf(10));
 
-        assertThrows(NoPermissionsException.class, () -> service.addDiscount(request, clientId));
+        assertThrows(NoPermissionsException.class, () -> service.addDiscount("computer", request, clientId));
     }
 
     @Test
@@ -101,7 +101,7 @@ class DiscountServiceImplTest {
 
         when(discountRepository.exists(100L)).thenReturn(true);
 
-        assertThrows(DiscountForProductAlreadyExists.class, () -> service.addDiscount(request, clientId));
+        assertThrows(DiscountForProductAlreadyExists.class, () -> service.addDiscount("computer", request, clientId));
     }
 
     @Test

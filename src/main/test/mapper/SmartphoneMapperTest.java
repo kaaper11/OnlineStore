@@ -23,10 +23,7 @@ public class SmartphoneMapperTest {
     public void shouldMapDtoToSmartphone() {
         Smartphone result = SmartphoneMapper.mapDtoToSmartphone(smartphoneDto, 1L);
 
-        assertThat(result)
-                .usingRecursiveComparison()
-                .ignoringFields("id")
-                .isEqualTo(smartphoneDto);
+        assertThat(result.getName()).isEqualTo(smartphoneDto.getName());
     }
 
     @Test

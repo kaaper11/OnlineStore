@@ -16,7 +16,7 @@ public class CartRepository {
     private final AtomicLong idCounter = new AtomicLong(1L);
 
     public CartRepository() {
-        save(100L);
+        save(new Cart(getNextId(), 100L, new ArrayList<>()));
     }
 
     /**
@@ -24,11 +24,10 @@ public class CartRepository {
      * A unique cart ID is generated automatically and the cart is initialized
      * with an empty product list.
      *
-     * @param clientId the identifier of the client for whom the cart is created
+     * @param cart the identifier of the client for whom the cart is created
      * @return the newly created Cart instance
      */
-    public Cart save(Long clientId) {
-        Cart cart = new Cart(getNextId(), clientId, new ArrayList<>());
+    public Cart save(Cart cart) {
         carts.add(cart);
         return cart;
     }

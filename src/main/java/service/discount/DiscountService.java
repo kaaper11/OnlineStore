@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DiscountService {
-    DiscountDto addDiscount(DiscountRequest discountRequest, Long clientId);
+    DiscountDto addDiscount(String type, DiscountRequest discountRequest, Long clientId);
 
     BigDecimal calculateDiscount(Product product);
 

@@ -1,8 +1,10 @@
 package validator;
 
-import dto.client.AddressDto;
 import dto.client.ClientRequestDto;
 import exception.ValidationException;
+
+import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * Validator responsible for validating client data before persistence.
@@ -22,7 +24,18 @@ public class ClientValidator {
         validateEmail(dto.email());
         validatePassword(dto.password());
         validatePhone(dto.phone());
-        validateAddress(dto.address());
+
+        validateAddress(dto.address(), Objects::nonNull, "Adres nie może być pusty.");
+        validateAddress(dto.address().country(), country -> country != null && !country.isBlank(),
+                "Kraj nie może być pusty.");
+        validateAddress(dto.address().city(), city -> city != null && !city.isBlank(),
+                "Miasto nie może być puste.");
+        validateAddress(dto.address().street(), street -> street != null && !street.isBlank(),
+                "Ulica nie może być pusty.");
+        validateAddress(dto.address().zip(), zip -> zip != null && zip.matches("^[0-9]{2}-[0-9]{3}$"),
+                "Kod pocztowy musi być w formacie XX-XXX.");
+        validateAddress(dto.address().number(), number -> number > 0,
+                "Numer domu musi być większy od 0.");
     }
 
     /**
@@ -44,7 +57,7 @@ public class ClientValidator {
      * @throws ValidationException if the email is null or has invalid format
      */
     private static void validateEmail(String email) {
-        if (email == null || !email.matches("^[\\w.-]+@[\\w.-]+\\.[a-z]{2,}$")) {
+        if (email == null || email.isBlank() || !email.matches("^[\\w.-]+@[\\w.-]+\\.[a-z]{2,}$")) {
             throw new ValidationException("Nieprawidłowy format email.");
         }
     }
@@ -86,31 +99,9 @@ public class ClientValidator {
         }
     }
 
-    /**
-     * Validates the client's address data.
-     * Ensures that all address fields are present and correctly formatted.
-     *
-     * @param address the address DTO to validate
-     * @throws ValidationException if any address field is invalid or missing
-     */
-    private static void validateAddress(AddressDto address) {
-        if (address == null) {
-            throw new ValidationException("Adres nie może być pusty.");
-        }
-        if (address.country() == null || address.country().isBlank()) {
-            throw new ValidationException("Kraj nie może być pusty.");
-        }
-        if (address.city() == null || address.city().isBlank()) {
-            throw new ValidationException("Miasto nie może być puste.");
-        }
-        if (address.street() == null || address.street().isBlank()) {
-            throw new ValidationException("Ulica nie może być pusta.");
-        }
-        if (address.zip() == null || !address.zip().matches("\\d{2}-\\d{3}")) {
-            throw new ValidationException("Kod pocztowy musi być w formacie XX-XXX.");
-        }
-        if (address.number() <= 0) {
-            throw new ValidationException("Numer domu musi być większy od 0.");
+    private static <T> void validateAddress(T value, Predicate<T> predicate, String message) {
+        if (!predicate.test(value)) {
+            throw new ValidationException(message);
         }
     }
 }

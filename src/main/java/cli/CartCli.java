@@ -92,7 +92,7 @@ public class CartCli {
         GraphicCard graphicCard = TypeReaderCli.readGraphicCard(scanner);
 
         ProductConfig config = new ComputerConfig(processor, ram, rom, graphicCard);
-        cartService.addProductToCart(clientId, productId, config);
+        cartService.addProductToCart("computer", clientId, productId, config);
         System.out.println("Komputer dodany do koszyka!");
     }
 
@@ -120,7 +120,7 @@ public class CartCli {
         }
 
         ProductConfig config = new SmartphoneConfig(color, battery, accessories);
-        cartService.addProductToCart(clientId, productId, config);
+        cartService.addProductToCart("smartphone", clientId, productId, config);
         System.out.println("Smartfon dodany do koszyka!");
     }
 
@@ -128,7 +128,7 @@ public class CartCli {
         System.out.print("ID produktu: ");
         Long productId = TypeReaderCli.readLong(scanner);
 
-        cartService.addProductToCart(clientId, productId, new ElectonicsConfig());
+        cartService.addProductToCart("electronics", clientId, productId, new ElectonicsConfig());
         System.out.println("Produkt dodany do koszyka!");
     }
 }

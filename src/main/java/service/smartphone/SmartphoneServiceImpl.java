@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import mapper.SmartphoneMapper;
 import repository.ClientRepository;
 import repository.productrepositories.SmartphoneRepository;
-import repository.productrepositories.idconfig.ProductIdGenerator;
 import validator.ProductValidator;
 
 import java.math.BigDecimal;
@@ -42,29 +41,23 @@ public class SmartphoneServiceImpl implements SmartphoneService {
         }
 
         Smartphone smartphone = smartphoneRepository.save(SmartphoneMapper.mapDtoToSmartphone(smartphoneDto,
-                ProductIdGenerator.getNextProductId()));
+                smartphoneRepository.getNextId()));
         return SmartphoneMapper.mapSmartphoneToDto(smartphone);
     }
 
     @Override
-    public SmartphoneResponseDto remove(Long id, Long clientId) {
+    public void remove(Long id, Long clientId) {
         Client client = clientRepository.getClientById(clientId).orElseThrow(ClientNotFoundException::new);
 
         if (client.getRole() != Role.ADMIN) {
             throw new NoPermissionsException();
         }
-        Smartphone smartphone = smartphoneRepository.delete(id).orElseThrow(SmartphoneNotFoundException::new);
-        return SmartphoneMapper.mapSmartphoneToDto(smartphone);
+        smartphoneRepository.delete(id).orElseThrow(SmartphoneNotFoundException::new);
     }
 
     @Override
     public boolean exist(Long id) {
         return smartphoneRepository.getSmartphoneById(id).isPresent();
-    }
-
-    @Override
-    public boolean isInstance(ProductRequestDto dto) {
-        return dto instanceof SmartphoneRequestDto;
     }
 
     @Override
@@ -77,8 +70,10 @@ public class SmartphoneServiceImpl implements SmartphoneService {
             throw new NoPermissionsException();
         }
 
-        Smartphone smartphone = smartphoneRepository.updateSmartphonePrice(id, price)
+        Smartphone smartphone = smartphoneRepository.getSmartphoneById(id)
                 .orElseThrow(SmartphoneNotFoundException::new);
+
+        smartphone.setPrice(price);
         return SmartphoneMapper.mapSmartphoneToDto(smartphone);
     }
 
@@ -92,8 +87,10 @@ public class SmartphoneServiceImpl implements SmartphoneService {
             throw new NoPermissionsException();
         }
 
-        Smartphone smartphone = smartphoneRepository.updateSmartphoneQuantity(id, quantity)
+        Smartphone smartphone = smartphoneRepository.getSmartphoneById(id)
                 .orElseThrow(SmartphoneNotFoundException::new);
+
+        smartphone.setQuantity(quantity);
         return SmartphoneMapper.mapSmartphoneToDto(smartphone);
     }
 

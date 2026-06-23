@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,25 +20,25 @@ class CartRepositoryTest {
 
     @Test
     void shouldSaveCartAndAssignId() {
-        Cart cart = repository.save(1L);
+        Cart cart = repository.save(new Cart(1L, 1L, new ArrayList<>()));
 
         assertNotNull(cart);
-        assertEquals(2L, cart.getId());
+        assertEquals(1L, cart.getId());
         assertEquals(1L, cart.getClientId());
     }
 
     @Test
     void shouldIncrementIdForEachSavedCart() {
-        Cart cart1 = repository.save(1L);
-        Cart cart2 = repository.save(2L);
+        Cart cart1 = repository.save(new Cart(1L, 1L, new ArrayList<>()));
+        Cart cart2 = repository.save(new Cart(2L, 2L, new ArrayList<>()));
 
-        assertEquals(2L, cart1.getId());
-        assertEquals(3L, cart2.getId());
+        assertEquals(1L, cart1.getId());
+        assertEquals(2L, cart2.getId());
     }
 
     @Test
     void shouldFindCartById() {
-        Cart cart = repository.save(1L);
+        Cart cart = repository.save(new Cart(1L, 1L, new ArrayList<>()));
 
         Optional<Cart> found = repository.getCartById(cart.getId());
 
@@ -47,7 +48,7 @@ class CartRepositoryTest {
 
     @Test
     void shouldFindCartByClientId() {
-        repository.save(10L);
+        repository.save(new Cart(1L, 10L, new ArrayList<>()));
 
         Optional<Cart> found = repository.getCartByClientId(10L);
 
@@ -57,7 +58,7 @@ class CartRepositoryTest {
 
     @Test
     void shouldDeleteCartByClientId() {
-        repository.save(100L);
+        repository.save(new Cart(1L, 100L, new ArrayList<>()));
 
         Optional<Cart> deleted = repository.delete(100L);
 
@@ -76,11 +77,11 @@ class CartRepositoryTest {
 
     @Test
     void shouldReturnAllCarts() {
-        repository.save(1L);
-        repository.save(2L);
+        repository.save(new Cart(1L, 1L, new ArrayList<>()));
+        repository.save(new Cart(2L, 2L, new ArrayList<>()));
 
         assertEquals(3, repository.getAllCarts().size());
-        assertEquals(3L, repository.getAllCarts().get(1).getId());
+        assertEquals(2L, repository.getAllCarts().get(1).getId());
     }
 
     @Test

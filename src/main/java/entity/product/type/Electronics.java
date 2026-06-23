@@ -1,5 +1,7 @@
 package entity.product.type;
 
+import lombok.experimental.SuperBuilder;
+
 import java.math.BigDecimal;
 
 /**
@@ -9,6 +11,7 @@ import java.math.BigDecimal;
  * <p>
  * It is used for simple electronic items that do not require component-based configuration.
  */
+@SuperBuilder(toBuilder = true)
 public class Electronics extends Product {
     public Electronics(Long id, String name, BigDecimal price, int quantity) {
         super(id, name, price, quantity);
@@ -21,6 +24,6 @@ public class Electronics extends Product {
 
     @Override
     public Product getProductCopy() {
-        return new Electronics(getId(), getName(), getPrice(), getQuantity());
+        return this.toBuilder().build();
     }
 }

@@ -50,8 +50,8 @@ public class DiscountValidator {
      * @throws DiscountNotCorrectException if constant discount is invalid
      */
     private static void constantValidate(DiscountRequest dto, BigDecimal productPrice) {
-        if (dto.discountType() == DiscountType.CONSTANT &&
-                (dto.value().compareTo(productPrice) > 0 && dto.value().compareTo(BigDecimal.ONE) < 0)) {
+        if (dto.discountType() == DiscountType.CONSTANT &&(
+                (dto.value().compareTo(productPrice) > 0 || dto.value().compareTo(BigDecimal.ONE) < 0))) {
             throw new DiscountNotCorrectException();
         }
     }

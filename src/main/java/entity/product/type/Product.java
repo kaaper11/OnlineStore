@@ -3,6 +3,7 @@ package entity.product.type;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import exception.ProductOutOfStockException;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -17,6 +18,7 @@ import java.util.Objects;
 @ToString
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@SuperBuilder(toBuilder = true)
 public abstract class Product {
     private Long id;
     private String name;
@@ -33,7 +35,7 @@ public abstract class Product {
      * @return the updated quantity after the purchase operation
      * @throws ProductOutOfStockException if the product is not available in stock
      */
-    public int buyProduct() {
+    public int decreaseQuantity() {
         if (quantity == 0) {
             throw new ProductOutOfStockException(this);
         }

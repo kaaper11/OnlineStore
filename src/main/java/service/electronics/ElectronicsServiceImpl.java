@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import mapper.ElectronicsMapper;
 import repository.ClientRepository;
 import repository.productrepositories.ElectronicsRepository;
-import repository.productrepositories.idconfig.ProductIdGenerator;
 import validator.ProductValidator;
 
 import java.math.BigDecimal;
@@ -41,20 +40,19 @@ public class ElectronicsServiceImpl implements ElectronicsService {
         }
 
         Electronics electronics = electronicsRepository.save(ElectronicsMapper.mapDtoToElectronics(electronicsRequestDto,
-                ProductIdGenerator.getNextProductId()));
+                electronicsRepository.getNextId()));
         return ElectronicsMapper.mapElectronicsToDto(electronics);
     }
 
     @Override
-    public ElectronicsResponseDto remove(Long id, Long clientId) {
+    public void remove(Long id, Long clientId) {
         Client client = clientRepository.getClientById(clientId).orElseThrow(ClientNotFoundException::new);
 
         if (client.getRole() != Role.ADMIN) {
             throw new NoPermissionsException();
         }
 
-        Electronics electronics = electronicsRepository.delete(id).orElseThrow(ElectronicsNotFoundException::new);
-        return ElectronicsMapper.mapElectronicsToDto(electronics);
+        electronicsRepository.delete(id).orElseThrow(ElectronicsNotFoundException::new);
     }
 
     @Override
@@ -67,8 +65,10 @@ public class ElectronicsServiceImpl implements ElectronicsService {
             throw new NoPermissionsException();
         }
 
-        Electronics electronics = electronicsRepository.updatePrice(id, price)
+        Electronics electronics = electronicsRepository.getElectronicsById(id)
                 .orElseThrow(ElectronicsNotFoundException::new);
+
+        electronics.setPrice(price);
         return ElectronicsMapper.mapElectronicsToDto(electronics);
     }
 
@@ -82,8 +82,10 @@ public class ElectronicsServiceImpl implements ElectronicsService {
             throw new NoPermissionsException();
         }
 
-        Electronics electronics = electronicsRepository.updateQuantity(id, quantity)
+        Electronics electronics = electronicsRepository.getElectronicsById(id)
                 .orElseThrow(ElectronicsNotFoundException::new);
+
+        electronics.setQuantity(quantity);
         return ElectronicsMapper.mapElectronicsToDto(electronics);
     }
 
@@ -97,11 +99,6 @@ public class ElectronicsServiceImpl implements ElectronicsService {
     @Override
     public boolean exist(Long id) {
         return electronicsRepository.getElectronicsById(id).isPresent();
-    }
-
-    @Override
-    public boolean isInstance(ProductRequestDto dto) {
-        return dto instanceof ElectronicsRequestDto;
     }
 
     @Override

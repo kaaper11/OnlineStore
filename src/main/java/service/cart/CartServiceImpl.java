@@ -4,9 +4,7 @@ import dto.cart.CartDto;
 import dto.productconfig.ProductConfig;
 import entity.cart.Cart;
 import entity.product.type.Product;
-import exception.CartNotFoundException;
-import exception.ProductNotFoundException;
-import exception.ProductOutOfStockException;
+import exception.*;
 import lombok.AllArgsConstructor;
 import mapper.CartMapper;
 import repository.CartRepository;
@@ -66,10 +64,18 @@ public class CartServiceImpl implements CartService {
      * @throws ProductOutOfStockException if the product has no available quantity
      */
     @Override
-    public CartDto addProductToCart(Long clientId, Long productId, ProductConfig productConfig) {
+    public CartDto addProductToCart(String type, Long clientId, Long productId, ProductConfig productConfig) {
         Cart cart = cartRepository.getCartByClientId(clientId).orElseThrow(CartNotFoundException::new);
 
-        Product originalProduct = findProductById(productId);
+        Product originalProduct = switch (type) {
+            case "computer" -> computerRepository.getComputerById(productId)
+                    .orElseThrow(ComputerNotFoundException::new);
+            case "electronics" -> electronicsRepository.getElectronicsById(productId)
+                    .orElseThrow(ElectronicsNotFoundException::new);
+            case "smartphone" -> smartphoneRepository.getSmartphoneById(productId)
+                    .orElseThrow(SmartphoneNotFoundException::new);
+            default -> throw new ProductTypeNotFoundException();
+        };
 
         if (originalProduct.getQuantity() < 1) {
             throw new ProductOutOfStockException(originalProduct);
@@ -79,24 +85,10 @@ public class CartServiceImpl implements CartService {
 
         productConfig.configure(product);
 
-        originalProduct.buyProduct();
+        originalProduct.decreaseQuantity();
 
         cart.addProduct(product);
 
         return CartMapper.mapCartToDto(cart);
-    }
-
-    /**
-     * Searches for a product by its identifier across all product repositories.
-     *
-     * @param id the identifier of the product
-     * @return the found Product instance
-     * @throws ProductNotFoundException if no product exists with the given id
-     */
-    private Product findProductById(Long id) {
-        return computerRepository.getComputerById(id).<Product>map(product -> product)
-                .or(() -> smartphoneRepository.getSmartphoneById(id))
-                .or(() -> electronicsRepository.getElectronicsById(id))
-                .orElseThrow(() -> new ProductNotFoundException("produktu"));
     }
 }

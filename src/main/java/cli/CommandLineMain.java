@@ -4,10 +4,13 @@ import dto.client.ClientResponseDto;
 import lombok.AllArgsConstructor;
 import service.cart.CartServiceImpl;
 import service.client.ClientServiceImpl;
+import service.computer.ComputerServiceImpl;
 import service.discount.DiscountServiceImpl;
+import service.electronics.ElectronicsServiceImpl;
 import service.invoice.InvoiceServiceImpl;
 import service.order.OrderServiceImpl;
 import service.productfacade.ProductFacadeServiceImpl;
+import service.smartphone.SmartphoneServiceImpl;
 
 import java.util.Scanner;
 
@@ -20,6 +23,9 @@ public class CommandLineMain {
     private final OrderServiceImpl orderService;
     private final ProductFacadeServiceImpl productFacadeServiceImpl;
     private final DiscountServiceImpl discountService;
+    private final ComputerServiceImpl computerService;
+    private final SmartphoneServiceImpl smartphoneService;
+    private final ElectronicsServiceImpl electronicsService;
 
 
     public void start() {
@@ -41,7 +47,8 @@ public class CommandLineMain {
             System.out.print("Wybierz opcję: ");
 
             switch (scanner.nextLine()) {
-                case "1" -> new ProductCli(productFacadeServiceImpl, discountService, scanner)
+                case "1" -> new ProductCli(productFacadeServiceImpl, computerService, smartphoneService,
+                        electronicsService, discountService, scanner)
                         .showProductMenu(loggedClient.id());
                 case "2" -> new CartCli(cartService, discountService, scanner).run(loggedClient.id());
                 case "3" -> new OrderCli(orderService, discountService, scanner).run(loggedClient.id());

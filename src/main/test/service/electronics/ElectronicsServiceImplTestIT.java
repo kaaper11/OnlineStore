@@ -58,10 +58,9 @@ public class ElectronicsServiceImplTestIT {
     void shouldRemoveElectronics() {
         electronicsRepository.save(electronics);
 
-        ElectronicsResponseDto remove = electronicsService.remove(1L, 100L);
+        electronicsService.remove(1L, 100L);
 
-        assertThat(remove).isNotNull();
-        assertThat(remove.getName()).isEqualTo(electronics.getName());
+        assertThat(electronicsRepository.getAllElectronics().size()).isEqualTo(0);
     }
 
     @Test
@@ -119,13 +118,6 @@ public class ElectronicsServiceImplTestIT {
 
         assertThat(all).isNotNull();
         assertThat(all.size()).isEqualTo(1);
-    }
-
-    @Test
-    void shouldCheckInstance() {
-        boolean result = electronicsService.isInstance(productRequestDto);
-
-        assertThat(result).isTrue();
     }
 
     @Test

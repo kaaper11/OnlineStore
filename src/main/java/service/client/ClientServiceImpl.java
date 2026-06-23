@@ -3,6 +3,7 @@ package service.client;
 import dto.client.LoginRequest;
 import dto.client.ClientRequestDto;
 import dto.client.ClientResponseDto;
+import entity.cart.Cart;
 import entity.client.Client;
 import exception.ClientAlreadyExists;
 import exception.ClientNotFoundException;
@@ -13,6 +14,7 @@ import repository.CartRepository;
 import repository.ClientRepository;
 import validator.ClientValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +46,7 @@ public class ClientServiceImpl implements ClientService {
 
         Client client = clientRepository.save(ClientMapper.mapDtoToClient(clientRequestDto,
                 clientRepository.getNextId()));
-        cartRepository.save(client.getId());
+        cartRepository.save(new Cart(cartRepository.getNextId(), client.getId(), new ArrayList<>()));
         return ClientMapper.mapClientToDto(client);
     }
 
@@ -99,7 +101,8 @@ public class ClientServiceImpl implements ClientService {
      */
     @Override
     public ClientResponseDto getClientByEmail(String email) {
-        Client client = clientRepository.getClientByEmail(email).orElseThrow(ClientNotFoundException::new);
+        Client client = clientRepository.getClientByEmail(email.trim().toLowerCase())
+                .orElseThrow(ClientNotFoundException::new);
         return ClientMapper.mapClientToDto(client);
     }
 

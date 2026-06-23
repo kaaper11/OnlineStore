@@ -1,9 +1,12 @@
 package entity.product.config.smartphone;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public enum Accessory {
     PHONE_CASE(new BigDecimal("50")),
@@ -12,8 +15,4 @@ public enum Accessory {
     POWERBANK(new BigDecimal("100"));
 
     private final BigDecimal price;
-
-    Accessory(BigDecimal price) {
-        this.price = price;
-    }
 }

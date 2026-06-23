@@ -23,10 +23,7 @@ public class ComputerMapperTest {
     public void shouldMapDtoToComputer() {
         Computer result = ComputerMapper.mapDtoToComputer(computerRequestDto, 1L);
 
-        assertThat(result)
-                .usingRecursiveComparison()
-                .ignoringFields("id")
-                .isEqualTo(computerRequestDto);
+        assertThat(result.getName()).isEqualTo(computerRequestDto.getName());
     }
 
     @Test

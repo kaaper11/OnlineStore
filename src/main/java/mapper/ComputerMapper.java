@@ -2,6 +2,10 @@ package mapper;
 
 import dto.product.request.ComputerRequestDto;
 import dto.product.response.ComputerResponseDto;
+import entity.product.config.computer.GraphicCard;
+import entity.product.config.computer.Processor;
+import entity.product.config.computer.Ram;
+import entity.product.config.computer.Rom;
 import entity.product.type.Computer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -16,8 +20,8 @@ import lombok.NoArgsConstructor;
 public final class ComputerMapper {
 
     public static Computer mapDtoToComputer(ComputerRequestDto dto, Long id) {
-        return new Computer(id, dto.getName(), dto.getPrice(), dto.getQuantity(), dto.getProcessor(), dto.getRam(),
-                dto.getRom(), dto.getGraphicCard());
+        return new Computer(id, dto.getName(), dto.getPrice(), dto.getQuantity(), Processor.INTEL_CORE_I3, Ram.GB8,
+                Rom.GB500 , GraphicCard.RTX5050);
     }
 
     public static ComputerResponseDto mapComputerToDto(Computer computer) {

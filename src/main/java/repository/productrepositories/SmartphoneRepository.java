@@ -2,11 +2,11 @@ package repository.productrepositories;
 
 import entity.product.type.Smartphone;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Repository responsible for managing Smartphone entities in memory.
@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SmartphoneRepository {
     private final Set<Smartphone> smartphones = ConcurrentHashMap.newKeySet();
+    private final AtomicLong idCounter = new AtomicLong(1L);
 
     /**
      * Saves a smartphone entity into the repository.
@@ -65,35 +66,7 @@ public class SmartphoneRepository {
                 .toList();
     }
 
-    /**
-     * Updates the price of a smartphone with the given identifier.
-     *
-     * @param id    the identifier of the smartphone to update
-     * @param price the new price to set
-     * @return an Optional containing the updated smartphone if found,
-     * otherwise an empty Optional
-     */
-    public Optional<Smartphone> updateSmartphonePrice(Long id, BigDecimal price) {
-        return getSmartphoneById(id)
-                .map(smartphone -> {
-                    smartphone.setPrice(price);
-                    return smartphone;
-                });
-    }
-
-    /**
-     * Updates the quantity of a smartphone with the given identifier.
-     *
-     * @param id       the identifier of the smartphone to update
-     * @param quantity the new quantity to set
-     * @return an Optional containing the updated smartphone if found,
-     * otherwise an empty Optional
-     */
-    public Optional<Smartphone> updateSmartphoneQuantity(Long id, int quantity) {
-        return getSmartphoneById(id)
-                .map(smartphone -> {
-                    smartphone.setQuantity(quantity);
-                    return smartphone;
-                });
+    public Long getNextId() {
+        return idCounter.getAndIncrement();
     }
 }

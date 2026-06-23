@@ -68,7 +68,7 @@ public class DiscountServiceImplTestIT {
     void shouldAddPercentDiscount() {
         DiscountRequest request = new DiscountRequest(1L, DiscountType.PERCENT, new BigDecimal("20"));
 
-        DiscountDto dto = discountService.addDiscount(request, 100L);
+        DiscountDto dto = discountService.addDiscount("computer", request, 100L);
 
         assertThat(dto).isNotNull();
         assertThat(dto.productId()).isEqualTo(1L);
@@ -131,7 +131,7 @@ public class DiscountServiceImplTestIT {
         DiscountRequest request = new DiscountRequest(1L, DiscountType.PERCENT, new BigDecimal("20"));
 
         assertThatExceptionOfType(ClientNotFoundException.class)
-                .isThrownBy(() -> discountService.addDiscount(request, 999L));
+                .isThrownBy(() -> discountService.addDiscount("computer", request, 999L));
     }
 
     @Test
@@ -139,7 +139,7 @@ public class DiscountServiceImplTestIT {
         DiscountRequest request = new DiscountRequest(1L, DiscountType.PERCENT, new BigDecimal("20"));
 
         assertThatExceptionOfType(NoPermissionsException.class)
-                .isThrownBy(() -> discountService.addDiscount(request, 1L));
+                .isThrownBy(() -> discountService.addDiscount("computer", request, 1L));
     }
 
     @Test
@@ -151,7 +151,7 @@ public class DiscountServiceImplTestIT {
         DiscountRequest request = new DiscountRequest(1L, DiscountType.PERCENT, new BigDecimal("10"));
 
         assertThatExceptionOfType(DiscountForProductAlreadyExists.class)
-                .isThrownBy(() -> discountService.addDiscount(request, 100L));
+                .isThrownBy(() -> discountService.addDiscount("computer", request, 100L));
     }
 
     @Test
@@ -159,6 +159,6 @@ public class DiscountServiceImplTestIT {
         DiscountRequest request = new DiscountRequest(999L, DiscountType.PERCENT, new BigDecimal("20"));
 
         assertThatExceptionOfType(ProductNotFoundException.class)
-                .isThrownBy(() -> discountService.addDiscount(request, 100L));
+                .isThrownBy(() -> discountService.addDiscount("computer", request, 100L));
     }
 }

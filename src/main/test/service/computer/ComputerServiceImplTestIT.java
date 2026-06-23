@@ -59,10 +59,9 @@ public class ComputerServiceImplTestIT {
     void shouldRemoveComputer() {
         computerRepository.save(computer);
 
-        ComputerResponseDto remove = computerService.remove(1L, 100L);
+        computerService.remove(1L, 100L);
 
-        assertThat(remove).isNotNull();
-        assertThat(remove.getName()).isEqualTo(computer.getName());
+        assertThat(computerRepository.getAllComputers().size()).isEqualTo(0);
     }
 
     @Test
