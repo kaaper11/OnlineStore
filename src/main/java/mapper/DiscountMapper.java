@@ -20,7 +20,7 @@ public final class DiscountMapper {
                 discount.getValue());
     }
 
-    public static Discount mapDiscountRequestToDiscount(DiscountRequest discountRequest, Long id) {
-        return new Discount(id, discountRequest.productId(), discountRequest.discountType(), discountRequest.value());
+    public static Discount mapDiscountRequestToDiscount(DiscountRequest discountRequest) {
+        return new Discount(null, discountRequest.productId(), discountRequest.discountType(), discountRequest.value());
     }
 }

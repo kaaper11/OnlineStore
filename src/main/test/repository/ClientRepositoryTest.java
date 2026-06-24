@@ -19,31 +19,31 @@ public class ClientRepositoryTest {
     @InjectMocks
     private ClientRepository clientRepository;
 
-    private final Address address = new Address("Poland", "Warsaw", "Zlota", "15-820", 10
+    private static final Address ADDRESS = new Address("Poland", "Warsaw", "Zlota", "15-820", 10
     );
 
-    private final Client client = new Client(1L, "name", "name@test.com","pass",
-            "123456789", address, Role.ADMIN);
+    private static final Client CLIENT = new Client(1L, "name", "name@test.com","pass",
+            "123456789", ADDRESS, Role.ADMIN);
 
-    private final Client updatedClient = new Client(1L, "name", "name@test.com", "pass",
-            "987654321", address, Role.ADMIN);
+    private static final Client UPDATED_CLIENT = new Client(1L, "name", "name@test.com", "pass",
+            "987654321", ADDRESS, Role.ADMIN);
 
     @Test
     public void shouldSaveClient() {
-        Client result = clientRepository.save(client);
+        Client result = clientRepository.save(CLIENT);
 
-        assertThat(result).usingRecursiveComparison().isEqualTo(client);
+        assertThat(result).usingRecursiveComparison().isEqualTo(CLIENT);
 
-        assertThat(clientRepository.getClientById(1L)).contains(client);
+        assertThat(clientRepository.getClientById(1L)).contains(CLIENT);
     }
 
     @Test
     public void shouldDeleteClient() {
-        clientRepository.save(client);
+        clientRepository.save(CLIENT);
 
-        Optional<Client> result = clientRepository.delete(1L);
+        final var result = clientRepository.delete(1L);
 
-        assertThat(result).contains(client);
+        assertThat(result).contains(CLIENT);
 
         assertThat(clientRepository.getClientById(1L)).isEmpty();
     }
@@ -57,9 +57,9 @@ public class ClientRepositoryTest {
 
     @Test
     public void shouldUpdateClient() {
-        clientRepository.save(client);
+        clientRepository.save(CLIENT);
 
-        Optional<Client> result = clientRepository.update(1L, updatedClient);
+        final var result = clientRepository.update(1L, UPDATED_CLIENT);
 
         assertThat(result).isPresent();
         assertThat(clientRepository.getClientById(1L)).usingRecursiveComparison().isEqualTo(result);
@@ -67,60 +67,51 @@ public class ClientRepositoryTest {
 
     @Test
     public void shouldReturnEmptyWhenUpdatingNonExistingClient() {
-        Optional<Client> result =
-                clientRepository.update(99L, updatedClient);
+        final var result =
+                clientRepository.update(99L, UPDATED_CLIENT);
 
         assertThat(result).isEmpty();
     }
 
     @Test
     public void shouldGetClientById() {
-        clientRepository.save(client);
+        clientRepository.save(CLIENT);
 
-        Optional<Client> result = clientRepository.getClientById(1L);
+        final var result = clientRepository.getClientById(1L);
 
-        assertThat(result).usingRecursiveComparison().isEqualTo(Optional.of(client));
+        assertThat(result).usingRecursiveComparison().isEqualTo(Optional.of(CLIENT));
     }
 
     @Test
     public void shouldGetClientByEmail() {
-        clientRepository.save(client);
+        clientRepository.save(CLIENT);
 
-        Optional<Client> result = clientRepository.getClientByEmail("name@test.com");
+        final var result = clientRepository.getClientByEmail("name@test.com");
 
-        assertThat(result).usingRecursiveComparison().isEqualTo(Optional.of(client));
+        assertThat(result).usingRecursiveComparison().isEqualTo(Optional.of(CLIENT));
     }
 
     @Test
     public void shouldReturnAllClients() {
-        clientRepository.save(client);
+        clientRepository.save(CLIENT);
 
         List<Client> result = clientRepository.getAllComputers();
 
         assertThat(result).hasSize(2);
-        assertThat(result.get(1)).isEqualTo(client);
-    }
-
-    @Test
-    public void shouldGenerateNextId() {
-        Long firstId = clientRepository.getNextId();
-        Long secondId = clientRepository.getNextId();
-
-        assertThat(firstId).isEqualTo(1L);
-        assertThat(secondId).isEqualTo(2L);
+        assertThat(result.get(1)).isEqualTo(CLIENT);
     }
 
     @Test
     public void shouldTrueIfClientExists() {
-        clientRepository.save(client);
+        clientRepository.save(CLIENT);
 
-        boolean result = clientRepository.isClientExist(client.getEmail());
+        boolean result = clientRepository.isClientExist(CLIENT.getEmail());
         assertThat(result).isTrue();
     }
 
     @Test
     public void shouldFalseIfClientNotExists() {
-        boolean result = clientRepository.isClientExist(client.getEmail());
+        boolean result = clientRepository.isClientExist(CLIENT.getEmail());
         assertThat(result).isFalse();
     }
 }

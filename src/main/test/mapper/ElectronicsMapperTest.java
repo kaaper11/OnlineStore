@@ -14,27 +14,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 public class ElectronicsMapperTest {
 
-    private final Electronics electronics = new Electronics(1L, "name", new BigDecimal("100"), 20);
+    private static final Electronics ELECTRONICS = new Electronics(1L, "name", new BigDecimal("100"), 20);
 
-    private final ElectronicsRequestDto electronicsRequestDto = new ElectronicsRequestDto("name", new BigDecimal("100"), 20);
+    private static final ElectronicsRequestDto ELECTRONICS_REQUEST_DTO = new ElectronicsRequestDto("name", new BigDecimal("100"), 20);
 
     @Test
     public void shouldMapDtoToElectronics() {
-        Electronics result = ElectronicsMapper.mapDtoToElectronics(electronicsRequestDto, 1L);
+        Electronics result = ElectronicsMapper.mapDtoToElectronics(ELECTRONICS_REQUEST_DTO);
 
         assertThat(result)
                 .usingRecursiveComparison()
                 .ignoringFields("id")
-                .isEqualTo(electronicsRequestDto);
+                .isEqualTo(ELECTRONICS_REQUEST_DTO);
     }
 
     @Test
     public void shouldMapElectronicsToDto() {
-        ElectronicsResponseDto result = ElectronicsMapper.mapElectronicsToDto(electronics);
+        ElectronicsResponseDto result = ElectronicsMapper.mapElectronicsToDto(ELECTRONICS);
 
         assertThat(result)
                 .usingRecursiveComparison()
                 .ignoringFields("id")
-                .isEqualTo(electronics);
+                .isEqualTo(ELECTRONICS);
     }
 }

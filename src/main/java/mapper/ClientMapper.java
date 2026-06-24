@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ClientMapper {
 
-    public static Client mapDtoToClient(ClientRequestDto clientRequestDto, Long id) {
-        return new Client(id, clientRequestDto.name(), clientRequestDto.email(), clientRequestDto.password(),
+    public static Client mapDtoToClient(ClientRequestDto clientRequestDto) {
+        return new Client(null, clientRequestDto.name(), clientRequestDto.email(), clientRequestDto.password(),
                 clientRequestDto.phone(), AddressMapper.mapDtoToAddress(clientRequestDto.address()),
                 Role.USER);
     }

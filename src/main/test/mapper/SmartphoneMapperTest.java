@@ -14,25 +14,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 public class SmartphoneMapperTest {
 
-    private final Smartphone smartphone = new Smartphone(1L, "name", new BigDecimal("100"), 20);
+    private static final Smartphone SMARTPHONE = new Smartphone(1L, "name", new BigDecimal("100"), 20);
 
-    private final SmartphoneRequestDto smartphoneDto = new SmartphoneRequestDto("name", new BigDecimal("100"),
+    private static final SmartphoneRequestDto SMARTPHONE_DTO = new SmartphoneRequestDto("name", new BigDecimal("100"),
             20);
 
     @Test
     public void shouldMapDtoToSmartphone() {
-        Smartphone result = SmartphoneMapper.mapDtoToSmartphone(smartphoneDto, 1L);
+        Smartphone result = SmartphoneMapper.mapDtoToSmartphone(SMARTPHONE_DTO);
 
-        assertThat(result.getName()).isEqualTo(smartphoneDto.getName());
+        assertThat(result.getName()).isEqualTo(SMARTPHONE_DTO.getName());
     }
 
     @Test
     public void shouldMapSmartphoneToDto() {
-        SmartphoneResponseDto result = SmartphoneMapper.mapSmartphoneToDto(smartphone);
+        SmartphoneResponseDto result = SmartphoneMapper.mapSmartphoneToDto(SMARTPHONE);
 
         assertThat(result)
                 .usingRecursiveComparison()
                 .ignoringFields("id")
-                .isEqualTo(smartphone);
+                .isEqualTo(SMARTPHONE);
     }
 }

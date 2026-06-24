@@ -2,6 +2,7 @@ package entity.client;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
@@ -17,6 +18,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 public class Client {
+    @Setter
     private Long id;
     private String name;
     private String email;

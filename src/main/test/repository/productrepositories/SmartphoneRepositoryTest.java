@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 public class SmartphoneRepositoryTest {
 
-    private final Smartphone smartphone = new Smartphone(1L, "name", new BigDecimal("100"), 20,
+    private static final Smartphone SMARTPHONE = new Smartphone(1L, "name", new BigDecimal("100"), 20,
             SmartphoneColorType.BLACK, Battery.MAH5500);
 
     @InjectMocks
@@ -25,14 +25,14 @@ public class SmartphoneRepositoryTest {
 
     @Test
     public void shouldSaveAndFindSmartphone() {
-        Smartphone save = smartphoneRepository.save(smartphone);
+        Smartphone save = smartphoneRepository.save(SMARTPHONE);
 
-        assertThat(save).usingRecursiveComparison().isEqualTo(smartphone);
+        assertThat(save).usingRecursiveComparison().isEqualTo(SMARTPHONE);
     }
 
     @Test
     public void shouldDeleteSmartphone() {
-        smartphoneRepository.save(smartphone);
+        smartphoneRepository.save(SMARTPHONE);
 
         Optional<Smartphone> deleted = smartphoneRepository.delete(1L);
 
@@ -42,12 +42,12 @@ public class SmartphoneRepositoryTest {
 
     @Test
     public void shouldFindSmartphoneById() {
-        smartphoneRepository.save(smartphone);
+        smartphoneRepository.save(SMARTPHONE);
 
         Optional<Smartphone> result = smartphoneRepository.getSmartphoneById(1L);
 
         assertThat(result).isPresent();
-        assertThat(result).isEqualTo(Optional.of(smartphone));
+        assertThat(result).isEqualTo(Optional.of(SMARTPHONE));
     }
 
     @Test

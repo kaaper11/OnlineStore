@@ -27,19 +27,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(MockitoExtension.class)
 public class ProductMapperTest {
 
-    private final Computer computer = new Computer(2L, "Mouse", BigDecimal.valueOf(200), 20,
+    private static final Computer COMPUTER = new Computer(2L, "Mouse", BigDecimal.valueOf(200), 20,
             Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
 
-    private final Smartphone smartphone = new Smartphone(2L, "iPhone", BigDecimal.valueOf(4500), 48,
+    private static final Smartphone SMARTPHONE = new Smartphone(2L, "iPhone", BigDecimal.valueOf(4500), 48,
             SmartphoneColorType.BLACK, Battery.MAH5500);
 
-    private final Electronics electronics = new Electronics(3L, "TV", BigDecimal.valueOf(3000), 24);
+    private static final Electronics ELECTRONICS = new Electronics(3L, "TV", BigDecimal.valueOf(3000), 24);
 
     @Test
     public void shouldMapComputerToDto() {
-        ProductResponseDto result = ProductMapper.mapProductToDto(computer);
+        ProductResponseDto result = ProductMapper.mapProductToDto(COMPUTER);
 
-        ComputerResponseDto expected = ComputerMapper.mapComputerToDto(computer);
+        ComputerResponseDto expected = ComputerMapper.mapComputerToDto(COMPUTER);
 
         assertThat(result)
                 .usingRecursiveComparison()
@@ -48,9 +48,9 @@ public class ProductMapperTest {
 
     @Test
     public void shouldMapSmartphoneToDto() {
-        ProductResponseDto result = ProductMapper.mapProductToDto(smartphone);
+        ProductResponseDto result = ProductMapper.mapProductToDto(SMARTPHONE);
 
-        SmartphoneResponseDto expected = SmartphoneMapper.mapSmartphoneToDto(smartphone);
+        SmartphoneResponseDto expected = SmartphoneMapper.mapSmartphoneToDto(SMARTPHONE);
 
         assertThat(result)
                 .usingRecursiveComparison()
@@ -59,9 +59,9 @@ public class ProductMapperTest {
 
     @Test
     public void shouldMapElectronicsToDto() {
-        ProductResponseDto result = ProductMapper.mapProductToDto(electronics);
+        ProductResponseDto result = ProductMapper.mapProductToDto(ELECTRONICS);
 
-        ElectronicsResponseDto expected = ElectronicsMapper.mapElectronicsToDto(electronics);
+        ElectronicsResponseDto expected = ElectronicsMapper.mapElectronicsToDto(ELECTRONICS);
 
         assertThat(result)
                 .usingRecursiveComparison()

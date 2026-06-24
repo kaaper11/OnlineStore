@@ -43,38 +43,38 @@ public class ComputerServiceImplTest {
     @InjectMocks
     private ComputerServiceImpl computerService;
 
-    private final ComputerRequestDto computerRequestDto = new ComputerRequestDto("name", new BigDecimal("100"),
+    private static final ComputerRequestDto COMPUTER_REQUEST_DTO = new ComputerRequestDto("name", new BigDecimal("100"),
             20);
 
-    private final Computer computer = new Computer(1L, "name", new BigDecimal("100"), 20,
+    private static final Computer COMPUTER = new Computer(1L, "name", new BigDecimal("100"), 20,
             Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
 
-    private final Address address = new Address("Poland", "Warsaw", "Zlota", "15-820",
+    private static final Address ADDRESS = new Address("Poland", "Warsaw", "Zlota", "15-820",
             2);
 
-    private final Client client = new Client(1L, "name", "name@test.com", "pasS12%dd",
-            "123456789", address, Role.ADMIN);
+    private static final Client CLIENT = new Client(1L, "name", "name@test.com", "pasS12%dd",
+            "123456789", ADDRESS, Role.ADMIN);
 
 
     @Test
     void shouldCreateComputer() {
         //given
-        when(computerRepository.save(any(Computer.class))).thenReturn(computer);
-        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
+        when(computerRepository.save(any(Computer.class))).thenReturn(COMPUTER);
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(CLIENT));
 
         //when
-        ComputerResponseDto dto = computerService.create(computerRequestDto, 1L);
+        ComputerResponseDto dto = computerService.create(COMPUTER_REQUEST_DTO, 1L);
 
         assertNotNull(dto);
         verify(computerRepository).save(any(Computer.class));
-        assertThat(dto.getName()).isEqualTo(computerRequestDto.getName());
+        assertThat(dto.getName()).isEqualTo(COMPUTER_REQUEST_DTO.getName());
     }
 
     @Test
     void shouldRemoveComputer() {
         //given
-        when(computerRepository.delete(anyLong())).thenReturn(Optional.of(computer));
-        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
+        when(computerRepository.delete(anyLong())).thenReturn(Optional.of(COMPUTER));
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(CLIENT));
 
         //when
         computerService.remove(1L, 1L);
@@ -87,7 +87,7 @@ public class ComputerServiceImplTest {
     void shouldThrowWhenRemoveAndComputerNotFound() {
         //given
         when(computerRepository.delete(anyLong())).thenReturn(Optional.empty());
-        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(CLIENT));
 
         //then
         assertThatExceptionOfType(ComputerNotFoundException.class)
@@ -97,14 +97,14 @@ public class ComputerServiceImplTest {
     @Test
     void shouldGetCorrectComputerById() {
         //given
-        when(computerRepository.getComputerById(anyLong())).thenReturn(Optional.of(computer));
+        when(computerRepository.getComputerById(anyLong())).thenReturn(Optional.of(COMPUTER));
 
         //when
         ComputerResponseDto dto = computerService.getById(1L);
 
         //then
         assertNotNull(dto);
-        assertThat(dto).usingRecursiveComparison().isEqualTo(computer);
+        assertThat(dto).usingRecursiveComparison().isEqualTo(COMPUTER);
     }
 
     @Test
@@ -120,27 +120,27 @@ public class ComputerServiceImplTest {
     @Test
     void shouldGetAllComputers() {
         //given
-        when(computerRepository.getAllComputers()).thenReturn(List.of(computer));
+        when(computerRepository.getAllComputers()).thenReturn(List.of(COMPUTER));
 
         //when
         List<ComputerResponseDto> dtos = computerService.getAll();
 
         //then
         assertThat(dtos).hasSize(1);
-        assertThat(dtos.getFirst().getName()).isEqualTo(computer.getName());
+        assertThat(dtos.getFirst().getName()).isEqualTo(COMPUTER.getName());
     }
 
     @Test
     void shouldComputerExists() {
-        when(computerRepository.getComputerById(anyLong())).thenReturn(Optional.of(computer));
+        when(computerRepository.getComputerById(anyLong())).thenReturn(Optional.of(COMPUTER));
 
-        boolean result = computerService.exist(computer.getId());
+        boolean result = computerService.exist(COMPUTER.getId());
         assertThat(result).isTrue();
     }
 
     @Test
     void shouldComputerNotExists() {
-        when(computerRepository.getComputerById(anyLong())).thenReturn(Optional.of(computer));
+        when(computerRepository.getComputerById(anyLong())).thenReturn(Optional.of(COMPUTER));
 
         boolean result = computerService.exist(10L);
         assertThat(result).isTrue();

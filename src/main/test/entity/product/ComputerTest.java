@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 @ExtendWith(MockitoExtension.class)
 public class ComputerTest {
 
-    Computer computer = new Computer(1L, "name", new BigDecimal(BigInteger.ONE), 22,
+    private final static Computer NAME = new Computer(1L, "name", new BigDecimal(BigInteger.ONE), 22,
             Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
 
     @Mock
@@ -39,28 +39,28 @@ public class ComputerTest {
     @Test
     public void shouldReturnSelfAfterConfiguration() {
         // when
-        Computer result = computer.configureComputer(processor, ram, rom, graphicCard);
+        Computer result = NAME.configureComputer(processor, ram, rom, graphicCard);
 
         // then
-        assertSame(computer, result);
+        assertSame(NAME, result);
     }
 
     @Test
     public void shouldSetAllComponentsOnConfigure() {
         // when
-        Computer result = computer.configureComputer(processor, ram, rom, graphicCard);
+        Computer result = NAME.configureComputer(processor, ram, rom, graphicCard);
 
         // then
-        assertThat(computer.getProcessor()).isNotNull();
-        assertThat(computer.getRam()).isNotNull();
-        assertThat(computer.getRom()).isNotNull();
-        assertThat(computer.getGraphicCard()).isNotNull();
-        assertEquals(computer, result);
+        assertThat(NAME.getProcessor()).isNotNull();
+        assertThat(NAME.getRam()).isNotNull();
+        assertThat(NAME.getRom()).isNotNull();
+        assertThat(NAME.getGraphicCard()).isNotNull();
+        assertEquals(NAME, result);
     }
 
     @Test
     public void shouldReturnTotalPriceCorrectly() {
-        BigDecimal totalPrice = computer.getTotalPrice();
+        BigDecimal totalPrice = NAME.getTotalPrice();
 
         assertThat(totalPrice).isNotNull();
         assertThat(totalPrice).isEqualTo(new BigDecimal(BigInteger.ONE));
@@ -68,9 +68,9 @@ public class ComputerTest {
 
     @Test
     public void shouldReturnComputerCopyCorrectly() {
-        Product computer1 = computer.getProductCopy();
+        Product computer1 = NAME.getProductCopy();
 
         assertThat(computer1).isNotNull();
-        assertThat(computer1.getName()).isEqualTo(computer.getName());
+        assertThat(computer1.getName()).isEqualTo(NAME.getName());
     }
 }

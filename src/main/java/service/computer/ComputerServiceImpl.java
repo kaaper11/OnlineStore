@@ -6,6 +6,7 @@ import dto.product.response.ComputerResponseDto;
 import entity.client.Client;
 import entity.client.Role;
 import entity.product.type.Computer;
+import entity.product.type.Product;
 import exception.ClientNotFoundException;
 import exception.ComputerNotFoundException;
 import exception.NoPermissionsException;
@@ -51,8 +52,7 @@ public class ComputerServiceImpl implements ComputerService {
             throw new NoPermissionsException();
         }
 
-        Computer computer = computerRepository.save(ComputerMapper.mapDtoToComputer(computerRequestDto,
-                computerRepository.getNextId()));
+        Computer computer = computerRepository.save(ComputerMapper.mapDtoToComputer(computerRequestDto));
         return ComputerMapper.mapComputerToDto(computer);
     }
 
@@ -167,5 +167,15 @@ public class ComputerServiceImpl implements ComputerService {
     @Override
     public boolean exist(Long id) {
         return computerRepository.getComputerById(id).isPresent();
+    }
+
+    @Override
+    public String getType() {
+        return "computer";
+    }
+
+    @Override
+    public Product getProductById(Long id) {
+        return computerRepository.getComputerById(id).orElseThrow(ComputerNotFoundException::new);
     }
 }

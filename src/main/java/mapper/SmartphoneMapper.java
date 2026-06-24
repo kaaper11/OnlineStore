@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SmartphoneMapper {
 
-    public static Smartphone mapDtoToSmartphone(SmartphoneRequestDto smartphoneDto, Long id) {
-        return new Smartphone(id, smartphoneDto.getName(), smartphoneDto.getPrice(), smartphoneDto.getQuantity(),
+    public static Smartphone mapDtoToSmartphone(SmartphoneRequestDto smartphoneDto) {
+        return new Smartphone(null, smartphoneDto.getName(), smartphoneDto.getPrice(), smartphoneDto.getQuantity(),
                 SmartphoneColorType.BLACK, Battery.MAH5000);
     }
 

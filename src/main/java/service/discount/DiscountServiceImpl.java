@@ -11,9 +11,7 @@ import lombok.AllArgsConstructor;
 import mapper.DiscountMapper;
 import repository.ClientRepository;
 import repository.DiscountRepository;
-import repository.productrepositories.ComputerRepository;
-import repository.productrepositories.ElectronicsRepository;
-import repository.productrepositories.SmartphoneRepository;
+import service.productfacade.ProductFacadeServiceImpl;
 import validator.DiscountValidator;
 
 import java.math.BigDecimal;
@@ -29,10 +27,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class DiscountServiceImpl implements DiscountService {
     private final DiscountRepository discountRepository;
-    private final ComputerRepository computerRepository;
-    private final SmartphoneRepository smartphoneRepository;
-    private final ElectronicsRepository electronicsRepository;
     private final ClientRepository clientRepository;
+    private ProductFacadeServiceImpl productFacadeService;
 
     /**
      * Adds a discount for a specific product.
@@ -59,19 +55,10 @@ public class DiscountServiceImpl implements DiscountService {
             throw new DiscountForProductAlreadyExists();
         }
 
-        Product product = switch (type) {
-            case "computer" -> computerRepository.getComputerById(discountRequest.productId())
-                    .orElseThrow(ComputerNotFoundException::new);
-            case "electronics" -> electronicsRepository.getElectronicsById(discountRequest.productId())
-                    .orElseThrow(ElectronicsNotFoundException::new);
-            case "smartphone" -> smartphoneRepository.getSmartphoneById(discountRequest.productId())
-                    .orElseThrow(SmartphoneNotFoundException::new);
-            default -> throw new ProductTypeNotFoundException();
-        };
+        Product product = productFacadeService.getProductById(discountRequest.productId(), type);
 
         DiscountValidator.validate(discountRequest, product.getPrice());
-        Discount discount = discountRepository.save(DiscountMapper.mapDiscountRequestToDiscount(discountRequest,
-                discountRepository.getNextId()));
+        Discount discount = discountRepository.save(DiscountMapper.mapDiscountRequestToDiscount(discountRequest));
         return DiscountMapper.mapDiscountToDto(discount);
     }
 

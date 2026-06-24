@@ -24,6 +24,7 @@ public class OrderRepository {
      * @return the saved order instance
      */
     public Order save(Order order) {
+        order.setId(getNextId());
         orders.add(order);
         return order;
     }
@@ -52,7 +53,7 @@ public class OrderRepository {
                 .toList();
     }
 
-    public Long getNextId() {
+    private Long getNextId() {
         return idCounter.getAndIncrement();
     }
 }

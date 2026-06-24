@@ -104,7 +104,6 @@ public class ProductCli {
             }
             default -> throw new ProductTypeNotFoundException();
         }
-//        productFacadeServiceImpl.createProduct(dto, clientId);
         System.out.println("Produkt dodany!");
     }
 
@@ -118,7 +117,6 @@ public class ProductCli {
             case "electronics" -> electronicsService.remove(productId, clientId);
             default -> throw new ProductTypeNotFoundException();
         }
-//        productFacadeServiceImpl.removeProduct(productId, clientId);
         System.out.println("Produkt usunięty!");
     }
 
@@ -134,7 +132,6 @@ public class ProductCli {
             case "electronics" -> electronicsService.updateQuantity(productId, clientId, quantity);
             default -> throw new ProductTypeNotFoundException();
         }
-//        productFacadeServiceImpl.updateProductQuantity(productId, clientId, quantity);
     }
 
     private void updateProductPrice(String type, Long clientId) {
@@ -149,7 +146,6 @@ public class ProductCli {
             case "electronics" -> electronicsService.updatePrice(productId, clientId, price);
             default -> throw new ProductTypeNotFoundException();
         }
-//        productFacadeServiceImpl.updateProductPrice(productId, clientId, price);
     }
 
     private void getAllProducts() {

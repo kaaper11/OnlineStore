@@ -11,26 +11,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 public class AddressMapperTest {
 
-    private final Address address = new Address("Poland", "Warsaw", "Zlota", "15-820",
+    private final static Address ADDRESS = new Address("Poland", "Warsaw", "Zlota", "15-820",
             10);
-    private final AddressDto addressDto = new AddressDto("Poland", "Warsaw", "Zlota", "15-820",
+    private final static AddressDto ADDRESS_DTO = new AddressDto("Poland", "Warsaw", "Zlota", "15-820",
             10);
 
     @Test
     public void shouldMapAddressToDto() {
-        AddressDto result = AddressMapper.mapAddressToDto(address);
+        AddressDto result = AddressMapper.mapAddressToDto(ADDRESS);
 
         assertThat(result)
                 .usingRecursiveComparison()
-                .isEqualTo(address);
+                .isEqualTo(ADDRESS);
     }
 
     @Test
     public void shouldMapAddressDtoToAddress() {
-        Address result = AddressMapper.mapDtoToAddress(addressDto);
+        Address result = AddressMapper.mapDtoToAddress(ADDRESS_DTO);
 
         assertThat(result)
                 .usingRecursiveComparison()
-                .isEqualTo(addressDto);
+                .isEqualTo(ADDRESS_DTO);
     }
 }

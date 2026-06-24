@@ -14,29 +14,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 public class CartTest {
 
-    private final Cart cart = new Cart(1L, 1L, new ArrayList<>());
-    private final Electronics electronics = new Electronics(1L, "name", BigDecimal.TEN, 10);
+    private final static Cart CART = new Cart(1L, 1L, new ArrayList<>());
+    private final static Electronics NAME = new Electronics(1L, "name", BigDecimal.TEN, 10);
 
     @Test
     public void shouldAddProductToCart() {
-        Product product = cart.addProduct(electronics);
+        Product product = CART.addProduct(NAME);
 
-        assertThat(product).usingRecursiveComparison().isEqualTo(electronics);
-        assertThat(cart.getProducts()).containsExactly(product);
+        assertThat(product).usingRecursiveComparison().isEqualTo(NAME);
+        assertThat(CART.getProducts()).containsExactly(product);
     }
 
     @Test
     public void shouldProductListIsEmpty() {
-        boolean result = cart.isEmpty();
+        boolean result = CART.isEmpty();
 
         assertThat(result).isTrue();
     }
 
     @Test
     public void shouldProductListIsNotEmpty() {
-        cart.addProduct(electronics);
+        CART.addProduct(NAME);
 
-        boolean result = cart.isEmpty();
+        boolean result = CART.isEmpty();
 
         assertThat(result).isFalse();
     }

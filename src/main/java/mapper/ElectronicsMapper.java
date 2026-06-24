@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ElectronicsMapper {
 
-    public static Electronics mapDtoToElectronics(ElectronicsRequestDto dto, Long id) {
-        return new Electronics(id, dto.getName(), dto.getPrice(), dto.getQuantity());
+    public static Electronics mapDtoToElectronics(ElectronicsRequestDto dto) {
+        return new Electronics(null, dto.getName(), dto.getPrice(), dto.getQuantity());
     }
 
     public static ElectronicsResponseDto mapElectronicsToDto(Electronics electronics) {

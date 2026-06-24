@@ -6,6 +6,7 @@ import dto.product.response.ElectronicsResponseDto;
 import entity.client.Client;
 import entity.client.Role;
 import entity.product.type.Electronics;
+import entity.product.type.Product;
 import exception.ClientNotFoundException;
 import exception.ElectronicsNotFoundException;
 import exception.NoPermissionsException;
@@ -39,8 +40,8 @@ public class ElectronicsServiceImpl implements ElectronicsService {
             throw new NoPermissionsException();
         }
 
-        Electronics electronics = electronicsRepository.save(ElectronicsMapper.mapDtoToElectronics(electronicsRequestDto,
-                electronicsRepository.getNextId()));
+        Electronics electronics = electronicsRepository.save(ElectronicsMapper
+                .mapDtoToElectronics(electronicsRequestDto));
         return ElectronicsMapper.mapElectronicsToDto(electronics);
     }
 
@@ -99,6 +100,17 @@ public class ElectronicsServiceImpl implements ElectronicsService {
     @Override
     public boolean exist(Long id) {
         return electronicsRepository.getElectronicsById(id).isPresent();
+    }
+
+    @Override
+    public String getType() {
+        return "electronics";
+    }
+
+    @Override
+    public Product getProductById(Long id) {
+        return electronicsRepository.getElectronicsById(id)
+                .orElseThrow(ElectronicsNotFoundException::new);
     }
 
     @Override

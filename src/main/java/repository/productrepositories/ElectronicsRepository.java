@@ -24,6 +24,7 @@ public class ElectronicsRepository {
      * @return the saved electronics instance
      */
     public Electronics save(Electronics electronics) {
+        electronics.setId(getNextId());
         electronicsSet.add(electronics);
         return electronics;
     }
@@ -66,7 +67,7 @@ public class ElectronicsRepository {
                 .toList();
     }
 
-    public Long getNextId() {
+    private Long getNextId() {
         return idCounter.getAndIncrement();
     }
 }

@@ -24,6 +24,7 @@ public class InvoiceRepository {
      * @return the saved invoice instance
      */
     public Invoice save(Invoice invoice) {
+        invoice.setId(getNextId());
         invoices.add(invoice);
         return invoice;
     }
@@ -52,7 +53,7 @@ public class InvoiceRepository {
                 .toList();
     }
 
-    public Long getNextId() {
+    private Long getNextId() {
         return idCounter.getAndIncrement();
     }
 }

@@ -28,17 +28,17 @@ public class OrderRepositoryTest {
     @InjectMocks
     private OrderRepository orderRepository;
 
-    private final Client client = new Client(2L, "name", "email","pass", "123456789",
+    private static final Client CLIENT = new Client(2L, "name", "email","pass", "123456789",
             new Address("Poland", "Warsaw", "Zlota", "15-820", 10), Role.ADMIN);
-    private final Product product = new Electronics(1L, "product", BigDecimal.TEN, 10);
-    private final Order order = new Order(1L, client, List.of(product), BigDecimal.TEN);
+    private static final Product PRODUCT = new Electronics(1L, "product", BigDecimal.TEN, 10);
+    private static final Order ORDER = new Order(1L, CLIENT, List.of(PRODUCT), BigDecimal.TEN);
 
     @Test
     public void shouldSaveOrder() {
-        Order saveOrder = orderRepository.save(order);
+        Order saveOrder = orderRepository.save(ORDER);
 
         assertThat(saveOrder).isNotNull();
-        assertThat(saveOrder).usingRecursiveComparison().isEqualTo(order);
+        assertThat(saveOrder).usingRecursiveComparison().isEqualTo(ORDER);
     }
 
     private static Stream<Arguments> getOrderArguments() {
@@ -57,9 +57,9 @@ public class OrderRepositoryTest {
     @ParameterizedTest
     @MethodSource("getOrderArguments")
     public void shouldGetOrderById(Long id, Optional expectedOrder) {
-        orderRepository.save(order);
+        orderRepository.save(ORDER);
 
-        Optional<Order> result = orderRepository.getOrderById(id);
+        final var result = orderRepository.getOrderById(id);
         assertThat(result).isEqualTo(expectedOrder);
     }
 
@@ -74,7 +74,7 @@ public class OrderRepositoryTest {
     @ParameterizedTest
     @MethodSource("getOrderArgumentsByClientId")
     public void shouldGetOrderByClientId(Long clientId, int expectedSize) {
-        orderRepository.save(order);
+        orderRepository.save(ORDER);
 
         List<Order> result = orderRepository.getOneClientOrders(clientId);
         assertThat(result).hasSize(expectedSize);

@@ -1,6 +1,8 @@
 package service.productfacade;
 
 import dto.product.response.ProductResponseDto;
+import entity.product.type.Product;
+import exception.ProductNotFoundException;
 import lombok.AllArgsConstructor;
 import service.product.ProductService;
 
@@ -31,5 +33,14 @@ public class ProductFacadeServiceImpl implements ProductFacadeService {
                 .flatMap(Collection::stream)
                 .sorted(Comparator.comparing(ProductResponseDto::getId))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Product getProductById(Long id, String type) {
+        return services.stream()
+                .filter(service -> service.getType().equals(type))
+                .map(service -> service.getProductById(id))
+                .findFirst()
+                .orElseThrow(() -> new ProductNotFoundException("Produkt"));
     }
 }

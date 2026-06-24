@@ -12,7 +12,7 @@ public interface OrderService {
 
     List<OrderDto> getOrdersByClientId(Long clientId);
 
-    List<OrderDto> placeSomeOrders(List<Long> clientIds);
+    List<OrderDto> placeManyOrders(List<Long> clientIds);
 
     CompletableFuture<OrderDto> placeOrderAsync(Long clientId);
 }

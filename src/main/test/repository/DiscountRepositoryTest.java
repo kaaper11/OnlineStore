@@ -18,7 +18,7 @@ class DiscountRepositoryTest {
     void shouldSaveAndRetrieveDiscountByProductId() {
         DiscountRepository repository = new DiscountRepository();
 
-        Discount discount = new Discount(repository.getNextId(), 100L, DiscountType.PERCENT,
+        Discount discount = new Discount(null, 100L, DiscountType.PERCENT,
                 new BigDecimal("15.5")
         );
 
@@ -45,7 +45,7 @@ class DiscountRepositoryTest {
     void shouldDeleteExistingDiscount() {
         DiscountRepository repository = new DiscountRepository();
 
-        Discount discount = new Discount(repository.getNextId(), 200L, DiscountType.PERCENT,
+        Discount discount = new Discount(null, 200L, DiscountType.PERCENT,
                 new BigDecimal("15.5"));
 
         repository.save(discount);

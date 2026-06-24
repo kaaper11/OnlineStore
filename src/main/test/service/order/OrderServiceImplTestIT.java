@@ -22,7 +22,11 @@ import repository.productrepositories.ElectronicsRepository;
 import repository.productrepositories.SmartphoneRepository;
 import service.cart.CartService;
 import service.cart.CartServiceImpl;
+import service.computer.ComputerServiceImpl;
 import service.discount.DiscountServiceImpl;
+import service.electronics.ElectronicsServiceImpl;
+import service.productfacade.ProductFacadeServiceImpl;
+import service.smartphone.SmartphoneServiceImpl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -47,8 +51,14 @@ public class OrderServiceImplTestIT {
         SmartphoneRepository smartphoneRepository = new SmartphoneRepository();
         DiscountRepository discountRepository = new DiscountRepository();
 
-        DiscountServiceImpl discountService = new DiscountServiceImpl(discountRepository, computerRepository, smartphoneRepository,
-                electronicsRepository, clientRepository);
+        ComputerServiceImpl computerService = new ComputerServiceImpl(computerRepository, clientRepository);
+        SmartphoneServiceImpl smartphoneService = new SmartphoneServiceImpl(smartphoneRepository, clientRepository);
+        ElectronicsServiceImpl electronicsService = new ElectronicsServiceImpl(electronicsRepository, clientRepository);
+        ProductFacadeServiceImpl productFacadeService = new ProductFacadeServiceImpl(List.of(
+                smartphoneService, computerService, electronicsService
+        ));
+
+        DiscountServiceImpl discountService = new DiscountServiceImpl(discountRepository, clientRepository, productFacadeService);
 
         orderService = new OrderServiceImpl(
                 orderRepository,
@@ -59,8 +69,7 @@ public class OrderServiceImplTestIT {
         );
         computerRepository.save(new Computer(1L, "name", new BigDecimal("100"), 20));
 
-        cartService = new CartServiceImpl(cartRepository, computerRepository, smartphoneRepository,
-                electronicsRepository);
+        cartService = new CartServiceImpl(cartRepository, productFacadeService);
 
 
         Address address = new Address("Polska", "Wwa", "Zlota", "17-873", 10);
@@ -108,14 +117,15 @@ public class OrderServiceImplTestIT {
     }
 
     @Test
-    void shouldPlaceSomeOrders() {
+    void shouldPlaceManyOrders() {
         cartService.addProductToCart("computer", 1L, 1L, new ComputerConfig(Processor.INTEL_CORE_I5, Ram.GB8,
                 Rom.GB500, GraphicCard.RTX5050));
 
-        List<OrderDto> orders = orderService.placeSomeOrders(List.of(1L));
+        List<OrderDto> orders = orderService.placeManyOrders(List.of(1L));
 
         assertThat(orders).isNotNull();
         assertThat(orders.size()).isEqualTo(1);
+        assertThat(orders.getFirst().products().getFirst().getName()).isEqualTo("name");
     }
 
     @Test

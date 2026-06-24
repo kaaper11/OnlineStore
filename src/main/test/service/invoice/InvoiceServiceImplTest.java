@@ -37,24 +37,24 @@ public class InvoiceServiceImplTest {
     @Mock
     InvoiceRepository invoiceRepository;
 
-    private final Product product = new Electronics(1L, "product", BigDecimal.TEN, 10);
-    private final Cart cart = new Cart(1L, 10L, List.of(product));
-    private final Address address = new Address("Poland", "Warsaw", "Zlota", "15-820",
+    private static final Product PRODUCT = new Electronics(1L, "product", BigDecimal.TEN, 10);
+    private static final Cart CART = new Cart(1L, 10L, List.of(PRODUCT));
+    private static final Address ADDRESS = new Address("Poland", "Warsaw", "Zlota", "15-820",
             2);
-    private final Client client = new Client(1L, "name", "name@test.com", "pass", "123456789",
-            address, Role.USER);
-    private final Order order = new Order(1L, client, cart.getProducts(), BigDecimal.TEN);
-    private final Invoice invoice = new Invoice(1L, order.getId(), client, order.getProducts(), BigDecimal.TEN,
+    private static final Client CLIENT = new Client(1L, "name", "name@test.com", "pass", "123456789",
+            ADDRESS, Role.USER);
+    private static final Order ORDER = new Order(1L, CLIENT, CART.getProducts(), BigDecimal.TEN);
+    private static final Invoice INVOICE = new Invoice(1L, ORDER.getId(), CLIENT, ORDER.getProducts(), BigDecimal.TEN,
             ZonedDateTime.now());
 
     @Test
     void shouldFindInvoiceByOrderId() {
-        when(invoiceRepository.getInvoiceByOrderId(anyLong())).thenReturn(Optional.of(invoice));
+        when(invoiceRepository.getInvoiceByOrderId(anyLong())).thenReturn(Optional.of(INVOICE));
 
         InvoiceDto invoiceDto = invoiceService.getInvoiceByOrderId(1L);
 
         assertThat(invoiceDto).isNotNull();
-        assertThat(invoiceDto.totalPrice()).isEqualTo(invoice.getTotalPrice());
+        assertThat(invoiceDto.totalPrice()).isEqualTo(INVOICE.getTotalPrice());
     }
 
     @Test
@@ -66,11 +66,11 @@ public class InvoiceServiceImplTest {
 
     @Test
     void shouldFindInvoicesByClientId() {
-        when(invoiceRepository.getInvoicesByClientId(anyLong())).thenReturn(List.of(invoice));
+        when(invoiceRepository.getInvoicesByClientId(anyLong())).thenReturn(List.of(INVOICE));
 
         List<InvoiceDto> invoicesDto = invoiceService.getInvoicesByClientId(1L, ZoneId.systemDefault());
 
         assertThat(invoicesDto).hasSize(1);
-        assertThat(invoicesDto.getFirst()).usingRecursiveComparison().isEqualTo(invoice);
+        assertThat(invoicesDto.getFirst()).usingRecursiveComparison().isEqualTo(INVOICE);
     }
 }

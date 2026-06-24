@@ -4,6 +4,7 @@ import entity.client.Client;
 import entity.product.type.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 public class Order {
+    @Setter
     private Long id;
     private Client client;
     private List<Product> products;

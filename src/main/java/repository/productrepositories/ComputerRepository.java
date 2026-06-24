@@ -24,6 +24,7 @@ public final class ComputerRepository {
      * @return the saved computer instance
      */
     public Computer save(Computer computer) {
+        computer.setId(getNextId());
         computers.add(computer);
         return computer;
     }
@@ -66,7 +67,7 @@ public final class ComputerRepository {
                 .toList();
     }
 
-    public Long getNextId() {
+    private Long getNextId() {
         return idCounter.getAndIncrement();
     }
 }

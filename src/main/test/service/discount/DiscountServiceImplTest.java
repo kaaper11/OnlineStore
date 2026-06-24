@@ -30,11 +30,16 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class DiscountServiceImplTest {
 
-    @Mock private DiscountRepository discountRepository;
-    @Mock private ComputerRepository computerRepository;
-    @Mock private SmartphoneRepository smartphoneRepository;
-    @Mock private ElectronicsRepository electronicsRepository;
-    @Mock private ClientRepository clientRepository;
+    @Mock
+    private DiscountRepository discountRepository;
+    @Mock
+    private ComputerRepository computerRepository;
+    @Mock
+    private SmartphoneRepository smartphoneRepository;
+    @Mock
+    private ElectronicsRepository electronicsRepository;
+    @Mock
+    private ClientRepository clientRepository;
 
     @InjectMocks
     private DiscountServiceImpl service;
@@ -52,7 +57,6 @@ class DiscountServiceImplTest {
         DiscountRequest request = new DiscountRequest(100L, DiscountType.PERCENT, BigDecimal.valueOf(10));
 
         when(discountRepository.exists(100L)).thenReturn(false);
-        when(discountRepository.getNextId()).thenReturn(1L);
 
         Computer computer = new Computer(5L, "name", BigDecimal.ZERO, 10);
 
@@ -130,7 +134,7 @@ class DiscountServiceImplTest {
 
         when(discountRepository.getByProductId(100L)).thenReturn(Optional.of(discount));
 
-        Optional<DiscountDto> result = service.getDiscountForProduct(100L);
+        final var result = service.getDiscountForProduct(100L);
 
         assertEquals(100L, result.get().productId());
     }

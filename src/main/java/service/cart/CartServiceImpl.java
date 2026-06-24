@@ -8,9 +8,7 @@ import exception.*;
 import lombok.AllArgsConstructor;
 import mapper.CartMapper;
 import repository.CartRepository;
-import repository.productrepositories.ComputerRepository;
-import repository.productrepositories.ElectronicsRepository;
-import repository.productrepositories.SmartphoneRepository;
+import service.productfacade.ProductFacadeServiceImpl;
 
 /**
  * Service implementation responsible for managing shopping cart operations.
@@ -20,9 +18,7 @@ import repository.productrepositories.SmartphoneRepository;
 @AllArgsConstructor
 public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
-    private final ComputerRepository computerRepository;
-    private final SmartphoneRepository smartphoneRepository;
-    private final ElectronicsRepository electronicsRepository;
+    private final ProductFacadeServiceImpl productFacadeService;
 
     /**
      * Retrieves a shopping cart by its identifier.
@@ -67,15 +63,7 @@ public class CartServiceImpl implements CartService {
     public CartDto addProductToCart(String type, Long clientId, Long productId, ProductConfig productConfig) {
         Cart cart = cartRepository.getCartByClientId(clientId).orElseThrow(CartNotFoundException::new);
 
-        Product originalProduct = switch (type) {
-            case "computer" -> computerRepository.getComputerById(productId)
-                    .orElseThrow(ComputerNotFoundException::new);
-            case "electronics" -> electronicsRepository.getElectronicsById(productId)
-                    .orElseThrow(ElectronicsNotFoundException::new);
-            case "smartphone" -> smartphoneRepository.getSmartphoneById(productId)
-                    .orElseThrow(SmartphoneNotFoundException::new);
-            default -> throw new ProductTypeNotFoundException();
-        };
+        Product originalProduct = productFacadeService.getProductById(productId, type);
 
         if (originalProduct.getQuantity() < 1) {
             throw new ProductOutOfStockException(originalProduct);

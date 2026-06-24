@@ -2,6 +2,7 @@ package service.product;
 
 import dto.product.request.ProductRequestDto;
 import dto.product.response.ProductResponseDto;
+import entity.product.type.Product;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,4 +21,8 @@ public interface ProductService<T extends ProductResponseDto> {
     List<T> getAll();
 
     boolean exist(Long id);
+
+    String getType();
+
+    Product getProductById(Long id);
 }

@@ -34,6 +34,7 @@ public class ClientRepository {
      */
     public Client save(Client client) {
         clients.add(client);
+        client.setId(getNextId());
         return client;
     }
 
@@ -105,7 +106,7 @@ public class ClientRepository {
                 .toList();
     }
 
-    public Long getNextId() {
+    private Long getNextId() {
         return idCounter.getAndIncrement();
     }
 

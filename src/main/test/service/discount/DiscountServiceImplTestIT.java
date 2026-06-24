@@ -20,6 +20,10 @@ import repository.DiscountRepository;
 import repository.productrepositories.ComputerRepository;
 import repository.productrepositories.ElectronicsRepository;
 import repository.productrepositories.SmartphoneRepository;
+import service.computer.ComputerServiceImpl;
+import service.electronics.ElectronicsServiceImpl;
+import service.productfacade.ProductFacadeServiceImpl;
+import service.smartphone.SmartphoneServiceImpl;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -44,8 +48,14 @@ public class DiscountServiceImplTestIT {
         ElectronicsRepository electronicsRepository = new ElectronicsRepository();
         ClientRepository clientRepository = new ClientRepository();
 
-        discountService = new DiscountServiceImpl(discountRepository, computerRepository, smartphoneRepository,
-                electronicsRepository, clientRepository);
+        ComputerServiceImpl computerService = new ComputerServiceImpl(computerRepository, clientRepository);
+        SmartphoneServiceImpl smartphoneService = new SmartphoneServiceImpl(smartphoneRepository, clientRepository);
+        ElectronicsServiceImpl electronicsService = new ElectronicsServiceImpl(electronicsRepository, clientRepository);
+        ProductFacadeServiceImpl productFacadeService = new ProductFacadeServiceImpl(List.of(
+                smartphoneService, computerService, electronicsService
+        ));
+
+        discountService = new DiscountServiceImpl(discountRepository, clientRepository, productFacadeService);
 
         Address address = new Address("Polska", "Warszawa", "Zlota", "17-873", 10);
 
@@ -131,7 +141,8 @@ public class DiscountServiceImplTestIT {
         DiscountRequest request = new DiscountRequest(1L, DiscountType.PERCENT, new BigDecimal("20"));
 
         assertThatExceptionOfType(ClientNotFoundException.class)
-                .isThrownBy(() -> discountService.addDiscount("computer", request, 999L));
+                .isThrownBy(() -> discountService.addDiscount("computer", request, 999L))
+                .withMessage("Brak klienta w repozytorium.");
     }
 
     @Test

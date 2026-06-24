@@ -5,6 +5,7 @@ import entity.product.type.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -22,6 +23,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 public class Invoice {
+    @Setter
     private Long id;
     private Long orderId;
     private Client client;

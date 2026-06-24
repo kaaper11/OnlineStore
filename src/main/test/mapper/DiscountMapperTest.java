@@ -15,8 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class DiscountMapperTest {
-
-
     @Test
     void shouldMapDiscountToDtoCorrectly() {
         Discount discount = new Discount(1L, 100L, DiscountType.PERCENT, new BigDecimal("20"));
@@ -34,9 +32,7 @@ public class DiscountMapperTest {
     void shouldMapDiscountRequestToDiscountCorrectly() {
         DiscountRequest request = new DiscountRequest(200L, DiscountType.PERCENT, new BigDecimal("15.5"));
 
-        Long id = 5L;
-
-        Discount discount = DiscountMapper.mapDiscountRequestToDiscount(request, id);
+        Discount discount = DiscountMapper.mapDiscountRequestToDiscount(request);
 
         assertThat(discount).isNotNull();
         assertEquals(5L, discount.getId());

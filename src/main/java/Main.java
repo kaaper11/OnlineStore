@@ -29,20 +29,18 @@ public class Main {
 
         InvoiceJsonWriter invoiceJsonWriter = new InvoiceJsonWriter();
 
-        DiscountServiceImpl discountService = new DiscountServiceImpl(discountRepository, computerRepository,
-                smartphoneRepository, electronicsRepository, clientRepository);
-        CartServiceImpl cartService = new CartServiceImpl(cartRepository, computerRepository, smartphoneRepository,
-                electronicsRepository);
+
         ClientServiceImpl clientService = new ClientServiceImpl(clientRepository, cartRepository);
         ComputerServiceImpl computerService = new ComputerServiceImpl(computerRepository, clientRepository);
-        InvoiceServiceImpl invoiceService = new InvoiceServiceImpl(invoiceRepository, invoiceJsonWriter);
-        OrderServiceImpl orderService = new OrderServiceImpl(orderRepository, cartRepository, clientRepository,
-                invoiceRepository, discountService);
         ElectronicsServiceImpl electronicsService = new ElectronicsServiceImpl(electronicsRepository, clientRepository);
         SmartphoneServiceImpl smartphoneService = new SmartphoneServiceImpl(smartphoneRepository, clientRepository);
         ProductFacadeServiceImpl productFacadeServiceImpl = new ProductFacadeServiceImpl(List.of(computerService, electronicsService,
                 smartphoneService));
-
+        DiscountServiceImpl discountService = new DiscountServiceImpl(discountRepository, clientRepository, productFacadeServiceImpl);
+        CartServiceImpl cartService = new CartServiceImpl(cartRepository, productFacadeServiceImpl);
+        InvoiceServiceImpl invoiceService = new InvoiceServiceImpl(invoiceRepository, invoiceJsonWriter);
+        OrderServiceImpl orderService = new OrderServiceImpl(orderRepository, cartRepository, clientRepository,
+                invoiceRepository, discountService);
 
         CommandLineMain cli = new CommandLineMain(cartService, clientService, invoiceService, orderService,
                 productFacadeServiceImpl, discountService, computerService, smartphoneService, electronicsService);

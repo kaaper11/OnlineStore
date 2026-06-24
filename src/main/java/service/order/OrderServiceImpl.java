@@ -67,10 +67,10 @@ public class OrderServiceImpl implements OrderService {
 
             BigDecimal totalPrice = discountService.calculateTotalCart(cart.getProducts());
 
-            Order order = orderRepository.save(new Order(orderRepository.getNextId(), client,
+            Order order = orderRepository.save(new Order(null, client,
                     new ArrayList<>(cart.getProducts()), totalPrice));
 
-            invoiceRepository.save(new Invoice(invoiceRepository.getNextId(),
+            invoiceRepository.save(new Invoice(null,
                     order.getId(), order.getClient(), order.getProducts(), order.getTotalPrice(), ZonedDateTime.now()));
 
             OrderDto orderDto = OrderMapper.mapOrderToDto(order);
@@ -115,7 +115,7 @@ public class OrderServiceImpl implements OrderService {
      * @return list of created OrderDto objects
      */
     @Override
-    public List<OrderDto> placeSomeOrders(List<Long> clientIds) {
+    public List<OrderDto> placeManyOrders(List<Long> clientIds) {
         ExecutorService executor = Executors.newFixedThreadPool(Math.min(clientIds.size(), 4));
 
         List<CompletableFuture<OrderDto>> futures = clientIds.stream()

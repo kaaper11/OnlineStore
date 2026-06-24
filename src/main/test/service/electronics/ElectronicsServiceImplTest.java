@@ -39,37 +39,37 @@ public class ElectronicsServiceImplTest {
     @InjectMocks
     private ElectronicsServiceImpl electronicsService;
 
-    private final ElectronicsRequestDto electronicsRequestDto = new ElectronicsRequestDto("name", new BigDecimal("100"), 20);
+    private static final ElectronicsRequestDto ELECTRONICS_REQUEST_DTO = new ElectronicsRequestDto("name", new BigDecimal("100"), 20);
 
-    private final Electronics electronics = new Electronics(1L, "name", new BigDecimal("100"), 20);
+    private static final Electronics ELECTRONICS = new Electronics(1L, "name", new BigDecimal("100"), 20);
 
-    private final Address address = new Address("Poland", "Warsaw", "Zlota", "15-820",
+    private static final Address ADDRESS = new Address("Poland", "Warsaw", "Zlota", "15-820",
             2);
 
-    private final Client client = new Client(1L, "name", "name@test.com", "pasS12%dd",
-            "123456789", address, Role.ADMIN);
+    private static final Client CLIENT = new Client(1L, "name", "name@test.com", "pasS12%dd",
+            "123456789", ADDRESS, Role.ADMIN);
 
     @Test
     void shouldCreateElectronics() {
         // given
-        when(electronicsRepository.save(any(Electronics.class))).thenReturn(electronics);
-        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
+        when(electronicsRepository.save(any(Electronics.class))).thenReturn(ELECTRONICS);
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(CLIENT));
 
         // when
-        ElectronicsResponseDto dto = electronicsService.create(electronicsRequestDto, 1L);
+        ElectronicsResponseDto dto = electronicsService.create(ELECTRONICS_REQUEST_DTO, 1L);
 
         // then
         assertNotNull(dto);
         verify(electronicsRepository).save(any(Electronics.class));
         assertThat(dto).usingRecursiveComparison().ignoringFields("id")
-                .isEqualTo(electronicsRequestDto);
+                .isEqualTo(ELECTRONICS_REQUEST_DTO);
     }
 
     @Test
     void shouldRemoveElectronics() {
         // given
-        when(electronicsRepository.delete(anyLong())).thenReturn(Optional.of(electronics));
-        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
+        when(electronicsRepository.delete(anyLong())).thenReturn(Optional.of(ELECTRONICS));
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(CLIENT));
 
         // when
         electronicsService.remove(1L, 1L);
@@ -82,7 +82,7 @@ public class ElectronicsServiceImplTest {
     void shouldThrowWhenRemoveAndElectronicsNotFound() {
         // given
         when(electronicsRepository.delete(anyLong())).thenReturn(Optional.empty());
-        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(CLIENT));
 
 
         // then
@@ -94,14 +94,14 @@ public class ElectronicsServiceImplTest {
     void shouldGetCorrectElectronicsById() {
         // given
         when(electronicsRepository.getElectronicsById(anyLong()))
-                .thenReturn(Optional.of(electronics));
+                .thenReturn(Optional.of(ELECTRONICS));
 
         // when
         ElectronicsResponseDto dto = electronicsService.getById(1L);
 
         // then
         assertNotNull(dto);
-        assertThat(dto).usingRecursiveComparison().ignoringFields("id").isEqualTo(electronicsRequestDto);
+        assertThat(dto).usingRecursiveComparison().ignoringFields("id").isEqualTo(ELECTRONICS_REQUEST_DTO);
     }
 
     @Test
@@ -119,7 +119,7 @@ public class ElectronicsServiceImplTest {
     void shouldGetAllElectronics() {
         // given
         when(electronicsRepository.getAllElectronics())
-                .thenReturn(List.of(electronics));
+                .thenReturn(List.of(ELECTRONICS));
 
         // when
         List<ElectronicsResponseDto> dtos = electronicsService.getAll();
@@ -129,20 +129,20 @@ public class ElectronicsServiceImplTest {
         assertThat(dtos.getFirst())
                 .usingRecursiveComparison()
                 .ignoringFields("id")
-                .isEqualTo(electronicsRequestDto);
+                .isEqualTo(ELECTRONICS_REQUEST_DTO);
     }
 
     @Test
     void shouldElectronicsExists() {
-        when(electronicsRepository.getElectronicsById(anyLong())).thenReturn(Optional.of(electronics));
+        when(electronicsRepository.getElectronicsById(anyLong())).thenReturn(Optional.of(ELECTRONICS));
 
-        boolean result = electronicsService.exist(electronics.getId());
+        boolean result = electronicsService.exist(ELECTRONICS.getId());
         assertThat(result).isTrue();
     }
 
     @Test
     void shouldElectronicsNotExists() {
-        when(electronicsRepository.getElectronicsById(anyLong())).thenReturn(Optional.of(electronics));
+        when(electronicsRepository.getElectronicsById(anyLong())).thenReturn(Optional.of(ELECTRONICS));
 
         boolean result = electronicsService.exist(10L);
         assertThat(result).isTrue();

@@ -19,9 +19,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ComputerMapper {
 
-    public static Computer mapDtoToComputer(ComputerRequestDto dto, Long id) {
-        return new Computer(id, dto.getName(), dto.getPrice(), dto.getQuantity(), Processor.INTEL_CORE_I3, Ram.GB8,
-                Rom.GB500 , GraphicCard.RTX5050);
+    public static Computer mapDtoToComputer(ComputerRequestDto dto) {
+        return new Computer(null, dto.getName(), dto.getPrice(), dto.getQuantity(), Processor.INTEL_CORE_I3, Ram.GB8,
+                Rom.GB500, GraphicCard.RTX5050);
     }
 
     public static ComputerResponseDto mapComputerToDto(Computer computer) {

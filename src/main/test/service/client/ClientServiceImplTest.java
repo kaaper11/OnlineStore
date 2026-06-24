@@ -37,47 +37,45 @@ public class ClientServiceImplTest {
     @InjectMocks
     private ClientServiceImpl clientService;
 
-    private final Address address = new Address("Poland", "Warsaw", "Zlota", "15-820",
+    private static final Address ADDRESS = new Address("Poland", "Warsaw", "Zlota", "15-820",
             2);
 
-    private final AddressDto addressDto = new AddressDto("Poland", "Warsaw", "Zlota", "15-820",
+    private static final AddressDto ADDRESS_DTO = new AddressDto("Poland", "Warsaw", "Zlota", "15-820",
             2);
 
-    private final Client client = new Client(1L, "name", "name@test.com", "pasS12%dd",
-            "123456789", address, Role.ADMIN);
+    private static final Client CLIENT = new Client(1L, "name", "name@test.com", "pasS12%dd",
+            "123456789", ADDRESS, Role.ADMIN);
 
-    private final Client updatedClient = new Client(1L, "name2", "name@test.com", "pasS12%dd",
-            "987654321", address, Role.ADMIN);
+    private static final Client UPDATED_CLIENT = new Client(1L, "name2", "name@test.com", "pasS12%dd",
+            "987654321", ADDRESS, Role.ADMIN);
 
-    private final ClientRequestDto request = new ClientRequestDto("name3", "name@test.com",
-            "pasS12%dd", "123456789", addressDto);
+    private static final ClientRequestDto REQUEST = new ClientRequestDto("name3", "name@test.com",
+            "pasS12%dd", "123456789", ADDRESS_DTO);
 
     @Test
     public void shouldCreateClient() {
-        when(clientRepository.getNextId()).thenReturn(1L);
-        when(clientRepository.save(any(Client.class))).thenReturn(client);
+        when(clientRepository.save(any(Client.class))).thenReturn(CLIENT);
         when(cartRepository.save(any(Cart.class))).thenReturn(any(Cart.class));
 
-        ClientResponseDto result = clientService.createClient(request);
+        ClientResponseDto result = clientService.createClient(REQUEST);
 
         assertThat(result).isNotNull();
 
-        verify(clientRepository).getNextId();
         verify(clientRepository).save(any(Client.class));
-        assertThat(result.email()).isEqualTo(request.email());
+        assertThat(result.email()).isEqualTo(REQUEST.email());
     }
 
     @Test
     public void shouldUpdateClient() {
         when(clientRepository.update(eq(1L), any(Client.class)))
-                .thenReturn(Optional.of(client));
+                .thenReturn(Optional.of(CLIENT));
 
-        ClientResponseDto result = clientService.updateClient(1L, request);
+        ClientResponseDto result = clientService.updateClient(1L, REQUEST);
 
         assertThat(result).isNotNull();
 
         verify(clientRepository).update(eq(1L), any(Client.class));
-        assertThat(result.email()).isEqualTo(request.email());
+        assertThat(result.email()).isEqualTo(REQUEST.email());
     }
 
     @Test
@@ -85,19 +83,19 @@ public class ClientServiceImplTest {
         when(clientRepository.update(eq(1L), any(Client.class)))
                 .thenReturn(Optional.empty());
 
-        assertThrows(ClientNotFoundException.class, () -> clientService.updateClient(1L, request));
+        assertThrows(ClientNotFoundException.class, () -> clientService.updateClient(1L, REQUEST));
     }
 
     @Test
     public void shouldRemoveClient() {
-        when(clientRepository.delete(1L)).thenReturn(Optional.of(client));
+        when(clientRepository.delete(1L)).thenReturn(Optional.of(CLIENT));
 
         ClientResponseDto result = clientService.removeClient(1L);
 
         assertThat(result).isNotNull();
 
         verify(clientRepository).delete(1L);
-        assertThat(result.id()).isEqualTo(client.getId());
+        assertThat(result.id()).isEqualTo(CLIENT.getId());
     }
 
     @Test
@@ -109,14 +107,14 @@ public class ClientServiceImplTest {
 
     @Test
     public void shouldGetClientById() {
-        when(clientRepository.getClientById(1L)).thenReturn(Optional.of(client));
+        when(clientRepository.getClientById(1L)).thenReturn(Optional.of(CLIENT));
 
         ClientResponseDto result = clientService.getClientById(1L);
 
         assertThat(result).isNotNull();
 
         verify(clientRepository).getClientById(1L);
-        assertThat(result.id()).isEqualTo(client.getId());
+        assertThat(result.id()).isEqualTo(CLIENT.getId());
     }
 
     @Test
@@ -129,45 +127,45 @@ public class ClientServiceImplTest {
     @Test
     public void shouldGetClientByEmail() {
         when(clientRepository.getClientByEmail("name@test.com"))
-                .thenReturn(Optional.of(client));
+                .thenReturn(Optional.of(CLIENT));
 
         ClientResponseDto result = clientService.getClientByEmail("name@test.com");
 
         assertThat(result).isNotNull();
 
         verify(clientRepository).getClientByEmail("name@test.com");
-        assertThat(result.id()).isEqualTo(client.getId());
+        assertThat(result.id()).isEqualTo(CLIENT.getId());
     }
 
     @Test
     public void shouldGetAllClients() {
-        when(clientRepository.getAllComputers()).thenReturn(List.of(client, updatedClient));
+        when(clientRepository.getAllComputers()).thenReturn(List.of(CLIENT, UPDATED_CLIENT));
 
         List<ClientResponseDto> result = clientService.getAllClients();
 
         assertThat(result).hasSize(2);
 
         verify(clientRepository).getAllComputers();
-        assertThat(result.getFirst().id()).isEqualTo(client.getId());
+        assertThat(result.getFirst().id()).isEqualTo(CLIENT.getId());
     }
 
     @Test
     public void shouldLoginClientWhenPasswordMatches() {
         LoginRequest loginRequest = new LoginRequest("name@test.com", "pasS12%dd");
 
-        when(clientRepository.getClientByEmail(anyString())).thenReturn(Optional.of(client));
+        when(clientRepository.getClientByEmail(anyString())).thenReturn(Optional.of(CLIENT));
 
         ClientResponseDto clientResponseDto = clientService.loginClient(loginRequest);
 
         assertThat(clientResponseDto).isNotNull();
-        assertThat(clientResponseDto.id()).isEqualTo(client.getId());
+        assertThat(clientResponseDto.id()).isEqualTo(CLIENT.getId());
     }
 
     @Test
     public void shouldThrowWhenPasswordDoesNotMatch() {
         LoginRequest loginRequest = new LoginRequest("name@test.com", "zlepass");
 
-        when(clientRepository.getClientByEmail(anyString())).thenReturn(Optional.of(client));
+        when(clientRepository.getClientByEmail(anyString())).thenReturn(Optional.of(CLIENT));
 
         assertThrows(IncorrectPasswordException.class, () -> clientService.loginClient(loginRequest));
     }

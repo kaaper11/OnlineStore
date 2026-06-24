@@ -2,6 +2,7 @@ package entity.discount;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 public class Discount {
+    @Setter
     private Long id;
     private Long productId;
     private DiscountType discountType;

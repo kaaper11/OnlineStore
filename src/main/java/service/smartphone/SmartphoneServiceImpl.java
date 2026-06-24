@@ -5,6 +5,7 @@ import dto.product.request.SmartphoneRequestDto;
 import dto.product.response.SmartphoneResponseDto;
 import entity.client.Client;
 import entity.client.Role;
+import entity.product.type.Product;
 import entity.product.type.Smartphone;
 import exception.ClientNotFoundException;
 import exception.NoPermissionsException;
@@ -40,8 +41,7 @@ public class SmartphoneServiceImpl implements SmartphoneService {
             throw new NoPermissionsException();
         }
 
-        Smartphone smartphone = smartphoneRepository.save(SmartphoneMapper.mapDtoToSmartphone(smartphoneDto,
-                smartphoneRepository.getNextId()));
+        Smartphone smartphone = smartphoneRepository.save(SmartphoneMapper.mapDtoToSmartphone(smartphoneDto));
         return SmartphoneMapper.mapSmartphoneToDto(smartphone);
     }
 
@@ -58,6 +58,17 @@ public class SmartphoneServiceImpl implements SmartphoneService {
     @Override
     public boolean exist(Long id) {
         return smartphoneRepository.getSmartphoneById(id).isPresent();
+    }
+
+    @Override
+    public String getType() {
+        return "smartphone";
+    }
+
+    @Override
+    public Product getProductById(Long id) {
+        return smartphoneRepository.getSmartphoneById(id)
+                .orElseThrow(SmartphoneNotFoundException::new);
     }
 
     @Override

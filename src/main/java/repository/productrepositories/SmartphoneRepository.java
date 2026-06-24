@@ -24,6 +24,7 @@ public class SmartphoneRepository {
      * @return the saved smartphone instance
      */
     public Smartphone save(Smartphone smartphone) {
+        smartphone.setId(getNextId());
         smartphones.add(smartphone);
         return smartphone;
     }
@@ -66,7 +67,7 @@ public class SmartphoneRepository {
                 .toList();
     }
 
-    public Long getNextId() {
+    private Long getNextId() {
         return idCounter.getAndIncrement();
     }
 }

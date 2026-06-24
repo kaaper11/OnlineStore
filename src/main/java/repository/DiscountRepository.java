@@ -23,6 +23,7 @@ public class DiscountRepository {
      * @return the saved discount instance
      */
     public Discount save(Discount discount) {
+        discount.setId(getNextId());
         discounts.add(discount);
         return discount;
     }
@@ -65,7 +66,7 @@ public class DiscountRepository {
         return getByProductId(productId).isPresent();
     }
 
-    public Long getNextId() {
+    private Long getNextId() {
         return idCounter.getAndIncrement();
     }
 }

@@ -24,24 +24,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 public class CartMapperTest {
 
-    private final Product product1 =
+    private static final Product PRODUCT_1 =
             new Electronics(1L, "Laptop", BigDecimal.valueOf(3000), 10);
 
-    private final Product product2 =
+    private static final Product PRODUCT_2 =
             new Computer(2L, "Mouse", BigDecimal.valueOf(200), 20, Processor.INTEL_CORE_I3, Ram.GB8,
                     Rom.GB500, GraphicCard.RTX5050);
 
-    private final ProductResponseDto productDto1 = new ElectronicsResponseDto(1L, "Laptop",
+    private static final ProductResponseDto PRODUCT_DTO_1 = new ElectronicsResponseDto(1L, "Laptop",
             BigDecimal.valueOf(3000), 10);
-    private final ProductResponseDto productDto2 = new ComputerResponseDto(2L, "Mouse", BigDecimal.valueOf(200), 20,
+    private static final ProductResponseDto PRODUCT_DTO_2 = new ComputerResponseDto(2L, "Mouse", BigDecimal.valueOf(200), 20,
             Processor.INTEL_CORE_I3, Ram.GB8, Rom.GB500, GraphicCard.RTX5050);
 
     @Test
     public void shouldMapCartToCartDto() {
-        Cart cart = new Cart(1L, 1L, List.of(product1, product2));
+        Cart cart = new Cart(1L, 1L, List.of(PRODUCT_1, PRODUCT_2));
 
         CartDto result = CartMapper.mapCartToDto(cart);
-        CartDto expected = new CartDto(1L, List.of(productDto1, productDto2));
+        CartDto expected = new CartDto(1L, List.of(PRODUCT_DTO_1, PRODUCT_DTO_2));
 
         assertThat(result)
                 .usingRecursiveComparison()

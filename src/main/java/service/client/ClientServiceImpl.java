@@ -38,14 +38,13 @@ public class ClientServiceImpl implements ClientService {
      */
     @Override
     public ClientResponseDto createClient(ClientRequestDto clientRequestDto) {
-        ClientValidator.validate(clientRequestDto);
+        ClientValidator.runValidate(clientRequestDto);
 
         if (clientRepository.isClientExist(clientRequestDto.email())) {
             throw new ClientAlreadyExists();
         }
 
-        Client client = clientRepository.save(ClientMapper.mapDtoToClient(clientRequestDto,
-                clientRepository.getNextId()));
+        Client client = clientRepository.save(ClientMapper.mapDtoToClient(clientRequestDto));
         cartRepository.save(new Cart(cartRepository.getNextId(), client.getId(), new ArrayList<>()));
         return ClientMapper.mapClientToDto(client);
     }
@@ -60,7 +59,7 @@ public class ClientServiceImpl implements ClientService {
      */
     @Override
     public ClientResponseDto updateClient(Long id, ClientRequestDto clientRequestDto) {
-        Client client = clientRepository.update(id, ClientMapper.mapDtoToClient(clientRequestDto, id))
+        Client client = clientRepository.update(id, ClientMapper.mapDtoToClient(clientRequestDto))
                 .orElseThrow(ClientNotFoundException::new);
         return ClientMapper.mapClientToDto(client);
     }

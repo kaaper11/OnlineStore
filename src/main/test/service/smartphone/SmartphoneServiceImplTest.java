@@ -40,39 +40,39 @@ public class SmartphoneServiceImplTest {
     @InjectMocks
     private SmartphoneServiceImpl smartphoneService;
 
-    private final SmartphoneRequestDto smartphoneDto = new SmartphoneRequestDto("name", new BigDecimal("100"),
+    private static final SmartphoneRequestDto SMARTPHONE_DTO = new SmartphoneRequestDto("name", new BigDecimal("100"),
             20);
 
-    private final Smartphone smartphone = new Smartphone(1L, "name", new BigDecimal("100"), 20,
+    private static final Smartphone SMARTPHONE = new Smartphone(1L, "name", new BigDecimal("100"), 20,
             SmartphoneColorType.BLACK, Battery.MAH5500);
 
-    private final Address address = new Address("Poland", "Warsaw", "Zlota", "15-820",
+    private static final Address ADDRESS = new Address("Poland", "Warsaw", "Zlota", "15-820",
             2);
 
-    private final Client client = new Client(1L, "name", "name@test.com", "pasS12%dd",
-            "123456789", address, Role.ADMIN);
+    private static final Client CLIENT = new Client(1L, "name", "name@test.com", "pasS12%dd",
+            "123456789", ADDRESS, Role.ADMIN);
 
 
     @Test
     void shouldCreateSmartphone() {
         // given
-        when(smartphoneRepository.save(any(Smartphone.class))).thenReturn(smartphone);
-        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
+        when(smartphoneRepository.save(any(Smartphone.class))).thenReturn(SMARTPHONE);
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(CLIENT));
 
         // when
-        SmartphoneResponseDto dto = smartphoneService.create(smartphoneDto, 1L);
+        SmartphoneResponseDto dto = smartphoneService.create(SMARTPHONE_DTO, 1L);
 
         // then
         assertNotNull(dto);
         verify(smartphoneRepository).save(any(Smartphone.class));
-        assertThat(dto.getName()).isEqualTo(smartphone.getName());
+        assertThat(dto.getName()).isEqualTo(SMARTPHONE.getName());
     }
 
     @Test
     void shouldRemoveSmartphone() {
         // given
-        when(smartphoneRepository.delete(anyLong())).thenReturn(Optional.of(smartphone));
-        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
+        when(smartphoneRepository.delete(anyLong())).thenReturn(Optional.of(SMARTPHONE));
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(CLIENT));
 
         // when
         smartphoneService.remove(1L, 1L);
@@ -85,7 +85,7 @@ public class SmartphoneServiceImplTest {
     void shouldThrowWhenRemoveAndSmartphoneNotFound() {
         // given
         when(smartphoneRepository.delete(anyLong())).thenReturn(Optional.empty());
-        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
+        when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(CLIENT));
 
         // then
         assertThatExceptionOfType(SmartphoneNotFoundException.class)
@@ -96,14 +96,14 @@ public class SmartphoneServiceImplTest {
     void shouldGetCorrectSmartphoneById() {
         // given
         when(smartphoneRepository.getSmartphoneById(anyLong()))
-                .thenReturn(Optional.of(smartphone));
+                .thenReturn(Optional.of(SMARTPHONE));
 
         // when
         SmartphoneResponseDto dto = smartphoneService.getById(1L);
 
         // then
         assertNotNull(dto);
-        assertThat(dto.getName()).isEqualTo(smartphone.getName());
+        assertThat(dto.getName()).isEqualTo(SMARTPHONE.getName());
     }
 
     @Test
@@ -121,27 +121,27 @@ public class SmartphoneServiceImplTest {
     void shouldGetAllSmartphones() {
         // given
         when(smartphoneRepository.getAllSmartphones())
-                .thenReturn(List.of(smartphone));
+                .thenReturn(List.of(SMARTPHONE));
 
         // when
         List<SmartphoneResponseDto> dtos = smartphoneService.getAll();
 
         // then
         assertThat(dtos).hasSize(1);
-        assertThat(dtos.getFirst().getName()).isEqualTo(smartphoneDto.getName());
+        assertThat(dtos.getFirst().getName()).isEqualTo(SMARTPHONE_DTO.getName());
     }
 
     @Test
     void shouldSmartphoneExists() {
-        when(smartphoneRepository.getSmartphoneById(anyLong())).thenReturn(Optional.of(smartphone));
+        when(smartphoneRepository.getSmartphoneById(anyLong())).thenReturn(Optional.of(SMARTPHONE));
 
-        boolean result = smartphoneService.exist(smartphone.getId());
+        boolean result = smartphoneService.exist(SMARTPHONE.getId());
         assertThat(result).isTrue();
     }
 
     @Test
     void shouldSmartphoneNotExists() {
-        when(smartphoneRepository.getSmartphoneById(anyLong())).thenReturn(Optional.of(smartphone));
+        when(smartphoneRepository.getSmartphoneById(anyLong())).thenReturn(Optional.of(SMARTPHONE));
 
         boolean result = smartphoneService.exist(10L);
         assertThat(result).isTrue();

@@ -53,28 +53,28 @@ public class OrderServiceImplTest {
     @InjectMocks
     private OrderServiceImpl orderService;
 
-    private final Product product = new Electronics(1L, "product", BigDecimal.TEN, 10);
-    private final Cart cart = new Cart(1L, 10L, List.of(product));
-    private final Address address = new Address("Poland", "Warsaw", "Zlota", "15-820",
+    private static final Product PRODUCT = new Electronics(1L, "product", BigDecimal.TEN, 10);
+    private static final Cart CART = new Cart(1L, 10L, List.of(PRODUCT));
+    private static final Address ADDRESS = new Address("Poland", "Warsaw", "Zlota", "15-820",
             2);
-    private final Client client = new Client(1L, "name", "name@test.com", "pass",
-            "123456789", address, Role.ADMIN);
-    private final Order order = new Order(1L, client, cart.getProducts(), BigDecimal.TEN);
+    private static final Client client = new Client(1L, "name", "name@test.com", "pass",
+            "123456789", ADDRESS, Role.ADMIN);
+    private static final Order ORDER = new Order(1L, client, CART.getProducts(), BigDecimal.TEN);
 
     @Test
     public void shouldPlaceOrder() {
         List<Product> products = new ArrayList<>();
-        products.add(product);
+        products.add(PRODUCT);
         Cart testCart = new Cart(1L, 10L, products);
 
         when(cartRepository.getCartByClientId(anyLong())).thenReturn(Optional.of(testCart));
         when(clientRepository.getClientById(anyLong())).thenReturn(Optional.of(client));
-        when(orderRepository.save(any(Order.class))).thenReturn(order);
+        when(orderRepository.save(any(Order.class))).thenReturn(ORDER);
         when(invoiceRepository.save(any(Invoice.class))).thenReturn(any(Invoice.class));
 
         OrderDto orderDto = orderService.placeOrder(1L);
 
-        assertThat(orderDto.totalPrice()).isEqualTo(order.getTotalPrice());
+        assertThat(orderDto.totalPrice()).isEqualTo(ORDER.getTotalPrice());
         assertThat(testCart.getProducts()).hasSize(0);
     }
 
@@ -90,11 +90,11 @@ public class OrderServiceImplTest {
 
     @Test
     public void shouldGetOrderById() {
-        when(orderRepository.getOrderById(anyLong())).thenReturn(Optional.of(order));
+        when(orderRepository.getOrderById(anyLong())).thenReturn(Optional.of(ORDER));
 
         OrderDto orderDto = orderService.getOrderById(1L);
 
-        assertThat(orderDto.totalPrice()).isEqualTo(order.getTotalPrice());
+        assertThat(orderDto.totalPrice()).isEqualTo(ORDER.getTotalPrice());
     }
 
     @Test
@@ -106,11 +106,11 @@ public class OrderServiceImplTest {
 
     @Test
     public void shouldGetOrdersByClientId() {
-        when(orderRepository.getOneClientOrders(anyLong())).thenReturn(List.of(order));
+        when(orderRepository.getOneClientOrders(anyLong())).thenReturn(List.of(ORDER));
 
         List<OrderDto> ordersDto = orderService.getOrdersByClientId(1L);
 
         assertThat(ordersDto).hasSize(1);
-        assertThat(ordersDto.getFirst().totalPrice()).isEqualTo(order.getTotalPrice());
+        assertThat(ordersDto.getFirst().totalPrice()).isEqualTo(ORDER.getTotalPrice());
     }
 }

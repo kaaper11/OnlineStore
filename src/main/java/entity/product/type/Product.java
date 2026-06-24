@@ -20,6 +20,7 @@ import java.util.Objects;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder(toBuilder = true)
 public abstract class Product {
+    @Setter
     private Long id;
     private String name;
     @Setter

@@ -14,25 +14,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 public class ComputerMapperTest {
 
-    private final Computer computer = new Computer(1L, "name", new BigDecimal("100"), 20);
+    private static final Computer COMPUTER = new Computer(1L, "name", new BigDecimal("100"), 20);
 
-    private final ComputerRequestDto computerRequestDto = new ComputerRequestDto("name", new BigDecimal("100"),
+    private static final ComputerRequestDto COMPUTER_REQUEST_DTO = new ComputerRequestDto("name", new BigDecimal("100"),
             20);
 
     @Test
     public void shouldMapDtoToComputer() {
-        Computer result = ComputerMapper.mapDtoToComputer(computerRequestDto, 1L);
+        Computer result = ComputerMapper.mapDtoToComputer(COMPUTER_REQUEST_DTO);
 
-        assertThat(result.getName()).isEqualTo(computerRequestDto.getName());
+        assertThat(result.getName()).isEqualTo(COMPUTER_REQUEST_DTO.getName());
     }
 
     @Test
     public void shouldMapComputerToDto() {
-        ComputerResponseDto result = ComputerMapper.mapComputerToDto(computer);
+        ComputerResponseDto result = ComputerMapper.mapComputerToDto(COMPUTER);
 
         assertThat(result)
                 .usingRecursiveComparison()
                 .ignoringFields("id")
-                .isEqualTo(computer);
+                .isEqualTo(COMPUTER);
     }
 }

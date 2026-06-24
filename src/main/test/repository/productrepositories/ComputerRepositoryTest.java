@@ -15,21 +15,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 public class ComputerRepositoryTest {
 
-    private final Computer computer = new Computer(1L, "name", new BigDecimal("100"), 20);
+    private static final Computer COMPUTER = new Computer(1L, "name", new BigDecimal("100"), 20);
 
     @InjectMocks
     private ComputerRepository computerRepository;
 
     @Test
     public void shouldSaveAndFindComputer() {
-        Computer save = computerRepository.save(computer);
+        Computer save = computerRepository.save(COMPUTER);
 
-        assertThat(save).usingRecursiveComparison().isEqualTo(computer);
+        assertThat(save).usingRecursiveComparison().isEqualTo(COMPUTER);
     }
 
     @Test
     public void shouldDeleteComputer() {
-        computerRepository.save(computer);
+        computerRepository.save(COMPUTER);
 
         Optional<Computer> deleted = computerRepository.delete(1L);
 
@@ -40,12 +40,12 @@ public class ComputerRepositoryTest {
 
     @Test
     public void shouldFindComputerById() {
-        computerRepository.save(computer);
+        computerRepository.save(COMPUTER);
 
         Optional<Computer> result = computerRepository.getComputerById(1L);
 
         assertThat(result).isPresent();
-        assertThat(result).isEqualTo(Optional.of(computer));
+        assertThat(result).isEqualTo(Optional.of(COMPUTER));
     }
 
     @Test

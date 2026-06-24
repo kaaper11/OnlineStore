@@ -15,34 +15,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 public class ClientMapperTest {
 
-    private final Address address = new Address("Poland", "Warsaw", "Zlota", "15-820",
+    private static final Address ADDRESS = new Address("Poland", "Warsaw", "Zlota", "15-820",
             10);
-    private final AddressDto addressDto = new AddressDto("Poland", "Warsaw", "Zlota", "15-820",
+    private static final AddressDto ADDRESS_DTO = new AddressDto("Poland", "Warsaw", "Zlota", "15-820",
             10);
-    private final Client client = new Client(1L, "name", "email", "pass", "phone",
-            address, Role.USER);
-    private final ClientRequestDto clientRequestDto = new ClientRequestDto("name", "email", "pass",
-            "phone", addressDto);
+    private static final Client CLIENT = new Client(1L, "name", "email", "pass", "phone",
+            ADDRESS, Role.USER);
+    private static final ClientRequestDto CLIENT_REQUEST_DTO = new ClientRequestDto("name", "email", "pass",
+            "phone", ADDRESS_DTO);
 
     @Test
     void shouldMapClientToDto() {
-        ClientResponseDto result = ClientMapper.mapClientToDto(client);
+        ClientResponseDto result = ClientMapper.mapClientToDto(CLIENT);
 
         assertThat(result).isNotNull();
         assertThat(result)
                 .usingRecursiveComparison()
                 .ignoringFields("role", "id")
-                .isEqualTo(clientRequestDto);
+                .isEqualTo(CLIENT_REQUEST_DTO);
     }
 
     @Test
     void shouldMapClientDtoToClient() {
-        Client result = ClientMapper.mapDtoToClient(clientRequestDto, 1L);
+        Client result = ClientMapper.mapDtoToClient(CLIENT_REQUEST_DTO);
 
         assertThat(result).isNotNull();
         assertThat(result)
                 .usingRecursiveComparison()
-                .isEqualTo(client);
+                .ignoringFields("id")
+                .isEqualTo(CLIENT);
     }
 
 }
