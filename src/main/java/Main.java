@@ -1,0 +1,50 @@
+import cli.CommandLineMain;
+import export.InvoiceJsonWriter;
+import repository.*;
+import repository.productrepositories.ComputerRepository;
+import repository.productrepositories.ElectronicsRepository;
+import repository.productrepositories.SmartphoneRepository;
+import service.cart.CartServiceImpl;
+import service.client.ClientServiceImpl;
+import service.computer.ComputerServiceImpl;
+import service.discount.DiscountServiceImpl;
+import service.electronics.ElectronicsServiceImpl;
+import service.invoice.InvoiceServiceImpl;
+import service.order.OrderServiceImpl;
+import service.productfacade.ProductFacadeServiceImpl;
+import service.smartphone.SmartphoneServiceImpl;
+
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+        CartRepository cartRepository = new CartRepository();
+        ClientRepository clientRepository = new ClientRepository();
+        ComputerRepository computerRepository = new ComputerRepository();
+        ElectronicsRepository electronicsRepository = new ElectronicsRepository();
+        InvoiceRepository invoiceRepository = new InvoiceRepository();
+        OrderRepository orderRepository = new OrderRepository();
+        SmartphoneRepository smartphoneRepository = new SmartphoneRepository();
+        DiscountRepository discountRepository = new DiscountRepository();
+
+        InvoiceJsonWriter invoiceJsonWriter = new InvoiceJsonWriter();
+
+
+        ClientServiceImpl clientService = new ClientServiceImpl(clientRepository, cartRepository);
+        ComputerServiceImpl computerService = new ComputerServiceImpl(computerRepository, clientRepository);
+        ElectronicsServiceImpl electronicsService = new ElectronicsServiceImpl(electronicsRepository, clientRepository);
+        SmartphoneServiceImpl smartphoneService = new SmartphoneServiceImpl(smartphoneRepository, clientRepository);
+        ProductFacadeServiceImpl productFacadeServiceImpl = new ProductFacadeServiceImpl(List.of(computerService, electronicsService,
+                smartphoneService));
+        DiscountServiceImpl discountService = new DiscountServiceImpl(discountRepository, clientRepository, productFacadeServiceImpl);
+        CartServiceImpl cartService = new CartServiceImpl(cartRepository, productFacadeServiceImpl);
+        InvoiceServiceImpl invoiceService = new InvoiceServiceImpl(invoiceRepository, invoiceJsonWriter);
+        OrderServiceImpl orderService = new OrderServiceImpl(orderRepository, cartRepository, clientRepository,
+                invoiceRepository, discountService);
+
+        CommandLineMain cli = new CommandLineMain(cartService, clientService, invoiceService, orderService,
+                productFacadeServiceImpl, discountService, computerService, smartphoneService, electronicsService);
+
+        cli.start();
+    }
+}
